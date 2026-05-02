@@ -39,8 +39,7 @@ export function toOptimizedAssetUrl(value?: string | null) {
 	}
 
 	if (isDirectusAssetUrl(assetUrl)) {
-		const separator = assetUrl.includes('?') ? '&' : '?';
-		return `${assetUrl}${separator}width=1600&quality=82&format=auto`;
+		return toProxyImageUrl(assetUrl);
 	}
 
 	// External URLs (e.g. Unsplash fallbacks) are already CDN-optimised.
@@ -92,4 +91,8 @@ function getDirectusUrl() {
 function isDirectusAssetUrl(value: string) {
 	const base = getDirectusUrl();
 	return value.startsWith(base) && value.includes('/assets/');
+}
+
+function toProxyImageUrl(value: string) {
+	return `/image-proxy?url=${encodeURIComponent(value)}&width=1600`;
 }

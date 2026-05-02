@@ -4,9 +4,11 @@ import { env as publicEnv } from '$env/dynamic/public';
 import { error } from '@sveltejs/kit';
 
 const MAX_WIDTH = 1600;
+const DEFAULT_WIDTH = 1600;
 
 export async function GET({ url, fetch, request }) {
 	const target = url.searchParams.get('url');
+	const width = readWidth(url.searchParams.get('width'));
 
 	if (!target) {
 		throw error(400, 'Missing image url');
@@ -44,12 +46,12 @@ export async function GET({ url, fetch, request }) {
 	}
 
 	const transformer = sharp(source).rotate().resize({
-		width: MAX_WIDTH,
+		width,
 		withoutEnlargement: true
 	});
 
 	let output;
-	let mimeType = contentType;
+	let mimeType: string;
 
 	if (preferredFormat === 'avif') {
 		output = await transformer.avif({ quality: 60 }).toBuffer();
@@ -72,6 +74,20 @@ export async function GET({ url, fetch, request }) {
 			'cache-control': 'public, max-age=31536000, immutable'
 		}
 	});
+}
+
+function readWidth(value: string | null) {
+	if (!value) {
+		return DEFAULT_WIDTH;
+	}
+
+	const parsed = Number.parseInt(value, 10);
+
+	if (!Number.isFinite(parsed) || parsed <= 0) {
+		return DEFAULT_WIDTH;
+	}
+
+	return Math.min(parsed, MAX_WIDTH);
 }
 
 function getPreferredFormat(accept: string | null) {
