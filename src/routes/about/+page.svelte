@@ -1,6 +1,7 @@
 <script lang="ts">
 	import SectionHeading from '$lib/components/content/SectionHeading.svelte';
 	import { getDirectusAttr } from '$lib/directus/visual-editing';
+	import { toSrcset } from '$lib/utils/image';
 
 	let { data } = $props();
 </script>
@@ -42,18 +43,22 @@
 				mode: 'popover'
 			})}
 		>
-		<img
-			class="aspect-[4/3] w-full object-cover"
-			src={data.site.aboutImage}
-			alt="Dining room interior"
-			loading="lazy"
-			decoding="async"
-		/>
+			<img
+				class="aspect-[4/3] w-full object-cover"
+				src={data.site.aboutImage}
+				srcset={toSrcset(data.site.aboutImage)}
+				sizes="(min-width: 1024px) 50vw, 100vw"
+				alt="Dining room interior"
+				loading="lazy"
+				decoding="async"
+			/>
 		</div>
 	</div>
 </section>
 
-<section class="px-6 py-16 pb-24 sm:px-8 lg:px-12 lg:py-20 [content-visibility:auto] [contain-intrinsic-size:600px]">
+<section
+	class="px-6 py-16 pb-24 [contain-intrinsic-size:600px] [content-visibility:auto] sm:px-8 lg:px-12 lg:py-20"
+>
 	<div class="mx-auto grid max-w-6xl gap-6 md:grid-cols-3">
 		{#each data.site.aboutCards as card (card.label)}
 			<div
