@@ -40,7 +40,7 @@ export function toOptimizedAssetUrl(value?: string | null) {
 
 	if (isDirectusAssetUrl(assetUrl)) {
 		const separator = assetUrl.includes('?') ? '&' : '?';
-		return `${assetUrl}${separator}width=1600&quality=82`;
+		return `${assetUrl}${separator}width=1600&quality=82&format=auto`;
 	}
 
 	return `/image-proxy?url=${encodeURIComponent(assetUrl)}`;
