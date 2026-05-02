@@ -41,10 +41,10 @@
 			<h2 class="text-3xl font-semibold tracking-tight text-white">{category.description}</h2>
 		</div>
 
-		<div class="space-y-4">
+		<div class="grid gap-4 md:grid-cols-2">
 			{#each items as item (item.slug)}
 				<article
-					class="rounded-[1.25rem] border border-white/10 bg-black/10 p-4"
+					class="overflow-hidden rounded-[1.5rem] border border-white/10 bg-black/15"
 					data-directus={getDirectusAttr({
 						enabled: visualEditing,
 						collection: 'menu_items',
@@ -54,6 +54,7 @@
 							'description',
 							'price',
 							'promo_price',
+							'image',
 							'image_url',
 							'labels',
 							'heat_level',
@@ -63,30 +64,39 @@
 						mode: 'drawer'
 					})}
 				>
-					<div class="flex items-start justify-between gap-4">
-						<div class="space-y-2">
-							<div class="flex flex-wrap items-center gap-2">
-								<h3 class="text-xl font-semibold text-white">{item.name}</h3>
-								{#if item.heatLevel > 0}
-									<span class="chip">Heat {item.heatLevel}/3</span>
-								{/if}
+					{#if item.image || item.imageUrl}
+						<img
+							class="aspect-[4/3] w-full object-cover"
+							src={item.image || item.imageUrl}
+							alt={item.name}
+						/>
+					{/if}
+					<div class="space-y-4 p-5">
+						<div class="flex items-start justify-between gap-4">
+							<div class="space-y-2">
+								<div class="flex flex-wrap items-center gap-2">
+									<h3 class="text-xl font-semibold text-white">{item.name}</h3>
+									{#if item.heatLevel > 0}
+										<span class="chip">Heat {item.heatLevel}/3</span>
+									{/if}
+								</div>
+								<p class="text-sm leading-6 text-stone-300">{item.description}</p>
 							</div>
-							<p class="text-sm leading-6 text-stone-300">{item.description}</p>
-							<div class="flex flex-wrap gap-2">
-								{#each item.labels as label (label)}
-									<span class="chip">{label}</span>
-								{/each}
+							<div class="shrink-0 text-right">
+								{#if item.promoPrice}
+									<p class="text-sm text-stone-500 line-through">
+										{formatCurrency(item.price, site.currencyCode)}
+									</p>
+								{/if}
+								<p class="text-xl font-semibold text-amber-300">
+									{formatCurrency(item.promoPrice ?? item.price, site.currencyCode)}
+								</p>
 							</div>
 						</div>
-						<div class="shrink-0 text-right">
-							{#if item.promoPrice}
-								<p class="text-sm text-stone-500 line-through">
-									{formatCurrency(item.price, site.currencyCode)}
-								</p>
-							{/if}
-							<p class="text-xl font-semibold text-amber-300">
-								{formatCurrency(item.promoPrice ?? item.price, site.currencyCode)}
-							</p>
+						<div class="flex flex-wrap gap-2">
+							{#each item.labels as label (label)}
+								<span class="chip">{label}</span>
+							{/each}
 						</div>
 					</div>
 				</article>

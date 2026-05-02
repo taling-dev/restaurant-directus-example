@@ -10,6 +10,7 @@ import {
 import type {
 	BusinessHour,
 	GalleryItem,
+	HomeCard,
 	HomepageSection,
 	MenuCategory,
 	MenuItem,
@@ -195,6 +196,10 @@ function mapSiteSettings(record: JsonRecord): SiteSettings {
 		promosEyebrow: readString(record.promos_eyebrow, fallbackSite.promosEyebrow),
 		promosTitle: readString(record.promos_title, fallbackSite.promosTitle),
 		promosBody: readString(record.promos_body, fallbackSite.promosBody),
+		homeCardsEyebrow: readString(record.home_cards_eyebrow, fallbackSite.homeCardsEyebrow),
+		homeCardsTitle: readString(record.home_cards_title, fallbackSite.homeCardsTitle),
+		homeCardsBody: readString(record.home_cards_body, fallbackSite.homeCardsBody),
+		homeCards: readHomeCards(record.home_cards, fallbackSite.homeCards),
 		menuEyebrow: readString(record.menu_eyebrow, fallbackSite.menuEyebrow),
 		menuTitle: readString(record.menu_title, fallbackSite.menuTitle),
 		menuBody: readString(record.menu_body, fallbackSite.menuBody),
@@ -502,6 +507,41 @@ function readNavLinks(value: unknown, fallback: SiteSettings['navLinks']) {
 			const parsed = JSON.parse(value);
 			if (Array.isArray(parsed)) {
 				return readNavLinks(parsed, fallback);
+			}
+		} catch {
+			return fallback;
+		}
+	}
+
+	return fallback;
+}
+
+function readHomeCards(value: unknown, fallback: HomeCard[]) {
+	if (Array.isArray(value)) {
+		const entries = value
+			.map((entry) => {
+				if (typeof entry !== 'object' || entry === null) return null;
+				const record = entry as JsonRecord;
+				const title = readOptionalString(record.title);
+				const body = readOptionalString(record.body);
+				if (!title || !body) return null;
+				return {
+					eyebrow: readOptionalString(record.eyebrow),
+					title,
+					body,
+					ctaLabel: readOptionalString(record.cta_label),
+					ctaUrl: readOptionalString(record.cta_url)
+				};
+			})
+			.filter((entry) => entry !== null) as HomeCard[];
+		return entries.length > 0 ? entries : fallback;
+	}
+
+	if (typeof value === 'string' && value.trim().length > 0) {
+		try {
+			const parsed = JSON.parse(value);
+			if (Array.isArray(parsed)) {
+				return readHomeCards(parsed, fallback);
 			}
 		} catch {
 			return fallback;

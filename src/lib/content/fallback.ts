@@ -43,6 +43,31 @@ export const fallbackSite: SiteSettings = {
 	promosTitle: 'Seasonal offers that keep the room buzzing',
 	promosBody:
 		'Highlight tasting menus, cocktail hours, weekend brunches, and limited-time pairings directly from Directus.',
+	homeCardsEyebrow: 'House notes',
+	homeCardsTitle: 'Flexible homepage cards for moments, offers, and service cues',
+	homeCardsBody:
+		'Add or remove cards as the week changes, whether you need to highlight happy hour, dietary notes, or private dining availability.',
+	homeCards: [
+		{
+			eyebrow: 'Private dining',
+			title: 'Group bookings and buyouts',
+			body: 'Promote rehearsal dinners, birthdays, or press dinners without changing the layout.',
+			ctaLabel: 'Plan your visit',
+			ctaUrl: '/contact'
+		},
+		{
+			eyebrow: 'Weekly special',
+			title: 'Swap campaigns in minutes',
+			body: 'Use cards for chef features, wine nights, or limited seats on tasting events.',
+			ctaLabel: 'See promos',
+			ctaUrl: '/promos'
+		},
+		{
+			eyebrow: 'Dietary clarity',
+			title: 'Call out guest-friendly details',
+			body: 'Surface gluten-free menus, vegan highlights, or family service updates in a reusable card format.'
+		}
+	],
 	menuEyebrow: 'Menu',
 	menuTitle: 'Organized for quick scanning on phones and better merchandising on larger screens',
 	menuBody:

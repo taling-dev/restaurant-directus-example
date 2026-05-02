@@ -3,6 +3,14 @@ export type SocialLink = {
 	url: string;
 };
 
+export type HomeCard = {
+	eyebrow?: string;
+	title: string;
+	body: string;
+	ctaLabel?: string;
+	ctaUrl?: string;
+};
+
 export type SiteSettings = {
 	id?: string;
 	name: string;
@@ -33,6 +41,10 @@ export type SiteSettings = {
 	promosEyebrow: string;
 	promosTitle: string;
 	promosBody: string;
+	homeCardsEyebrow: string;
+	homeCardsTitle: string;
+	homeCardsBody: string;
+	homeCards: HomeCard[];
 	menuEyebrow: string;
 	menuTitle: string;
 	menuBody: string;

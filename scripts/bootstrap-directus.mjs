@@ -53,6 +53,10 @@ const collections = [
 			stringField('promos_eyebrow'),
 			stringField('promos_title'),
 			textField('promos_body'),
+			stringField('home_cards_eyebrow'),
+			stringField('home_cards_title'),
+			textField('home_cards_body'),
+			jsonField('home_cards'),
 			stringField('menu_eyebrow'),
 			stringField('menu_title'),
 			textField('menu_body'),
@@ -225,6 +229,31 @@ const seedRecords = {
 			promos_title: 'Seasonal offers that keep the room buzzing',
 			promos_body:
 				'Highlight tasting menus, cocktail hours, weekend brunches, and limited-time pairings directly from Directus.',
+			home_cards_eyebrow: 'House notes',
+			home_cards_title: 'Flexible homepage cards for moments, offers, and service cues',
+			home_cards_body:
+				'Add or remove cards as the week changes, whether you need to highlight happy hour, dietary notes, or private dining availability.',
+			home_cards: [
+				{
+					eyebrow: 'Private dining',
+					title: 'Group bookings and buyouts',
+					body: 'Promote rehearsal dinners, birthdays, or press dinners without changing the layout.',
+					cta_label: 'Plan your visit',
+					cta_url: '/contact'
+				},
+				{
+					eyebrow: 'Weekly special',
+					title: 'Swap campaigns in minutes',
+					body: 'Use cards for chef features, wine nights, or limited seats on tasting events.',
+					cta_label: 'See promos',
+					cta_url: '/promos'
+				},
+				{
+					eyebrow: 'Dietary clarity',
+					title: 'Call out guest-friendly details',
+					body: 'Surface gluten-free menus, vegan highlights, or family service updates in a reusable card format.'
+				}
+			],
 			menu_eyebrow: 'Menu',
 			menu_title:
 				'Organized for quick scanning on phones and better merchandising on larger screens',

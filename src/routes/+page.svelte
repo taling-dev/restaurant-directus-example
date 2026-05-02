@@ -232,6 +232,51 @@
 	</div>
 </section>
 
+<section class="border-y border-white/10 bg-black/20 px-6 py-16 sm:px-8 lg:px-12 lg:py-20">
+	<div class="mx-auto max-w-6xl space-y-8">
+		<SectionHeading
+			eyebrow={data.site.homeCardsEyebrow}
+			title={data.site.homeCardsTitle}
+			copy={data.site.homeCardsBody}
+			visualEditing={data.visualEditing}
+			collection="site_settings"
+			item={data.site.id}
+			fields={['home_cards_eyebrow', 'home_cards_title', 'home_cards_body']}
+		/>
+
+		<div class="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+			{#each data.site.homeCards as card, index (`${card.title}-${index}`)}
+				<article
+					class="panel-dark flex h-full flex-col gap-4"
+					data-directus={getDirectusAttr({
+						enabled: data.visualEditing,
+						collection: 'site_settings',
+						item: data.site.id,
+						fields: ['home_cards'],
+						mode: 'drawer'
+					})}
+				>
+					{#if card.eyebrow}
+						<p class="section-kicker">{card.eyebrow}</p>
+					{/if}
+					<h3 class="text-2xl font-semibold text-white">{card.title}</h3>
+					<p class="text-sm leading-7 text-stone-300">{card.body}</p>
+					{#if card.ctaUrl}
+						<div class="mt-auto pt-2">
+							<a
+								class="btn-secondary"
+								href={withVisualEditingHref(card.ctaUrl, data.visualEditing)}
+							>
+								{card.ctaLabel ?? data.site.learnMoreLabel}
+							</a>
+						</div>
+					{/if}
+				</article>
+			{/each}
+		</div>
+	</div>
+</section>
+
 <section class="border-y border-white/10 bg-stone-900/70 px-6 py-16 sm:px-8 lg:px-12 lg:py-20">
 	<div class="mx-auto max-w-6xl space-y-10">
 		<SectionHeading
