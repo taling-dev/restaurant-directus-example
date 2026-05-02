@@ -22,16 +22,26 @@ import { readItems, toDirectusAssetUrl } from '$lib/server/directus';
 type JsonRecord = Record<string, unknown>;
 
 export async function getSiteSettings() {
-	const records = await withFallback(
+	const raw = await withFallback(
 		() => readItems<JsonRecord>('site_settings', { limit: '1' }).then((response) => response.data),
-		[]
+		null
 	);
 
-	if (records.length === 0) {
+	// Directus returns a single object for singleton collections, not an array.
+	// Handle both shapes defensively.
+	let record: JsonRecord | null = null;
+
+	if (Array.isArray(raw)) {
+		record = raw[0] ?? null;
+	} else if (raw !== null && typeof raw === 'object') {
+		record = raw as JsonRecord;
+	}
+
+	if (!record) {
 		return fallbackSite;
 	}
 
-	return mapSiteSettings(records[0]);
+	return mapSiteSettings(record);
 }
 
 export async function getHomepageSections() {
