@@ -105,6 +105,10 @@ export type HomepageSection = {
 	image?: string;
 	imageUrl?: string;
 	sort: number;
+	// Selectable block children (populated when at least one item is selected in Directus)
+	selectedPromotions?: Promotion[];
+	selectedMenuItems?: MenuItem[];
+	selectedGalleryItems?: GalleryItem[];
 };
 
 export type MenuCategory = {

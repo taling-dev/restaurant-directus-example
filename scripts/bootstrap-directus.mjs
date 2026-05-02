@@ -110,7 +110,37 @@ const collections = [
 			stringField('secondary_url'),
 			fileField('image'),
 			stringField('image_url'),
-			numberField('sort')
+			numberField('sort'),
+			m2mField('selected_promotions', '{{promotions_id.title}}', 'Pick which promotions appear in this promo-strip block.'),
+			m2mField('selected_menu_items', '{{menu_items_id.name}}', 'Pick which menu items appear in this featured-menu block.'),
+			m2mField('selected_gallery_items', '{{gallery_items_id.alt_text}}', 'Pick which gallery items appear in this gallery-preview block.')
+		]
+	},
+	{
+		collection: 'homepage_sections_promotions',
+		meta: { hidden: true, icon: 'import_export' },
+		fields: [
+			hiddenUuidField('homepage_sections_id'),
+			hiddenUuidField('promotions_id'),
+			hiddenNumberField('sort')
+		]
+	},
+	{
+		collection: 'homepage_sections_menu_items',
+		meta: { hidden: true, icon: 'import_export' },
+		fields: [
+			hiddenUuidField('homepage_sections_id'),
+			hiddenUuidField('menu_items_id'),
+			hiddenNumberField('sort')
+		]
+	},
+	{
+		collection: 'homepage_sections_gallery_items',
+		meta: { hidden: true, icon: 'import_export' },
+		fields: [
+			hiddenUuidField('homepage_sections_id'),
+			hiddenUuidField('gallery_items_id'),
+			hiddenNumberField('sort')
 		]
 	},
 	{
@@ -707,6 +737,41 @@ function dateField(name, nullable = false) {
 			data_type: 'date',
 			is_nullable: nullable
 		}
+	};
+}
+
+function m2mField(name, template, note) {
+	return {
+		field: name,
+		type: 'alias',
+		schema: null,
+		meta: {
+			special: ['m2m'],
+			interface: 'list-m2m',
+			options: { template },
+			display: 'related-values',
+			display_options: { template },
+			width: 'full',
+			note
+		}
+	};
+}
+
+function hiddenUuidField(name) {
+	return {
+		field: name,
+		type: 'uuid',
+		meta: { hidden: true },
+		schema: { name, data_type: 'uuid', is_nullable: true }
+	};
+}
+
+function hiddenNumberField(name) {
+	return {
+		field: name,
+		type: 'integer',
+		meta: { hidden: true },
+		schema: { name, data_type: 'integer', is_nullable: true }
 	};
 }
 

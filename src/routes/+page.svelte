@@ -79,6 +79,75 @@
 					mode: 'drawer'
 				})
 	);
+	const promoSection = $derived(
+		data.sections.find((section) => section.sectionType === 'promo-strip')
+	);
+	const featuredMenuSection = $derived(
+		data.sections.find((section) => section.sectionType === 'featured-menu')
+	);
+	const gallerySection = $derived(
+		data.sections.find((section) => section.sectionType === 'gallery-preview')
+	);
+
+	// Use section-curated items when set, otherwise fall back to all items from API
+	const activePromotions = $derived(promoSection?.selectedPromotions ?? data.promotions);
+	const activeFeaturedItems = $derived(
+		featuredMenuSection?.selectedMenuItems ?? data.featuredItems
+	);
+	const activeGallery = $derived(gallerySection?.selectedGalleryItems ?? data.gallery);
+
+	const promoAttr = $derived(
+		promoSection
+			? getDirectusAttr({
+					enabled: data.visualEditing,
+					collection: 'homepage_sections',
+					item: promoSection.id,
+					fields: ['eyebrow', 'title', 'body', 'selected_promotions'],
+					mode: 'drawer'
+				})
+			: getDirectusAttr({
+					enabled: data.visualEditing,
+					collection: 'site_settings',
+					item: data.site.id,
+					fields: ['promos_eyebrow', 'promos_title', 'promos_body'],
+					mode: 'drawer'
+				})
+	);
+	const featuredMenuAttr = $derived(
+		featuredMenuSection
+			? getDirectusAttr({
+					enabled: data.visualEditing,
+					collection: 'homepage_sections',
+					item: featuredMenuSection.id,
+					fields: ['eyebrow', 'title', 'body', 'selected_menu_items'],
+					mode: 'drawer'
+				})
+			: getDirectusAttr({
+					enabled: data.visualEditing,
+					collection: 'site_settings',
+					item: data.site.id,
+					fields: ['story_eyebrow', 'story_heading', 'story_body'],
+					mode: 'drawer'
+				})
+	);
+	const galleryAttr = $derived(
+		gallerySection
+			? getDirectusAttr({
+					enabled: data.visualEditing,
+					collection: 'homepage_sections',
+					item: gallerySection.id,
+					fields: ['eyebrow', 'title', 'body', 'selected_gallery_items'],
+					mode: 'drawer'
+				})
+			: getDirectusAttr({
+					enabled: data.visualEditing,
+					collection: 'site_settings',
+					item: data.site.id,
+					fields: ['gallery_eyebrow', 'gallery_title', 'gallery_body'],
+					mode: 'drawer'
+				})
+	);
+
 	const heroImageDimensions = toAspectDimensions(5 / 4);
 	const cardImageDimensions = toAspectDimensions(4 / 3);
 </script>
@@ -209,8 +278,11 @@
 			/>
 		</div>
 
-		<div class="grid gap-4 md:grid-cols-[repeat(auto-fit,minmax(16rem,1fr))]">
-			{#each data.featuredItems as item (item.slug)}
+		<div
+			class="grid gap-4 md:grid-cols-[repeat(auto-fit,minmax(16rem,1fr))]"
+			data-directus={featuredMenuAttr}
+		>
+			{#each activeFeaturedItems as item (item.slug)}
 				<article
 					class="panel-dark flex h-full flex-col overflow-hidden"
 					data-directus={getDirectusAttr({
@@ -307,17 +379,22 @@
 >
 	<div class="mx-auto max-w-6xl space-y-10">
 		<SectionHeading
-			eyebrow={data.site.promosEyebrow}
-			title={data.site.promosTitle}
-			copy={data.site.promosBody}
+			eyebrow={promoSection?.eyebrow ?? data.site.promosEyebrow}
+			title={promoSection?.title ?? data.site.promosTitle}
+			copy={promoSection?.body ?? data.site.promosBody}
 			visualEditing={data.visualEditing}
-			collection="site_settings"
-			item={data.site.id}
-			fields={['promos_eyebrow', 'promos_title', 'promos_body']}
+			collection={promoSection ? 'homepage_sections' : 'site_settings'}
+			item={promoSection ? promoSection.id : data.site.id}
+			fields={promoSection
+				? ['eyebrow', 'title', 'body', 'selected_promotions']
+				: ['promos_eyebrow', 'promos_title', 'promos_body']}
 		/>
 
-		<div class="grid gap-6 lg:grid-cols-[repeat(auto-fit,minmax(18rem,1fr))]">
-			{#each data.promotions as promotion (promotion.slug)}
+		<div
+			class="grid gap-6 lg:grid-cols-[repeat(auto-fit,minmax(18rem,1fr))]"
+			data-directus={promoAttr}
+		>
+			{#each activePromotions as promotion (promotion.slug)}
 				<PromoCard
 					{promotion}
 					visualEditing={data.visualEditing}
@@ -362,7 +439,7 @@
 		</div>
 
 		<div class="grid gap-6 md:grid-cols-[repeat(auto-fit,minmax(18rem,1fr))]">
-			{#each data.featuredItems as item (item.slug)}
+			{#each activeFeaturedItems as item (item.slug)}
 				<article
 					class="panel-dark flex h-full flex-col overflow-hidden"
 					data-directus={getDirectusAttr({
@@ -423,15 +500,19 @@
 >
 	<div class="mx-auto max-w-6xl space-y-8">
 		<SectionHeading
-			eyebrow={data.site.galleryEyebrow}
-			title={data.site.galleryTitle}
-			copy={data.site.galleryBody}
+			eyebrow={gallerySection?.eyebrow ?? data.site.galleryEyebrow}
+			title={gallerySection?.title ?? data.site.galleryTitle}
+			copy={gallerySection?.body ?? data.site.galleryBody}
 			visualEditing={data.visualEditing}
-			collection="site_settings"
-			item={data.site.id}
-			fields={['gallery_eyebrow', 'gallery_title', 'gallery_body']}
+			collection={gallerySection ? 'homepage_sections' : 'site_settings'}
+			item={gallerySection ? gallerySection.id : data.site.id}
+			fields={gallerySection
+				? ['eyebrow', 'title', 'body', 'selected_gallery_items']
+				: ['gallery_eyebrow', 'gallery_title', 'gallery_body']}
 		/>
-		<GalleryStrip items={data.gallery} visualEditing={data.visualEditing} />
+		<div data-directus={galleryAttr}>
+			<GalleryStrip items={activeGallery} visualEditing={data.visualEditing} />
+		</div>
 	</div>
 </section>
 
