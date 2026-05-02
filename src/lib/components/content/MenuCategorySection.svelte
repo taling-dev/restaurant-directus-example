@@ -17,7 +17,7 @@
 </script>
 
 <section
-	class="grid gap-6 rounded-[2rem] border border-white/10 bg-white/5 p-4 sm:p-6 lg:grid-cols-[0.4fr_0.6fr]"
+	class="grid gap-6 rounded-[2rem] border border-white/10 bg-white/5 p-4 sm:p-6 lg:grid-cols-[0.4fr_0.6fr] [content-visibility:auto] [contain-intrinsic-size:800px]"
 >
 	<div
 		class="overflow-hidden rounded-[1.5rem] border border-white/10 bg-stone-900"
@@ -33,6 +33,8 @@
 			class="aspect-square w-full object-cover"
 			src={category.image || category.imageUrl}
 			alt={category.name}
+			loading="lazy"
+			decoding="async"
 		/>
 	</div>
 	<div class="space-y-6">
@@ -65,11 +67,13 @@
 					})}
 				>
 					{#if item.image || item.imageUrl}
-						<img
-							class="aspect-[4/3] w-full object-cover"
-							src={item.image || item.imageUrl}
-							alt={item.name}
-						/>
+					<img
+						class="aspect-[4/3] w-full object-cover"
+						src={item.image || item.imageUrl}
+						alt={item.name}
+						loading="lazy"
+						decoding="async"
+					/>
 					{/if}
 					<div class="space-y-4 p-5">
 						<div class="flex items-start justify-between gap-4">

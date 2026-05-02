@@ -144,14 +144,16 @@
 			class="relative overflow-hidden rounded-[2rem] border border-white/10 bg-stone-900 shadow-2xl shadow-amber-950/40"
 			data-directus={heroAttr}
 		>
-			<img
-				class="h-full min-h-[28rem] w-full object-cover"
-				src={heroSection?.image ||
-					heroSection?.imageUrl ||
-					data.site.heroImage ||
-					data.featuredItems[0]?.imageUrl}
-				alt={heroSection?.title ?? data.site.heroTitle}
-			/>
+		<img
+			class="h-full min-h-[28rem] w-full object-cover"
+			src={heroSection?.image ||
+				heroSection?.imageUrl ||
+				data.site.heroImage ||
+				data.featuredItems[0]?.imageUrl}
+			alt={heroSection?.title ?? data.site.heroTitle}
+			loading="eager"
+			decoding="async"
+		/>
 			<div
 				class="absolute inset-0 bg-gradient-to-t from-stone-950 via-stone-950/20 to-transparent"
 			></div>
@@ -205,11 +207,13 @@
 						mode: 'drawer'
 					})}
 				>
-					<img
-						class="aspect-[4/3] w-full object-cover"
-						src={item.image || item.imageUrl}
-						alt={item.name}
-					/>
+				<img
+					class="aspect-[4/3] w-full object-cover"
+					src={item.image || item.imageUrl}
+					alt={item.name}
+					loading="lazy"
+					decoding="async"
+				/>
 					<div class="flex flex-1 flex-col gap-4 p-5">
 						<div class="flex items-start justify-between gap-4">
 							<div>
@@ -232,7 +236,7 @@
 	</div>
 </section>
 
-<section class="border-y border-white/10 bg-black/20 px-6 py-16 sm:px-8 lg:px-12 lg:py-20">
+<section class="border-y border-white/10 bg-black/20 px-6 py-16 sm:px-8 lg:px-12 lg:py-20 [content-visibility:auto] [contain-intrinsic-size:900px]">
 	<div class="mx-auto max-w-6xl space-y-8">
 		<SectionHeading
 			eyebrow={data.site.homeCardsEyebrow}
@@ -277,7 +281,7 @@
 	</div>
 </section>
 
-<section class="border-y border-white/10 bg-stone-900/70 px-6 py-16 sm:px-8 lg:px-12 lg:py-20">
+<section class="border-y border-white/10 bg-stone-900/70 px-6 py-16 sm:px-8 lg:px-12 lg:py-20 [content-visibility:auto] [contain-intrinsic-size:800px]">
 	<div class="mx-auto max-w-6xl space-y-10">
 		<SectionHeading
 			eyebrow={data.site.promosEyebrow}
@@ -301,7 +305,7 @@
 	</div>
 </section>
 
-<section class="px-6 py-16 sm:px-8 lg:px-12 lg:py-20">
+<section class="px-6 py-16 sm:px-8 lg:px-12 lg:py-20 [content-visibility:auto] [contain-intrinsic-size:1000px]">
 	<div class="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
 		<div class="space-y-5">
 			<SectionHeading
@@ -373,7 +377,7 @@
 	</div>
 </section>
 
-<section class="border-t border-white/10 px-6 py-16 sm:px-8 lg:px-12 lg:py-20">
+<section class="border-t border-white/10 px-6 py-16 sm:px-8 lg:px-12 lg:py-20 [content-visibility:auto] [contain-intrinsic-size:700px]">
 	<div class="mx-auto max-w-6xl space-y-8">
 		<SectionHeading
 			eyebrow={data.site.galleryEyebrow}
@@ -388,7 +392,7 @@
 	</div>
 </section>
 
-<section class="px-6 pt-4 pb-24 sm:px-8 lg:px-12">
+<section class="px-6 pt-4 pb-24 sm:px-8 lg:px-12 [content-visibility:auto] [contain-intrinsic-size:500px]">
 	<div
 		class="mx-auto max-w-6xl rounded-[2rem] border border-amber-300/20 bg-gradient-to-br from-amber-400/10 via-amber-300/5 to-transparent px-8 py-10"
 	>

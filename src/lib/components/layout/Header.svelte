@@ -9,7 +9,13 @@
 	<div class="mx-auto flex max-w-6xl items-center justify-between gap-6 px-6 py-4 sm:px-8 lg:px-12">
 		<a class="flex min-w-0 items-center gap-4" href={withVisualEditingHref('/', visualEditing)}>
 			{#if site.logo}
-				<img class="size-11 rounded-full object-cover" src={site.logo} alt={site.name} />
+				<img
+				class="size-11 rounded-full object-cover"
+				src={site.logo}
+				alt={site.name}
+				loading="eager"
+				decoding="async"
+			/>
 			{:else}
 				<div
 					class="flex size-11 items-center justify-center rounded-full border border-amber-300/30 bg-amber-300/10 text-sm font-semibold tracking-[0.3em] text-amber-300"

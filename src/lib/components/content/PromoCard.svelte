@@ -39,6 +39,8 @@
 		class="aspect-[4/3] w-full object-cover"
 		src={promotion.image || promotion.imageUrl}
 		alt={promotion.title}
+		loading="lazy"
+		decoding="async"
 	/>
 	<div class="space-y-4 p-5">
 		<div>
