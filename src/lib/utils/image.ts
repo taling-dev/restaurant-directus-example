@@ -20,7 +20,6 @@ export function toSrcset(url: string | undefined | null, widths = DEFAULT_WIDTHS
 			.map((w) => {
 				const u = new URL(url, LOCAL_ORIGIN);
 				u.searchParams.set('width', String(w));
-				u.searchParams.set('fit', 'cover');
 				const sizedUrl = isAbsolute ? u.toString() : `${u.pathname}${u.search}${u.hash}`;
 				return `${sizedUrl} ${w}w`;
 			})

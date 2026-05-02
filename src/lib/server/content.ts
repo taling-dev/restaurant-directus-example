@@ -18,7 +18,7 @@ import type {
 	SiteSettings
 } from '$lib/types/content';
 import { isPromotionCurrent } from '$lib/utils/format';
-import { readItems, toOptimizedAssetUrl, toDirectusAssetUrl } from '$lib/server/directus';
+import { readItems, toOptimizedAssetUrl } from '$lib/server/directus';
 
 type JsonRecord = Record<string, unknown>;
 
@@ -176,7 +176,7 @@ function mapSiteSettings(record: JsonRecord): SiteSettings {
 		heroTitle: readString(record.hero_title, fallbackSite.heroTitle),
 		heroBody: readString(record.hero_body, fallbackSite.heroBody),
 		heroImage:
-			toOptimizedAssetUrl(readOptionalString(record.hero_image)) ||
+			toOptimizedAssetUrl(readAssetToken(record.hero_image)) ||
 			toOptimizedAssetUrl(readOptionalString(record.hero_image_url)) ||
 			fallbackSite.heroImage,
 		heroPrimaryLabel: readString(record.hero_primary_label, fallbackSite.heroPrimaryLabel),
