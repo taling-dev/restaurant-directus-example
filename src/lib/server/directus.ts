@@ -43,7 +43,9 @@ export function toOptimizedAssetUrl(value?: string | null) {
 		return `${assetUrl}${separator}width=1600&quality=82&format=auto`;
 	}
 
-	return `/image-proxy?url=${encodeURIComponent(assetUrl)}`;
+	// External URLs (e.g. Unsplash fallbacks) are already CDN-optimised.
+	// Routing them through the proxy adds a server encode round-trip with no benefit.
+	return assetUrl;
 }
 
 export async function readItems<T>(collection: string, params: Record<string, string> = {}) {
