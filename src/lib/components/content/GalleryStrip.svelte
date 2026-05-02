@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { getDirectusAttr } from '$lib/directus/visual-editing';
 	import type { GalleryItem } from '$lib/types/content';
-	import { toSrcset } from '$lib/utils/image';
+	import { toSizes, toSrcset } from '$lib/utils/image';
 
 	let { items, visualEditing }: { items: GalleryItem[]; visualEditing: boolean } = $props();
 </script>
@@ -23,8 +23,8 @@
 				src={item.image || item.imageUrl}
 				srcset={toSrcset(item.image || item.imageUrl)}
 				sizes={index === 0
-					? '(min-width: 1280px) 50vw, (min-width: 768px) 50vw, 100vw'
-					: '(min-width: 1280px) 25vw, (min-width: 768px) 50vw, 100vw'}
+					? toSizes({ md: '50vw', xl: '50vw' })
+					: toSizes({ md: '50vw', xl: '25vw' })}
 				alt={item.altText}
 				loading="lazy"
 				decoding="async"

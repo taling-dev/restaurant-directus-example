@@ -26,10 +26,11 @@
 
 <section class="px-6 py-10 pb-24 sm:px-8 lg:px-12 lg:py-12">
 	<div class="mx-auto max-w-6xl space-y-8">
-		{#each data.categories as category (category.slug)}
+		{#each data.categories as category, index (category.slug)}
 			<MenuCategorySection
 				{category}
 				items={data.items.filter((item) => item.categorySlug === category.slug)}
+				priority={index === 0}
 				site={data.site}
 				visualEditing={data.visualEditing}
 			/>

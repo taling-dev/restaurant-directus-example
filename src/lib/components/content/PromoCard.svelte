@@ -2,7 +2,7 @@
 	import { getDirectusAttr, withVisualEditingHref } from '$lib/directus/visual-editing';
 	import type { Promotion } from '$lib/types/content';
 	import { formatPromotionWindow } from '$lib/utils/format';
-	import { toSrcset } from '$lib/utils/image';
+	import { toSizes, toSrcset } from '$lib/utils/image';
 
 	let {
 		promotion,
@@ -40,7 +40,7 @@
 		class="aspect-[4/3] w-full object-cover"
 		src={promotion.image || promotion.imageUrl}
 		srcset={toSrcset(promotion.image || promotion.imageUrl)}
-		sizes="(min-width: 1024px) 30vw, (min-width: 640px) 50vw, 100vw"
+		sizes={toSizes({ sm: '50vw', lg: '30vw' })}
 		alt={promotion.title}
 		loading="lazy"
 		decoding="async"

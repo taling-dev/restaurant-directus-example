@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { getDirectusAttr, withVisualEditingHref } from '$lib/directus/visual-editing';
 	import type { SiteSettings } from '$lib/types/content';
-	import { toSrcset } from '$lib/utils/image';
+	import { toSizes, toSrcset } from '$lib/utils/image';
 
 	let { site, visualEditing }: { site: SiteSettings; visualEditing: boolean } = $props();
 </script>
@@ -14,9 +14,10 @@
 					class="size-11 rounded-full object-cover"
 					src={site.logo}
 					srcset={toSrcset(site.logo)}
-					sizes="44px"
+					sizes={toSizes({ mobile: '44px' })}
 					alt={site.name}
 					loading="eager"
+					fetchpriority="high"
 					decoding="async"
 				/>
 			{:else}

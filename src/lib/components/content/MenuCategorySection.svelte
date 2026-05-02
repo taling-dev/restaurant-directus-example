@@ -2,16 +2,18 @@
 	import { getDirectusAttr } from '$lib/directus/visual-editing';
 	import type { MenuCategory, MenuItem, SiteSettings } from '$lib/types/content';
 	import { formatCurrency } from '$lib/utils/format';
-	import { toSrcset } from '$lib/utils/image';
+	import { toSizes, toSrcset } from '$lib/utils/image';
 
 	let {
 		category,
 		items,
 		site,
+		priority = false,
 		visualEditing
 	}: {
 		category: MenuCategory;
 		items: MenuItem[];
+		priority?: boolean;
 		site: SiteSettings;
 		visualEditing: boolean;
 	} = $props();
@@ -34,9 +36,10 @@
 			class="aspect-square w-full object-cover"
 			src={category.image || category.imageUrl}
 			srcset={toSrcset(category.image || category.imageUrl)}
-			sizes="(min-width: 1024px) 35vw, 100vw"
+			sizes={toSizes({ lg: '35vw' })}
 			alt={category.name}
-			loading="lazy"
+			loading={priority ? 'eager' : 'lazy'}
+			fetchpriority={priority ? 'high' : 'auto'}
 			decoding="async"
 		/>
 	</div>
@@ -74,9 +77,10 @@
 							class="aspect-[4/3] w-full object-cover"
 							src={item.image || item.imageUrl}
 							srcset={toSrcset(item.image || item.imageUrl)}
-							sizes="(min-width: 1024px) 30vw, (min-width: 768px) 50vw, 100vw"
+							sizes={toSizes({ md: '50vw', lg: '30vw' })}
 							alt={item.name}
 							loading="lazy"
+							fetchpriority="auto"
 							decoding="async"
 						/>
 					{/if}

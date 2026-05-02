@@ -4,7 +4,7 @@
 	import SectionHeading from '$lib/components/content/SectionHeading.svelte';
 	import { getDirectusAttr, withVisualEditingHref } from '$lib/directus/visual-editing';
 	import { formatCurrency } from '$lib/utils/format';
-	import { toSrcset } from '$lib/utils/image';
+	import { toSizes, toSrcset } from '$lib/utils/image';
 
 	let { data } = $props();
 
@@ -157,9 +157,10 @@
 						data.site.heroImage ||
 						data.featuredItems[0]?.imageUrl
 				)}
-				sizes="(min-width: 1024px) 40vw, 100vw"
+				sizes={toSizes({ lg: '40vw' })}
 				alt={heroSection?.title ?? data.site.heroTitle}
 				loading="eager"
+				fetchpriority="high"
 				decoding="async"
 			/>
 			<div
@@ -219,9 +220,10 @@
 						class="aspect-[4/3] w-full object-cover"
 						src={item.image || item.imageUrl}
 						srcset={toSrcset(item.image || item.imageUrl)}
-						sizes="(min-width: 1024px) 28vw, (min-width: 640px) 50vw, 100vw"
+						sizes={toSizes({ sm: '50vw', lg: '28vw' })}
 						alt={item.name}
-						loading="lazy"
+						loading="eager"
+						fetchpriority="high"
 						decoding="async"
 					/>
 					<div class="flex flex-1 flex-col gap-4 p-5">

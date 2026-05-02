@@ -20,6 +20,7 @@ export function toSrcset(url: string | undefined | null, widths = DEFAULT_WIDTHS
 			.map((w) => {
 				const u = new URL(url, LOCAL_ORIGIN);
 				u.searchParams.set('width', String(w));
+				u.searchParams.set('fit', 'cover');
 				const sizedUrl = isAbsolute ? u.toString() : `${u.pathname}${u.search}${u.hash}`;
 				return `${sizedUrl} ${w}w`;
 			})
@@ -27,4 +28,28 @@ export function toSrcset(url: string | undefined | null, widths = DEFAULT_WIDTHS
 	} catch {
 		return undefined;
 	}
+}
+
+export function toSizes({
+	mobile = '100vw',
+	sm,
+	md,
+	lg,
+	xl
+}: {
+	mobile?: string;
+	sm?: string;
+	md?: string;
+	lg?: string;
+	xl?: string;
+}) {
+	const rules = [
+		xl ? `(min-width: 1280px) ${xl}` : null,
+		lg ? `(min-width: 1024px) ${lg}` : null,
+		md ? `(min-width: 768px) ${md}` : null,
+		sm ? `(min-width: 640px) ${sm}` : null,
+		mobile
+	].filter(Boolean);
+
+	return rules.join(', ');
 }
