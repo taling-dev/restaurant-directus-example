@@ -406,90 +406,33 @@
 </section>
 
 <section
-	class="px-6 py-16 [contain-intrinsic-size:1000px] [content-visibility:auto] sm:px-8 lg:px-12 lg:py-20"
+	class="px-6 py-16 [contain-intrinsic-size:600px] [content-visibility:auto] sm:px-8 lg:px-12 lg:py-20"
 >
-	<div class="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
-		<div class="space-y-5">
-			<SectionHeading
-				eyebrow={data.site.menuEyebrow}
-				title={data.site.menuTitle}
-				copy={data.site.menuBody}
-				visualEditing={data.visualEditing}
-				collection="site_settings"
-				item={data.site.id}
-				fields={['menu_eyebrow', 'menu_title', 'menu_body']}
-			/>
-			<div class="grid gap-3 sm:grid-cols-[repeat(auto-fit,minmax(14rem,1fr))]">
-				{#each data.categories as category (category.slug)}
-					<div
-						class="rounded-2xl border border-white/10 bg-white/5 px-4 py-4"
-						data-directus={getDirectusAttr({
-							enabled: data.visualEditing,
-							collection: 'menu_categories',
-							item: category.id,
-							fields: ['name', 'description', 'image', 'image_url'],
-							mode: 'popover'
-						})}
-					>
-						<p class="text-lg font-semibold text-white">{category.name}</p>
-						<p class="mt-2 text-sm leading-6 text-stone-300">{category.description}</p>
-					</div>
-				{/each}
-			</div>
-		</div>
-
-		<div class="grid gap-6 md:grid-cols-[repeat(auto-fit,minmax(18rem,1fr))]">
-			{#each activeFeaturedItems as item (item.slug)}
-				<article
-					class="panel-dark flex h-full flex-col overflow-hidden"
+	<div class="mx-auto max-w-6xl space-y-6">
+		<SectionHeading
+			eyebrow={data.site.menuEyebrow}
+			title={data.site.menuTitle}
+			copy={data.site.menuBody}
+			visualEditing={data.visualEditing}
+			collection="site_settings"
+			item={data.site.id}
+			fields={['menu_eyebrow', 'menu_title', 'menu_body']}
+		/>
+		<div class="grid gap-3 sm:grid-cols-[repeat(auto-fit,minmax(14rem,1fr))]">
+			{#each data.categories as category (category.slug)}
+				<div
+					class="rounded-2xl border border-white/10 bg-white/5 px-4 py-4"
 					data-directus={getDirectusAttr({
 						enabled: data.visualEditing,
-						collection: 'menu_items',
-						item: item.id,
-						fields: [
-							'name',
-							'description',
-							'price',
-							'promo_price',
-							'image',
-							'image_url',
-							'labels',
-							'featured'
-						],
-						mode: 'drawer'
+						collection: 'menu_categories',
+						item: category.id,
+						fields: ['name', 'description', 'image', 'image_url'],
+						mode: 'popover'
 					})}
 				>
-					<img
-						class="aspect-[4/3] w-full object-cover"
-						src={item.image || item.imageUrl}
-						width={cardImageDimensions.width}
-						height={cardImageDimensions.height}
-						srcset={toSrcset(item.image || item.imageUrl, { ratio: 4 / 3 })}
-						sizes={toSizes({ md: '50vw', lg: '33vw' })}
-						alt={item.name}
-						loading="lazy"
-						decoding="async"
-					/>
-					<div class="flex flex-1 flex-col gap-4 p-5">
-						<div class="space-y-2">
-							<div class="flex flex-wrap items-center gap-2">
-								<h3 class="text-xl font-semibold text-white">{item.name}</h3>
-								<span class="chip">{data.site.featuredLabel}</span>
-							</div>
-							<p class="text-sm leading-6 text-stone-300">{item.description}</p>
-						</div>
-						<div class="mt-auto flex flex-wrap items-center justify-between gap-3">
-							<div class="flex flex-wrap gap-2">
-								{#each item.labels as label (label)}
-									<span class="chip">{label}</span>
-								{/each}
-							</div>
-							<p class="text-lg font-semibold text-amber-300">
-								{formatCurrency(item.promoPrice ?? item.price, data.site.currencyCode)}
-							</p>
-						</div>
-					</div>
-				</article>
+					<p class="text-lg font-semibold text-white">{category.name}</p>
+					<p class="mt-2 text-sm leading-6 text-stone-300">{category.description}</p>
+				</div>
 			{/each}
 		</div>
 	</div>
