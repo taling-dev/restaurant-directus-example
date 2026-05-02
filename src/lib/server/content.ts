@@ -18,7 +18,7 @@ import type {
 	SiteSettings
 } from '$lib/types/content';
 import { isPromotionCurrent } from '$lib/utils/format';
-import { readItems, toDirectusAssetUrl } from '$lib/server/directus';
+import { readItems, toOptimizedAssetUrl, toDirectusAssetUrl } from '$lib/server/directus';
 
 type JsonRecord = Record<string, unknown>;
 
@@ -176,8 +176,8 @@ function mapSiteSettings(record: JsonRecord): SiteSettings {
 		heroTitle: readString(record.hero_title, fallbackSite.heroTitle),
 		heroBody: readString(record.hero_body, fallbackSite.heroBody),
 		heroImage:
-			toDirectusAssetUrl(readOptionalString(record.hero_image)) ||
-			toDirectusAssetUrl(readOptionalString(record.hero_image_url)) ||
+			toOptimizedAssetUrl(readOptionalString(record.hero_image)) ||
+			toOptimizedAssetUrl(readOptionalString(record.hero_image_url)) ||
 			fallbackSite.heroImage,
 		heroPrimaryLabel: readString(record.hero_primary_label, fallbackSite.heroPrimaryLabel),
 		heroPrimaryUrl: readString(record.hero_primary_url, fallbackSite.heroPrimaryUrl),
@@ -190,8 +190,8 @@ function mapSiteSettings(record: JsonRecord): SiteSettings {
 		aboutTitle: readString(record.about_title, fallbackSite.aboutTitle),
 		aboutBody: readString(record.about_body, fallbackSite.aboutBody),
 		aboutImage:
-			toDirectusAssetUrl(readOptionalString(record.about_image)) ||
-			toDirectusAssetUrl(readOptionalString(record.about_image_url)) ||
+			toOptimizedAssetUrl(readOptionalString(record.about_image)) ||
+			toOptimizedAssetUrl(readOptionalString(record.about_image_url)) ||
 			fallbackSite.aboutImage,
 		promosEyebrow: readString(record.promos_eyebrow, fallbackSite.promosEyebrow),
 		promosTitle: readString(record.promos_title, fallbackSite.promosTitle),
@@ -226,8 +226,8 @@ function mapSiteSettings(record: JsonRecord): SiteSettings {
 		connectHeading: readString(record.connect_heading, fallbackSite.connectHeading),
 		accentColor: readString(record.accent_color, fallbackSite.accentColor),
 		darkColor: readString(record.dark_color, fallbackSite.darkColor),
-		favicon: toDirectusAssetUrl(readOptionalString(record.favicon)) || fallbackSite.favicon,
-		logo: toDirectusAssetUrl(readOptionalString(record.logo)) || fallbackSite.logo,
+		favicon: toOptimizedAssetUrl(readOptionalString(record.favicon)) || fallbackSite.favicon,
+		logo: toOptimizedAssetUrl(readOptionalString(record.logo)) || fallbackSite.logo,
 		seoTitle: readString(record.seo_title, fallbackSite.seoTitle),
 		seoDescription: readString(record.seo_description, fallbackSite.seoDescription),
 		footerNote: readString(record.footer_note, fallbackSite.footerNote),
@@ -255,11 +255,11 @@ function mapHomepageSection(row: JsonRecord): HomepageSection {
 		secondaryLabel: readOptionalString(row.secondary_label),
 		secondaryUrl: readOptionalString(row.secondary_url),
 		image:
-			toDirectusAssetUrl(readOptionalString(row.image)) ||
-			toDirectusAssetUrl(readOptionalString(row.image_url)),
+			toOptimizedAssetUrl(readOptionalString(row.image)) ||
+			toOptimizedAssetUrl(readOptionalString(row.image_url)),
 		imageUrl:
-			toDirectusAssetUrl(readOptionalString(row.image)) ||
-			toDirectusAssetUrl(readOptionalString(row.image_url)),
+			toOptimizedAssetUrl(readOptionalString(row.image)) ||
+			toOptimizedAssetUrl(readOptionalString(row.image_url)),
 		sort: readNumber(row.sort, 0)
 	};
 }
@@ -271,18 +271,17 @@ function mapMenuCategory(row: JsonRecord): MenuCategory {
 		slug: readString(row.slug, 'menu-category'),
 		description: readString(row.description, ''),
 		image:
-			toDirectusAssetUrl(readOptionalString(row.image)) ||
-			toDirectusAssetUrl(readOptionalString(row.image_url)) ||
+			toOptimizedAssetUrl(readOptionalString(row.image)) ||
+			toOptimizedAssetUrl(readOptionalString(row.image_url)) ||
 			fallbackCategories[0].imageUrl,
 		imageUrl:
-			toDirectusAssetUrl(readOptionalString(row.image)) ||
-			toDirectusAssetUrl(readOptionalString(row.image_url)) ||
+			toOptimizedAssetUrl(readOptionalString(row.image)) ||
+			toOptimizedAssetUrl(readOptionalString(row.image_url)) ||
 			fallbackCategories[0].imageUrl,
 		sort: readNumber(row.sort, 0),
 		active: readBoolean(row.active, true)
 	};
 }
-
 
 function mapMenuItem(row: JsonRecord, categories: MenuCategory[]): MenuItem {
 	const categoryToken = readRelationToken(row.category_slug) ?? readRelationToken(row.category);
@@ -296,12 +295,12 @@ function mapMenuItem(row: JsonRecord, categories: MenuCategory[]): MenuItem {
 		price: readNumber(row.price, 0),
 		promoPrice: readNullableNumber(row.promo_price),
 		image:
-			toDirectusAssetUrl(readOptionalString(row.image)) ||
-			toDirectusAssetUrl(readOptionalString(row.image_url)) ||
+			toOptimizedAssetUrl(readOptionalString(row.image)) ||
+			toOptimizedAssetUrl(readOptionalString(row.image_url)) ||
 			fallbackItems[0].imageUrl,
 		imageUrl:
-			toDirectusAssetUrl(readOptionalString(row.image)) ||
-			toDirectusAssetUrl(readOptionalString(row.image_url)) ||
+			toOptimizedAssetUrl(readOptionalString(row.image)) ||
+			toOptimizedAssetUrl(readOptionalString(row.image_url)) ||
 			fallbackItems[0].imageUrl,
 		categorySlug,
 		labels: readList(row.labels, []),
@@ -343,7 +342,11 @@ function readRelationToken(value: unknown) {
 
 	if (typeof value === 'object' && value !== null) {
 		const record = value as JsonRecord;
-		return readOptionalString(record.id) ?? readOptionalString(record.slug) ?? readOptionalString(record.name);
+		return (
+			readOptionalString(record.id) ??
+			readOptionalString(record.slug) ??
+			readOptionalString(record.name)
+		);
 	}
 
 	return undefined;
@@ -357,12 +360,12 @@ function mapPromotion(row: JsonRecord): Promotion {
 		shortDescription: readString(row.short_description, ''),
 		fullDescription: readString(row.full_description, ''),
 		image:
-			toDirectusAssetUrl(readOptionalString(row.image)) ||
-			toDirectusAssetUrl(readOptionalString(row.image_url)) ||
+			toOptimizedAssetUrl(readOptionalString(row.image)) ||
+			toOptimizedAssetUrl(readOptionalString(row.image_url)) ||
 			fallbackPromotions[0].imageUrl,
 		imageUrl:
-			toDirectusAssetUrl(readOptionalString(row.image)) ||
-			toDirectusAssetUrl(readOptionalString(row.image_url)) ||
+			toOptimizedAssetUrl(readOptionalString(row.image)) ||
+			toOptimizedAssetUrl(readOptionalString(row.image_url)) ||
 			fallbackPromotions[0].imageUrl,
 		startDate: readOptionalString(row.start_date),
 		endDate: readOptionalString(row.end_date),
@@ -389,12 +392,12 @@ function mapGalleryItem(row: JsonRecord): GalleryItem {
 	return {
 		id: readOptionalString(row.id),
 		image:
-			toDirectusAssetUrl(readOptionalString(row.image)) ||
-			toDirectusAssetUrl(readOptionalString(row.image_url)) ||
+			toOptimizedAssetUrl(readOptionalString(row.image)) ||
+			toOptimizedAssetUrl(readOptionalString(row.image_url)) ||
 			fallbackGallery[0].imageUrl,
 		imageUrl:
-			toDirectusAssetUrl(readOptionalString(row.image)) ||
-			toDirectusAssetUrl(readOptionalString(row.image_url)) ||
+			toOptimizedAssetUrl(readOptionalString(row.image)) ||
+			toOptimizedAssetUrl(readOptionalString(row.image_url)) ||
 			fallbackGallery[0].imageUrl,
 		altText: readString(row.alt_text, 'Gallery image'),
 		caption: readOptionalString(row.caption),

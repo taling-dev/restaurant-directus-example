@@ -31,6 +31,16 @@ export function toDirectusAssetUrl(value?: string | null) {
 	return `${base}/assets/${value}`;
 }
 
+export function toOptimizedAssetUrl(value?: string | null) {
+	const assetUrl = toDirectusAssetUrl(value);
+
+	if (!assetUrl) {
+		return '';
+	}
+
+	return `/image-proxy?url=${encodeURIComponent(assetUrl)}`;
+}
+
 export async function readItems<T>(collection: string, params: Record<string, string> = {}) {
 	return request<DirectusListResponse<T>>(`/items/${collection}`, params);
 }
