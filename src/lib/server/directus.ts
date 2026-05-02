@@ -38,6 +38,11 @@ export function toOptimizedAssetUrl(value?: string | null) {
 		return '';
 	}
 
+	if (isDirectusAssetUrl(assetUrl)) {
+		const separator = assetUrl.includes('?') ? '&' : '?';
+		return `${assetUrl}${separator}width=1600&quality=82`;
+	}
+
 	return `/image-proxy?url=${encodeURIComponent(assetUrl)}`;
 }
 
@@ -80,4 +85,9 @@ function getDirectusUrl() {
 	}
 
 	return url.replace(/\/$/, '');
+}
+
+function isDirectusAssetUrl(value: string) {
+	const base = getDirectusUrl();
+	return value.startsWith(base) && value.includes('/assets/');
 }
