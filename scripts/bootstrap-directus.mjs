@@ -113,26 +113,26 @@ const collections = [
 			numberField('sort')
 		]
 	},
-	{
-		collection: 'menu_categories',
-		meta: { icon: 'restaurant_menu' },
-		fields: [
-			stringField('name'),
-			stringField('slug'),
-			textField('description'),
-			fileField('image'),
+		{
+			collection: 'menu_categories',
+			meta: { icon: 'restaurant_menu' },
+			fields: [
+				stringField('name'),
+				slugField('slug', 'name'),
+				textField('description'),
+				fileField('image'),
 			stringField('image_url'),
 			numberField('sort'),
 			booleanField('active')
 		]
 	},
-	{
-		collection: 'menu_items',
-		meta: { icon: 'lunch_dining' },
-		fields: [
-			stringField('name'),
-			stringField('slug'),
-			textField('description'),
+		{
+			collection: 'menu_items',
+			meta: { icon: 'lunch_dining' },
+			fields: [
+				stringField('name'),
+				slugField('slug', 'name'),
+				textField('description'),
 			decimalField('price'),
 			decimalField('promo_price', true),
 			fileField('image'),
@@ -145,14 +145,14 @@ const collections = [
 			numberField('sort')
 		]
 	},
-	{
-		collection: 'promotions',
-		meta: { icon: 'local_offer' },
-		fields: [
-			stringField('title'),
-			stringField('slug'),
-			textField('short_description'),
-			textField('full_description'),
+		{
+			collection: 'promotions',
+			meta: { icon: 'local_offer' },
+			fields: [
+				stringField('title'),
+				slugField('slug', 'title'),
+				textField('short_description'),
+				textField('full_description'),
 			fileField('image'),
 			stringField('image_url'),
 			dateField('start_date', true),
@@ -507,6 +507,26 @@ function stringField(name) {
 		type: 'string',
 		meta: {
 			interface: 'input',
+			width: 'full'
+		},
+		schema: {
+			name,
+			data_type: 'varchar',
+			max_length: 255
+		}
+	};
+}
+
+function slugField(name, mirroredField) {
+	return {
+		field: name,
+		type: 'string',
+		meta: {
+			interface: 'slug',
+			options: {
+				mirroredField,
+				forceLowercase: true
+			},
 			width: 'full'
 		},
 		schema: {
