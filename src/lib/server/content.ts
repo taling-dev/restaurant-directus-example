@@ -143,10 +143,10 @@ export async function getHomePageData() {
 
 	return {
 		sections,
-		categories: categories.slice(0, 3),
-		featuredItems: items.filter((item) => item.featured).slice(0, 4),
-		promotions: promotions.slice(0, 3),
-		gallery: gallery.slice(0, 4)
+		categories,
+		featuredItems: items.filter((item) => item.featured),
+		promotions,
+		gallery
 	};
 }
 

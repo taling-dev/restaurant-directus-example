@@ -8,7 +8,7 @@
 	const galleryImageDimensions = toAspectDimensions(4 / 3);
 </script>
 
-<div class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+<div class="grid [grid-template-columns:repeat(auto-fit,minmax(16rem,1fr))] gap-4">
 	{#each items as item, index (item.imageUrl)}
 		<figure
 			class={`panel-dark overflow-hidden ${index === 0 ? 'md:col-span-2' : ''}`}

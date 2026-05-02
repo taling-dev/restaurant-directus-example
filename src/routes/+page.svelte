@@ -124,7 +124,7 @@
 				</a>
 			</div>
 
-			<div class="grid gap-4 sm:grid-cols-3">
+			<div class="grid gap-4 sm:grid-cols-[repeat(auto-fit,minmax(14rem,1fr))]">
 				{#each data.site.statsCards as card (card.label)}
 					<div
 						class="panel-dark"
@@ -209,7 +209,7 @@
 			/>
 		</div>
 
-		<div class="grid gap-4 sm:grid-cols-2">
+		<div class="grid gap-4 md:grid-cols-[repeat(auto-fit,minmax(16rem,1fr))]">
 			{#each data.featuredItems as item (item.slug)}
 				<article
 					class="panel-dark flex h-full flex-col overflow-hidden"
@@ -269,7 +269,7 @@
 			fields={['home_cards_eyebrow', 'home_cards_title', 'home_cards_body']}
 		/>
 
-		<div class="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+		<div class="grid gap-5 md:grid-cols-[repeat(auto-fit,minmax(16rem,1fr))]">
 			{#each data.site.homeCards as card, index (`${card.title}-${index}`)}
 				<article
 					class="panel-dark flex h-full flex-col gap-4"
@@ -316,7 +316,7 @@
 			fields={['promos_eyebrow', 'promos_title', 'promos_body']}
 		/>
 
-		<div class="grid gap-6 lg:grid-cols-3">
+		<div class="grid gap-6 lg:grid-cols-[repeat(auto-fit,minmax(18rem,1fr))]">
 			{#each data.promotions as promotion (promotion.slug)}
 				<PromoCard
 					{promotion}
@@ -342,7 +342,7 @@
 				item={data.site.id}
 				fields={['menu_eyebrow', 'menu_title', 'menu_body']}
 			/>
-			<div class="grid gap-3 sm:grid-cols-2">
+			<div class="grid gap-3 sm:grid-cols-[repeat(auto-fit,minmax(14rem,1fr))]">
 				{#each data.categories as category (category.slug)}
 					<div
 						class="rounded-2xl border border-white/10 bg-white/5 px-4 py-4"
@@ -361,43 +361,59 @@
 			</div>
 		</div>
 
-		<div class="panel-dark overflow-hidden p-0">
-			<div class="grid gap-0 divide-y divide-white/10">
-				{#each data.featuredItems as item (item.slug)}
-					<div
-						class="flex items-center justify-between gap-4 px-5 py-4 sm:px-6"
-						data-directus={getDirectusAttr({
-							enabled: data.visualEditing,
-							collection: 'menu_items',
-							item: item.id,
-							fields: ['name', 'description', 'price', 'promo_price', 'featured'],
-							mode: 'popover'
-						})}
-					>
-						<div>
-							<p class="text-lg font-medium text-white">{item.name}</p>
-							<p class="mt-1 text-sm text-stone-300">{item.description}</p>
+		<div class="grid gap-6 md:grid-cols-[repeat(auto-fit,minmax(18rem,1fr))]">
+			{#each data.featuredItems as item (item.slug)}
+				<article
+					class="panel-dark flex h-full flex-col overflow-hidden"
+					data-directus={getDirectusAttr({
+						enabled: data.visualEditing,
+						collection: 'menu_items',
+						item: item.id,
+						fields: [
+							'name',
+							'description',
+							'price',
+							'promo_price',
+							'image',
+							'image_url',
+							'labels',
+							'featured'
+						],
+						mode: 'drawer'
+					})}
+				>
+					<img
+						class="aspect-[4/3] w-full object-cover"
+						src={item.image || item.imageUrl}
+						width={cardImageDimensions.width}
+						height={cardImageDimensions.height}
+						srcset={toSrcset(item.image || item.imageUrl, { ratio: 4 / 3 })}
+						sizes={toSizes({ md: '50vw', lg: '33vw' })}
+						alt={item.name}
+						loading="lazy"
+						decoding="async"
+					/>
+					<div class="flex flex-1 flex-col gap-4 p-5">
+						<div class="space-y-2">
+							<div class="flex flex-wrap items-center gap-2">
+								<h3 class="text-xl font-semibold text-white">{item.name}</h3>
+								<span class="chip">{data.site.featuredLabel}</span>
+							</div>
+							<p class="text-sm leading-6 text-stone-300">{item.description}</p>
 						</div>
-						<div class="shrink-0 text-right">
+						<div class="mt-auto flex flex-wrap items-center justify-between gap-3">
+							<div class="flex flex-wrap gap-2">
+								{#each item.labels as label (label)}
+									<span class="chip">{label}</span>
+								{/each}
+							</div>
 							<p class="text-lg font-semibold text-amber-300">
 								{formatCurrency(item.promoPrice ?? item.price, data.site.currencyCode)}
 							</p>
-							<p
-								class="mt-1 text-xs tracking-[0.25em] text-stone-500 uppercase"
-								data-directus={getDirectusAttr({
-									enabled: data.visualEditing,
-									collection: 'site_settings',
-									item: data.site.id,
-									fields: ['featured_label'],
-									mode: 'popover'
-								})}
-							>
-								{data.site.featuredLabel}
-							</p>
 						</div>
 					</div>
-				{/each}
-			</div>
+				</article>
+			{/each}
 		</div>
 	</div>
 </section>
