@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { getDirectusAttr } from '$lib/directus/visual-editing';
+	import { getDirectusAttr, withVisualEditingHref } from '$lib/directus/visual-editing';
 	import type { SiteSettings } from '$lib/types/content';
 
 	let { site, visualEditing }: { site: SiteSettings; visualEditing: boolean } = $props();
@@ -22,7 +22,7 @@
 		>
 		<a
 			class="rounded-full bg-white/5 px-3 py-3 text-center text-xs font-semibold text-white"
-			href={site.mapsUrl}
+			href={withVisualEditingHref(site.mapsUrl, visualEditing)}
 			data-directus={getDirectusAttr({
 				enabled: visualEditing,
 				collection: 'site_settings',
@@ -33,7 +33,7 @@
 		>
 		<a
 			class="rounded-full bg-amber-300 px-3 py-3 text-center text-xs font-semibold text-stone-950"
-			href={site.reservationUrl}
+			href={withVisualEditingHref(site.reservationUrl, visualEditing)}
 			data-directus={getDirectusAttr({
 				enabled: visualEditing,
 				collection: 'site_settings',

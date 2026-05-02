@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { getDirectusAttr } from '$lib/directus/visual-editing';
+	import { getDirectusAttr, withVisualEditingHref } from '$lib/directus/visual-editing';
 	import type { Promotion } from '$lib/types/content';
 	import { formatPromotionWindow } from '$lib/utils/format';
 
@@ -48,7 +48,7 @@
 		</div>
 		<p class="text-sm leading-6 text-stone-400">{promotion.fullDescription}</p>
 		{#if promotion.ctaUrl}
-			<a class="btn-secondary w-full" href={promotion.ctaUrl}
+			<a class="btn-secondary w-full" href={withVisualEditingHref(promotion.ctaUrl, visualEditing)}
 				>{promotion.ctaLabel ?? defaultLabel}</a
 			>
 		{/if}

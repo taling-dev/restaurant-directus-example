@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { getDirectusAttr } from '$lib/directus/visual-editing';
+	import { getDirectusAttr, withVisualEditingHref } from '$lib/directus/visual-editing';
 	import type { SiteSettings } from '$lib/types/content';
 
 	let { site, visualEditing }: { site: SiteSettings; visualEditing: boolean } = $props();
@@ -7,7 +7,7 @@
 
 <header class="sticky top-0 z-40 border-b border-white/10 bg-stone-950/75 backdrop-blur-xl">
 	<div class="mx-auto flex max-w-6xl items-center justify-between gap-6 px-6 py-4 sm:px-8 lg:px-12">
-		<a class="flex min-w-0 items-center gap-4" href="/">
+		<a class="flex min-w-0 items-center gap-4" href={withVisualEditingHref('/', visualEditing)}>
 			{#if site.logo}
 				<img class="size-11 rounded-full object-cover" src={site.logo} alt={site.name} />
 			{:else}
@@ -43,7 +43,9 @@
 			})}
 		>
 			{#each site.navLinks as link (link.url)}
-				<a class="hover:text-white" href={link.url}>{link.label}</a>
+				<a class="hover:text-white" href={withVisualEditingHref(link.url, visualEditing)}
+					>{link.label}</a
+				>
 			{/each}
 		</nav>
 
@@ -61,7 +63,7 @@
 			>
 			<a
 				class="btn-primary"
-				href={site.reservationUrl}
+				href={withVisualEditingHref(site.reservationUrl, visualEditing)}
 				data-directus={getDirectusAttr({
 					enabled: visualEditing,
 					collection: 'site_settings',

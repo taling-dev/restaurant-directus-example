@@ -1,6 +1,6 @@
 <script lang="ts">
 	import SectionHeading from '$lib/components/content/SectionHeading.svelte';
-	import { getDirectusAttr } from '$lib/directus/visual-editing';
+	import { getDirectusAttr, withVisualEditingHref } from '$lib/directus/visual-editing';
 	import { formatServiceWindow } from '$lib/utils/format';
 
 	let { data } = $props();
@@ -55,9 +55,19 @@
 			</div>
 
 			<div class="flex flex-wrap gap-4">
-				<a class="btn-primary" href={data.site.reservationUrl}>{data.site.reserveLabel}</a>
-				<a class="btn-secondary" href={data.site.mapsUrl}>{data.site.directionsLabel}</a>
-				<a class="btn-secondary" href={data.site.whatsappUrl}>{data.site.messageLabel}</a>
+				<a
+					class="btn-primary"
+					href={withVisualEditingHref(data.site.reservationUrl, data.visualEditing)}
+					>{data.site.reserveLabel}</a
+				>
+				<a class="btn-secondary" href={withVisualEditingHref(data.site.mapsUrl, data.visualEditing)}
+					>{data.site.directionsLabel}</a
+				>
+				<a
+					class="btn-secondary"
+					href={withVisualEditingHref(data.site.whatsappUrl, data.visualEditing)}
+					>{data.site.messageLabel}</a
+				>
 			</div>
 		</div>
 

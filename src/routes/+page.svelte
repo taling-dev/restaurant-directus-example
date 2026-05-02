@@ -2,7 +2,7 @@
 	import GalleryStrip from '$lib/components/content/GalleryStrip.svelte';
 	import PromoCard from '$lib/components/content/PromoCard.svelte';
 	import SectionHeading from '$lib/components/content/SectionHeading.svelte';
-	import { getDirectusAttr } from '$lib/directus/visual-editing';
+	import { getDirectusAttr, withVisualEditingHref } from '$lib/directus/visual-editing';
 	import { formatCurrency } from '$lib/utils/format';
 
 	let { data } = $props();
@@ -101,10 +101,22 @@
 			</div>
 
 			<div class="flex flex-wrap gap-4">
-				<a class="btn-primary" href={heroSection?.ctaUrl ?? data.site.heroPrimaryUrl}>
+				<a
+					class="btn-primary"
+					href={withVisualEditingHref(
+						heroSection?.ctaUrl ?? data.site.heroPrimaryUrl,
+						data.visualEditing
+					)}
+				>
 					{heroSection?.ctaLabel ?? data.site.heroPrimaryLabel}
 				</a>
-				<a class="btn-secondary" href={heroSection?.secondaryUrl ?? data.site.heroSecondaryUrl}>
+				<a
+					class="btn-secondary"
+					href={withVisualEditingHref(
+						heroSection?.secondaryUrl ?? data.site.heroSecondaryUrl,
+						data.visualEditing
+					)}
+				>
 					{heroSection?.secondaryLabel ?? data.site.heroSecondaryLabel}
 				</a>
 			</div>
@@ -346,12 +358,18 @@
 				</p>
 			</div>
 			<div class="flex flex-wrap gap-4">
-				<a class="btn-primary" href={contactSection?.ctaUrl ?? data.site.reservationUrl}>
+				<a
+					class="btn-primary"
+					href={withVisualEditingHref(
+						contactSection?.ctaUrl ?? data.site.reservationUrl,
+						data.visualEditing
+					)}
+				>
 					{contactSection?.ctaLabel ?? data.site.contactCtaButtonLabel}
 				</a>
 				<a
 					class="btn-secondary"
-					href="/contact"
+					href={withVisualEditingHref('/contact', data.visualEditing)}
 					data-directus={getDirectusAttr({
 						enabled: data.visualEditing,
 						collection: 'site_settings',
