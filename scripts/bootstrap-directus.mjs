@@ -137,7 +137,7 @@ const collections = [
 			decimalField('promo_price', true),
 			fileField('image'),
 			stringField('image_url'),
-			stringField('category_slug'),
+			categorySlugRelationField(),
 			stringArrayField('labels'),
 			numberField('heat_level'),
 			booleanField('featured'),
@@ -549,6 +549,33 @@ function fileField(name) {
 	};
 }
 
+function categorySlugRelationField() {
+	return {
+		field: 'category_slug',
+		type: 'uuid',
+		meta: {
+			special: ['m2o'],
+			interface: 'select-dropdown-m2o',
+			options: {
+				template: '{{name}}'
+			},
+			display: 'related-values',
+			display_options: {
+				template: '{{name}}'
+			},
+			width: 'full'
+		},
+		schema: {
+			name: 'category_slug',
+			data_type: 'uuid',
+			is_nullable: true,
+			foreign_key_schema: 'public',
+			foreign_key_table: 'menu_categories',
+			foreign_key_column: 'id'
+		}
+	};
+}
+
 function idField() {
 	return {
 		field: 'id',
@@ -841,7 +868,9 @@ async function seedCollection(token, collection, items) {
 
 	for (const item of items) {
 		const key = strategy.key;
-		const value = item[key];
+		const normalizedItem =
+			collection === 'menu_items' ? await normalizeMenuItemSeed(token, item) : item;
+		const value = normalizedItem[key];
 		const filterValue = encodeURIComponent(String(value));
 		const existing = await fetchJson(
 			`/items/${collection}?limit=1&fields=id&filter[${encodeURIComponent(key)}][_eq]=${filterValue}`,
@@ -852,7 +881,7 @@ async function seedCollection(token, collection, items) {
 		if (existingItem?.id) {
 			await fetchJson(`/items/${collection}/${existingItem.id}`, token, {
 				method: 'PATCH',
-				body: item
+				body: normalizedItem
 			});
 			console.log(`Updated seed record for ${collection}.${key}=${value}`);
 			continue;
@@ -860,10 +889,32 @@ async function seedCollection(token, collection, items) {
 
 		await fetchJson(`/items/${collection}`, token, {
 			method: 'POST',
-			body: item
+			body: normalizedItem
 		});
 		console.log(`Created seed record for ${collection}.${key}=${value}`);
 	}
+}
+
+async function normalizeMenuItemSeed(token, item) {
+	const categorySlug = item.category_slug;
+
+	if (typeof categorySlug !== 'string' || categorySlug.trim().length === 0) {
+		return item;
+	}
+
+	const categoryId = await getMenuCategoryIdBySlug(token, categorySlug);
+
+	return {
+		...item,
+		category_slug: categoryId ?? categorySlug
+	};
+}
+
+async function getMenuCategoryIdBySlug(token, slug) {
+	const response = await fetchJson('/items/menu_categories?fields=id,slug&limit=100', token);
+	const rows = Array.isArray(response?.data) ? response.data : [];
+	const match = rows.find((row) => row?.slug === slug);
+	return match?.id ?? null;
 }
 
 async function fetchJson(path, token, options = {}) {

@@ -74,7 +74,7 @@ export async function getMenuCategories() {
 		.sort((left, right) => left.sort - right.sort);
 }
 
-export async function getMenuItems() {
+export async function getMenuItems(categories: MenuCategory[] = fallbackCategories) {
 	const rows = await withFallback(
 		() =>
 			readItems<JsonRecord>('menu_items', {
@@ -85,7 +85,7 @@ export async function getMenuItems() {
 	);
 
 	return rows
-		.map(mapMenuItem)
+		.map((row) => mapMenuItem(row, categories))
 		.filter((item) => item.available)
 		.sort((left, right) => left.sort - right.sort);
 }
@@ -133,13 +133,13 @@ export async function getGalleryItems() {
 }
 
 export async function getHomePageData() {
-	const [sections, categories, items, promotions, gallery] = await Promise.all([
+	const [sections, categories, promotions, gallery] = await Promise.all([
 		getHomepageSections(),
 		getMenuCategories(),
-		getMenuItems(),
 		getPromotions(),
 		getGalleryItems()
 	]);
+	const items = await getMenuItems(categories);
 
 	return {
 		sections,
@@ -283,7 +283,11 @@ function mapMenuCategory(row: JsonRecord): MenuCategory {
 	};
 }
 
-function mapMenuItem(row: JsonRecord): MenuItem {
+
+function mapMenuItem(row: JsonRecord, categories: MenuCategory[]): MenuItem {
+	const categoryToken = readRelationToken(row.category_slug) ?? readRelationToken(row.category);
+	const categorySlug = resolveMenuCategorySlug(categoryToken, categories);
+
 	return {
 		id: readOptionalString(row.id),
 		name: readString(row.name, 'Menu Item'),
@@ -299,13 +303,50 @@ function mapMenuItem(row: JsonRecord): MenuItem {
 			toDirectusAssetUrl(readOptionalString(row.image)) ||
 			toDirectusAssetUrl(readOptionalString(row.image_url)) ||
 			fallbackItems[0].imageUrl,
-		categorySlug: readString(row.category_slug, 'small-plates'),
+		categorySlug,
 		labels: readList(row.labels, []),
 		heatLevel: readNumber(row.heat_level, 0),
 		featured: readBoolean(row.featured, false),
 		available: readBoolean(row.available, true),
 		sort: readNumber(row.sort, 0)
 	};
+}
+
+function resolveMenuCategorySlug(value: string | undefined, categories: MenuCategory[]) {
+	if (!value) {
+		return fallbackCategories[0]?.slug ?? 'small-plates';
+	}
+
+	const bySlug = categories.find((category) => category.slug === value);
+	if (bySlug) {
+		return bySlug.slug;
+	}
+
+	const byId = categories.find((category) => category.id === value);
+	if (byId) {
+		return byId.slug;
+	}
+
+	const normalized = value.toLowerCase();
+	const byName = categories.find((category) => category.name.toLowerCase() === normalized);
+	if (byName) {
+		return byName.slug;
+	}
+
+	return fallbackCategories.find((category) => category.slug === value)?.slug ?? value;
+}
+
+function readRelationToken(value: unknown) {
+	if (typeof value === 'string' && value.trim().length > 0) {
+		return value;
+	}
+
+	if (typeof value === 'object' && value !== null) {
+		const record = value as JsonRecord;
+		return readOptionalString(record.id) ?? readOptionalString(record.slug) ?? readOptionalString(record.name);
+	}
+
+	return undefined;
 }
 
 function mapPromotion(row: JsonRecord): Promotion {
