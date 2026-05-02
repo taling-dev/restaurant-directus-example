@@ -1,0 +1,24 @@
+{
+  "$schema": "https://app.kilo.ai/config.json",
+  "mcp": {
+    "exa": {
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "exa-mcp-server"
+      ],
+      "environment": {
+        "EXA_API_KEY": "5c203130-a3b4-4798-bf1d-0ad2a770dffa"
+      }
+    },
+    "directus": {
+      "type": "remote",
+      "url": "https://cms.bumimas12.web.id/mcp",
+      "enabled": true,
+      "headers": {
+        "Authorization": "Bearer EztJ0PUVynys0TZKbtSp0hlnw-RlBC2e"
+      }
+    }
+  }
+}

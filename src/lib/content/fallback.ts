@@ -23,6 +23,8 @@ export const fallbackSite: SiteSettings = {
 	heroTitle: 'A restaurant site made for nightly menu edits and promo drops.',
 	heroBody:
 		'Ember & Fig blends wood-fired mains, bright market vegetables, and a bar program designed for long dinners and quick walk-ins alike.',
+	heroImage:
+		'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=80',
 	heroPrimaryLabel: 'Book a table',
 	heroPrimaryUrl: 'https://www.opentable.com/',
 	heroSecondaryLabel: 'View the menu',
@@ -33,6 +35,56 @@ export const fallbackSite: SiteSettings = {
 	aboutTitle: 'A hospitality brand with a little heat and a lot of rhythm.',
 	aboutBody:
 		'Ember & Fig is imagined as a modern neighborhood restaurant: open kitchen energy, charcoal-led dishes, and a website that helps guests decide quickly whether they are coming for lunch, cocktails, or a full dinner reservation.',
+	aboutImage:
+		'https://images.unsplash.com/photo-1552566626-52f8b828add9?auto=format&fit=crop&w=1400&q=80',
+	promosEyebrow: 'Current promos',
+	promosTitle: 'Seasonal offers that keep the room buzzing',
+	promosBody:
+		'Highlight tasting menus, cocktail hours, weekend brunches, and limited-time pairings directly from Directus.',
+	menuEyebrow: 'Menu',
+	menuTitle: 'Organized for quick scanning on phones and better merchandising on larger screens',
+	menuBody:
+		'Each category and item can be edited from Directus without changing the page structure or layout code.',
+	galleryEyebrow: 'Gallery',
+	galleryTitle: 'A visual layer for dishes, cocktails, and room mood',
+	galleryBody:
+		'Use this page for plating updates, interior shots, chef moments, and social-first imagery that can be changed weekly.',
+	contactEyebrow: 'Contact',
+	contactTitle: 'Make the visit feel easy before the guest even leaves home',
+	contactBody:
+		'Address, phone, reservation links, and service windows stay visible and easy to update from the CMS.',
+	chefPickLabel: "Chef's pick",
+	chefPickItemSlug: 'charred-carrots',
+	statsCards: [
+		{ label: 'Today', title: 'Fresh lunch and dinner service' },
+		{ label: 'Signature', title: 'Wood-fired mains and seasonal cocktails' }
+	],
+	navLinks: [
+		{ label: 'Home', url: '/' },
+		{ label: 'Menu', url: '/menu' },
+		{ label: 'Promos', url: '/promos' },
+		{ label: 'About', url: '/about' },
+		{ label: 'Gallery', url: '/gallery' },
+		{ label: 'Contact', url: '/contact' }
+	],
+	aboutCards: [
+		{
+			label: 'CMS-ready',
+			title: 'Swap hero copy, homepage blocks, and contact details from structured content.'
+		},
+		{
+			label: 'Restaurant-first',
+			title: 'Layouts prioritize menu legibility, promo urgency, and reservation conversion.'
+		},
+		{
+			label: 'Operational fit',
+			title: 'Demo content fallback keeps the frontend usable while Directus gets populated.'
+		}
+	],
+	hoursHeading: 'Hours',
+	connectHeading: 'Connect',
+	accentColor: '#fbbf24',
+	darkColor: '#0c0a09',
 	seoTitle: 'Ember & Fig | Seasonal Restaurant Website Demo',
 	seoDescription:
 		'A Directus-powered SvelteKit restaurant website with menus, promotions, hours, gallery content, and reservation CTAs.',
@@ -48,7 +100,7 @@ export const fallbackSections: HomepageSection[] = [
 	{
 		id: 'hero',
 		sectionType: 'hero',
-		eyebrow: 'Tonight’s mood',
+		eyebrow: 'Tonight\u2019s mood',
 		title: 'Menus that change fast deserve a CMS that does too.',
 		body: 'Swap in weekend specials, tasting menus, and event promos without redeploying the site.',
 		ctaLabel: 'See promos',

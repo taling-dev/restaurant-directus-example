@@ -32,7 +32,7 @@
 		</div>
 
 		<div>
-			<p class="section-kicker">Hours</p>
+			<p class="section-kicker">{site.hoursHeading}</p>
 			<div class="mt-4 space-y-3 text-sm text-stone-300">
 				{#each hours as entry (entry.day)}
 					<div
@@ -62,11 +62,11 @@
 				enabled: visualEditing,
 				collection: 'site_settings',
 				item: site.id,
-				fields: ['phone', 'email', 'maps_url', 'socials'],
+				fields: ['phone', 'email', 'maps_url', 'socials', 'connect_heading'],
 				mode: 'drawer'
 			})}
 		>
-			<p class="section-kicker">Connect</p>
+			<p class="section-kicker">{site.connectHeading}</p>
 			<div class="mt-4 space-y-3 text-sm text-stone-300">
 				<p>
 					<a class="hover:text-white" href={`tel:${site.phone.replace(/\s+/g, '')}`}>{site.phone}</a

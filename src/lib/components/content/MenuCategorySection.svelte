@@ -25,11 +25,15 @@
 			enabled: visualEditing,
 			collection: 'menu_categories',
 			item: category.id,
-			fields: ['name', 'description', 'image_url'],
+			fields: ['name', 'description', 'image'],
 			mode: 'drawer'
 		})}
 	>
-		<img class="aspect-square w-full object-cover" src={category.imageUrl} alt={category.name} />
+		<img
+			class="aspect-square w-full object-cover"
+			src={category.image || category.imageUrl}
+			alt={category.name}
+		/>
 	</div>
 	<div class="space-y-6">
 		<div class="space-y-3">

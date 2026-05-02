@@ -7,9 +7,11 @@
 	import favicon from '$lib/assets/favicon.svg';
 
 	let { data, children } = $props();
+
+	const faviconUrl = $derived(data.site.favicon || favicon);
 </script>
 
-<svelte:head><link rel="icon" href={favicon} /></svelte:head>
+<svelte:head><link rel="icon" href={faviconUrl} /></svelte:head>
 
 <VisualEditing enabled={data.visualEditing} directusUrl={data.directusUrl} />
 

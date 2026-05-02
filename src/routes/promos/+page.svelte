@@ -16,6 +16,10 @@
 			eyebrow="Promos"
 			title="Time-bound campaigns that can go live or expire without a redeploy"
 			copy="This page is designed for brunch launches, private dining pushes, cocktail windows, and seasonal menu moments."
+			visualEditing={data.visualEditing}
+			collection="site_settings"
+			item={data.site.id}
+			fields={['promos_eyebrow', 'promos_title', 'promos_body']}
 		/>
 	</div>
 </section>

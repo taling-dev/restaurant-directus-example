@@ -30,10 +30,19 @@
 			</p>
 		</div>
 
-		<div class="panel-dark overflow-hidden">
+		<div
+			class="panel-dark overflow-hidden"
+			data-directus={getDirectusAttr({
+				enabled: data.visualEditing,
+				collection: 'site_settings',
+				item: data.site.id,
+				fields: ['about_image'],
+				mode: 'popover'
+			})}
+		>
 			<img
 				class="aspect-[4/3] w-full object-cover"
-				src="https://images.unsplash.com/photo-1552566626-52f8b828add9?auto=format&fit=crop&w=1400&q=80"
+				src={data.site.aboutImage}
 				alt="Dining room interior"
 			/>
 		</div>
@@ -42,23 +51,20 @@
 
 <section class="px-6 py-16 pb-24 sm:px-8 lg:px-12 lg:py-20">
 	<div class="mx-auto grid max-w-6xl gap-6 md:grid-cols-3">
-		<div class="panel-dark p-6">
-			<p class="section-kicker">CMS-ready</p>
-			<p class="mt-4 text-lg leading-7 text-white">
-				Swap hero copy, homepage blocks, and contact details from structured content.
-			</p>
-		</div>
-		<div class="panel-dark p-6">
-			<p class="section-kicker">Restaurant-first</p>
-			<p class="mt-4 text-lg leading-7 text-white">
-				Layouts prioritize menu legibility, promo urgency, and reservation conversion.
-			</p>
-		</div>
-		<div class="panel-dark p-6">
-			<p class="section-kicker">Operational fit</p>
-			<p class="mt-4 text-lg leading-7 text-white">
-				Demo content fallback keeps the frontend usable while Directus gets populated.
-			</p>
-		</div>
+		{#each data.site.aboutCards as card (card.label)}
+			<div
+				class="panel-dark p-6"
+				data-directus={getDirectusAttr({
+					enabled: data.visualEditing,
+					collection: 'site_settings',
+					item: data.site.id,
+					fields: ['about_cards'],
+					mode: 'popover'
+				})}
+			>
+				<p class="section-kicker">{card.label}</p>
+				<p class="mt-4 text-base leading-7 text-stone-300">{card.body ?? card.title}</p>
+			</div>
+		{/each}
 	</div>
 </section>

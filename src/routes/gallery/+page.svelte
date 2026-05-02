@@ -16,6 +16,10 @@
 			eyebrow="Gallery"
 			title="A visual layer for dishes, cocktails, and room mood"
 			copy="Use this page for plating updates, interior shots, chef moments, and social-first imagery that can be changed weekly."
+			visualEditing={data.visualEditing}
+			collection="site_settings"
+			item={data.site.id}
+			fields={['gallery_eyebrow', 'gallery_title', 'gallery_body']}
 		/>
 	</div>
 </section>

@@ -16,6 +16,10 @@
 			eyebrow="Menu"
 			title="Organized for quick scanning on phones and better merchandising on larger screens"
 			copy="Each category and item can be edited from Directus without changing the page structure or layout code."
+			visualEditing={data.visualEditing}
+			collection="site_settings"
+			item={data.site.id}
+			fields={['menu_eyebrow', 'menu_title', 'menu_body']}
 		/>
 	</div>
 </section>

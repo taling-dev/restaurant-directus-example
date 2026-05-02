@@ -18,6 +18,10 @@
 				eyebrow="Contact"
 				title="Make the visit feel easy before the guest even leaves home"
 				copy="Address, phone, reservation links, and service windows stay visible and easy to update from the CMS."
+				visualEditing={data.visualEditing}
+				collection="site_settings"
+				item={data.site.id}
+				fields={['contact_eyebrow', 'contact_title', 'contact_body']}
 			/>
 
 			<div

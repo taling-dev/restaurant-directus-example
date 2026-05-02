@@ -18,16 +18,7 @@
 					enabled: data.visualEditing,
 					collection: 'homepage_sections',
 					item: heroSection.id,
-					fields: [
-						'eyebrow',
-						'title',
-						'body',
-						'cta_label',
-						'cta_url',
-						'secondary_label',
-						'secondary_url',
-						'image_url'
-					],
+					fields: ['eyebrow', 'title', 'body', 'cta_label', 'cta_url', 'image'],
 					mode: 'drawer'
 				})
 			: getDirectusAttr({
@@ -41,7 +32,8 @@
 						'hero_primary_label',
 						'hero_primary_url',
 						'hero_secondary_label',
-						'hero_secondary_url'
+						'hero_secondary_url',
+						'hero_image'
 					],
 					mode: 'drawer'
 				})
@@ -52,7 +44,7 @@
 					enabled: data.visualEditing,
 					collection: 'homepage_sections',
 					item: storySection.id,
-					fields: ['eyebrow', 'title', 'body'],
+					fields: ['eyebrow', 'title', 'body', 'image'],
 					mode: 'drawer'
 				})
 			: getDirectusAttr({
@@ -69,7 +61,7 @@
 					enabled: data.visualEditing,
 					collection: 'homepage_sections',
 					item: contactSection.id,
-					fields: ['eyebrow', 'title', 'body', 'cta_label', 'cta_url'],
+					fields: ['eyebrow', 'title', 'body', 'cta_label', 'cta_url', 'image'],
 					mode: 'drawer'
 				})
 			: undefined
@@ -106,27 +98,21 @@
 			</div>
 
 			<div class="grid gap-4 sm:grid-cols-3">
-				<div class="panel-dark">
-					<p class="text-sm tracking-[0.25em] text-amber-300/80 uppercase">Today</p>
-					<p class="mt-2 text-lg font-medium text-white">Fresh lunch and dinner service</p>
-				</div>
-				<div class="panel-dark">
-					<p class="text-sm tracking-[0.25em] text-amber-300/80 uppercase">Signature</p>
-					<p class="mt-2 text-lg font-medium text-white">Wood-fired mains and seasonal cocktails</p>
-				</div>
-				<div
-					class="panel-dark"
-					data-directus={getDirectusAttr({
-						enabled: data.visualEditing,
-						collection: 'site_settings',
-						item: data.site.id,
-						fields: ['location_note'],
-						mode: 'popover'
-					})}
-				>
-					<p class="text-sm tracking-[0.25em] text-amber-300/80 uppercase">Location</p>
-					<p class="mt-2 text-lg font-medium text-white">{data.site.locationNote}</p>
-				</div>
+				{#each data.site.statsCards as card (card.label)}
+					<div
+						class="panel-dark"
+						data-directus={getDirectusAttr({
+							enabled: data.visualEditing,
+							collection: 'site_settings',
+							item: data.site.id,
+							fields: ['stats_cards'],
+							mode: 'popover'
+						})}
+					>
+						<p class="text-sm tracking-[0.25em] text-amber-300/80 uppercase">{card.label}</p>
+						<p class="mt-2 text-lg font-medium text-white">{card.title}</p>
+					</div>
+				{/each}
 			</div>
 		</div>
 
@@ -136,18 +122,29 @@
 		>
 			<img
 				class="h-full min-h-[28rem] w-full object-cover"
-				src={heroSection?.imageUrl ?? data.featuredItems[0]?.imageUrl}
+				src={heroSection?.image ||
+					heroSection?.imageUrl ||
+					data.site.heroImage ||
+					data.featuredItems[0]?.imageUrl}
 				alt={heroSection?.title ?? data.site.heroTitle}
 			/>
 			<div
 				class="absolute inset-0 bg-gradient-to-t from-stone-950 via-stone-950/20 to-transparent"
 			></div>
 			<div class="absolute inset-x-0 bottom-0 p-6 sm:p-8">
-				<p class="text-sm tracking-[0.25em] text-amber-300/80 uppercase">Chef's pick</p>
-				<p class="mt-3 text-2xl font-semibold text-white">{data.featuredItems[0]?.name}</p>
-				<p class="mt-2 max-w-sm text-sm leading-6 text-stone-200">
-					{data.featuredItems[0]?.description}
+				<p class="text-sm tracking-[0.25em] text-amber-300/80 uppercase">
+					{data.site.chefPickLabel}
 				</p>
+				{#if data.featuredItems.find((i) => i.slug === data.site.chefPickItemSlug)}
+					{@const pick = data.featuredItems.find((i) => i.slug === data.site.chefPickItemSlug)}
+					<p class="mt-3 text-2xl font-semibold text-white">{pick?.name}</p>
+					<p class="mt-2 max-w-sm text-sm leading-6 text-stone-200">{pick?.description}</p>
+				{:else}
+					<p class="mt-3 text-2xl font-semibold text-white">{data.featuredItems[0]?.name}</p>
+					<p class="mt-2 max-w-sm text-sm leading-6 text-stone-200">
+						{data.featuredItems[0]?.description}
+					</p>
+				{/if}
 			</div>
 		</div>
 	</div>
@@ -175,7 +172,11 @@
 						mode: 'drawer'
 					})}
 				>
-					<img class="aspect-[4/3] w-full object-cover" src={item.imageUrl} alt={item.name} />
+					<img
+						class="aspect-[4/3] w-full object-cover"
+						src={item.image || item.imageUrl}
+						alt={item.name}
+					/>
 					<div class="flex flex-1 flex-col gap-4 p-5">
 						<div class="flex items-start justify-between gap-4">
 							<div>
@@ -204,6 +205,10 @@
 			eyebrow="Current promos"
 			title="Seasonal offers that keep the room buzzing"
 			copy="Highlight tasting menus, cocktail hours, weekend brunches, and limited-time pairings directly from Directus."
+			visualEditing={data.visualEditing}
+			collection="site_settings"
+			item={data.site.id}
+			fields={['promos_eyebrow', 'promos_title', 'promos_body']}
 		/>
 
 		<div class="grid gap-6 lg:grid-cols-3">
@@ -221,6 +226,10 @@
 				eyebrow="Menu structure"
 				title="Built for fast edits, clear navigation, and table-side decisions"
 				copy="Organize dishes by course, attach label chips for dietary notes, and feature best sellers across the homepage and menu page."
+				visualEditing={data.visualEditing}
+				collection="site_settings"
+				item={data.site.id}
+				fields={['menu_eyebrow', 'menu_title', 'menu_body']}
 			/>
 			<div class="grid gap-3 sm:grid-cols-2">
 				{#each data.categories as category (category.slug)}
@@ -277,6 +286,10 @@
 			eyebrow="Gallery"
 			title="Atmosphere, plating, and the little details that sell the experience"
 			copy="Every gallery card can come from Directus so marketing updates feel as quick as a nightly special."
+			visualEditing={data.visualEditing}
+			collection="site_settings"
+			item={data.site.id}
+			fields={['gallery_eyebrow', 'gallery_title', 'gallery_body']}
 		/>
 		<GalleryStrip items={data.gallery} visualEditing={data.visualEditing} />
 	</div>

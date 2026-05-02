@@ -18,6 +18,7 @@ export type SiteSettings = {
 	heroBadge: string;
 	heroTitle: string;
 	heroBody: string;
+	heroImage?: string;
 	heroPrimaryLabel: string;
 	heroPrimaryUrl: string;
 	heroSecondaryLabel: string;
@@ -26,6 +27,30 @@ export type SiteSettings = {
 	storyBody: string;
 	aboutTitle: string;
 	aboutBody: string;
+	aboutImage?: string;
+	promosEyebrow: string;
+	promosTitle: string;
+	promosBody: string;
+	menuEyebrow: string;
+	menuTitle: string;
+	menuBody: string;
+	galleryEyebrow: string;
+	galleryTitle: string;
+	galleryBody: string;
+	contactEyebrow: string;
+	contactTitle: string;
+	contactBody: string;
+	chefPickLabel: string;
+	chefPickItemSlug: string;
+	statsCards: { label: string; title: string }[];
+	navLinks: { label: string; url: string }[];
+	aboutCards: { label: string; title: string; body?: string }[];
+	hoursHeading: string;
+	connectHeading: string;
+	accentColor: string;
+	darkColor: string;
+	favicon?: string;
+	logo?: string;
 	seoTitle: string;
 	seoDescription: string;
 	footerNote: string;
@@ -50,6 +75,7 @@ export type HomepageSection = {
 	ctaUrl?: string;
 	secondaryLabel?: string;
 	secondaryUrl?: string;
+	image?: string;
 	imageUrl?: string;
 	sort: number;
 };
@@ -59,6 +85,7 @@ export type MenuCategory = {
 	name: string;
 	slug: string;
 	description: string;
+	image?: string;
 	imageUrl: string;
 	sort: number;
 	active: boolean;
@@ -71,6 +98,7 @@ export type MenuItem = {
 	description: string;
 	price: number;
 	promoPrice?: number | null;
+	image?: string;
 	imageUrl: string;
 	categorySlug: string;
 	labels: string[];
@@ -86,6 +114,7 @@ export type Promotion = {
 	slug: string;
 	shortDescription: string;
 	fullDescription: string;
+	image?: string;
 	imageUrl: string;
 	startDate?: string;
 	endDate?: string;
@@ -107,6 +136,7 @@ export type BusinessHour = {
 
 export type GalleryItem = {
 	id?: string;
+	image?: string;
 	imageUrl: string;
 	altText: string;
 	caption?: string;

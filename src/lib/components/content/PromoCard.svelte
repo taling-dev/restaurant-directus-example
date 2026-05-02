@@ -16,7 +16,7 @@
 			'title',
 			'short_description',
 			'full_description',
-			'image_url',
+			'image',
 			'start_date',
 			'end_date',
 			'cta_label',
@@ -27,7 +27,11 @@
 		mode: 'drawer'
 	})}
 >
-	<img class="aspect-[4/3] w-full object-cover" src={promotion.imageUrl} alt={promotion.title} />
+	<img
+		class="aspect-[4/3] w-full object-cover"
+		src={promotion.image || promotion.imageUrl}
+		alt={promotion.title}
+	/>
 	<div class="space-y-4 p-5">
 		<div>
 			<p class="section-kicker">{formatPromotionWindow(promotion)}</p>

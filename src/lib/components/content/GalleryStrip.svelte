@@ -13,11 +13,15 @@
 				enabled: visualEditing,
 				collection: 'gallery_items',
 				item: item.id,
-				fields: ['image_url', 'alt_text', 'caption', 'sort'],
+				fields: ['image', 'alt_text', 'caption', 'sort'],
 				mode: 'drawer'
 			})}
 		>
-			<img class="aspect-[4/3] w-full object-cover" src={item.imageUrl} alt={item.altText} />
+			<img
+				class="aspect-[4/3] w-full object-cover"
+				src={item.image || item.imageUrl}
+				alt={item.altText}
+			/>
 			{#if item.caption}
 				<figcaption class="px-4 py-4 text-sm leading-6 text-stone-300">{item.caption}</figcaption>
 			{/if}

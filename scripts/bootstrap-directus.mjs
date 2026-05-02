@@ -38,6 +38,7 @@ const collections = [
 			stringField('hero_badge'),
 			stringField('hero_title'),
 			textField('hero_body'),
+			fileField('hero_image'),
 			stringField('hero_primary_label'),
 			stringField('hero_primary_url'),
 			stringField('hero_secondary_label'),
@@ -46,6 +47,30 @@ const collections = [
 			textField('story_body'),
 			stringField('about_title'),
 			textField('about_body'),
+			fileField('about_image'),
+			stringField('promos_eyebrow'),
+			stringField('promos_title'),
+			textField('promos_body'),
+			stringField('menu_eyebrow'),
+			stringField('menu_title'),
+			textField('menu_body'),
+			stringField('gallery_eyebrow'),
+			stringField('gallery_title'),
+			textField('gallery_body'),
+			stringField('contact_eyebrow'),
+			stringField('contact_title'),
+			textField('contact_body'),
+			stringField('chef_pick_label'),
+			stringField('chef_pick_item_slug'),
+			jsonField('stats_cards'),
+			jsonField('nav_links'),
+			jsonField('about_cards'),
+			stringField('hours_heading'),
+			stringField('connect_heading'),
+			stringField('accent_color'),
+			stringField('dark_color'),
+			fileField('favicon'),
+			fileField('logo'),
 			stringField('seo_title'),
 			textField('seo_description'),
 			textField('footer_note'),
@@ -64,6 +89,7 @@ const collections = [
 			stringField('cta_url'),
 			stringField('secondary_label'),
 			stringField('secondary_url'),
+			fileField('image'),
 			stringField('image_url'),
 			numberField('sort')
 		]
@@ -75,6 +101,7 @@ const collections = [
 			stringField('name'),
 			stringField('slug'),
 			textField('description'),
+			fileField('image'),
 			stringField('image_url'),
 			numberField('sort'),
 			booleanField('active')
@@ -89,6 +116,7 @@ const collections = [
 			textField('description'),
 			decimalField('price'),
 			decimalField('promo_price', true),
+			fileField('image'),
 			stringField('image_url'),
 			stringField('category_slug'),
 			jsonField('labels'),
@@ -106,6 +134,7 @@ const collections = [
 			stringField('slug'),
 			textField('short_description'),
 			textField('full_description'),
+			fileField('image'),
 			stringField('image_url'),
 			dateField('start_date', true),
 			dateField('end_date', true),
@@ -131,6 +160,7 @@ const collections = [
 		collection: 'gallery_items',
 		meta: { icon: 'photo_library' },
 		fields: [
+			fileField('image'),
 			stringField('image_url'),
 			stringField('alt_text'),
 			textField('caption'),
@@ -388,6 +418,23 @@ function textField(name) {
 		schema: {
 			name,
 			data_type: 'text'
+		}
+	};
+}
+
+function fileField(name) {
+	return {
+		field: name,
+		type: 'uuid',
+		meta: {
+			special: ['file'],
+			interface: 'file-image',
+			width: 'full'
+		},
+		schema: {
+			name,
+			data_type: 'uuid',
+			is_nullable: true
 		}
 	};
 }

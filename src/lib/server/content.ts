@@ -174,6 +174,10 @@ function mapSiteSettings(record: JsonRecord): SiteSettings {
 		heroBadge: readString(record.hero_badge, fallbackSite.heroBadge),
 		heroTitle: readString(record.hero_title, fallbackSite.heroTitle),
 		heroBody: readString(record.hero_body, fallbackSite.heroBody),
+		heroImage:
+			toDirectusAssetUrl(readOptionalString(record.hero_image)) ||
+			toDirectusAssetUrl(readOptionalString(record.hero_image_url)) ||
+			fallbackSite.heroImage,
 		heroPrimaryLabel: readString(record.hero_primary_label, fallbackSite.heroPrimaryLabel),
 		heroPrimaryUrl: readString(record.hero_primary_url, fallbackSite.heroPrimaryUrl),
 		heroSecondaryLabel: readString(record.hero_secondary_label, fallbackSite.heroSecondaryLabel),
@@ -182,6 +186,33 @@ function mapSiteSettings(record: JsonRecord): SiteSettings {
 		storyBody: readString(record.story_body, fallbackSite.storyBody),
 		aboutTitle: readString(record.about_title, fallbackSite.aboutTitle),
 		aboutBody: readString(record.about_body, fallbackSite.aboutBody),
+		aboutImage:
+			toDirectusAssetUrl(readOptionalString(record.about_image)) ||
+			toDirectusAssetUrl(readOptionalString(record.about_image_url)) ||
+			fallbackSite.aboutImage,
+		promosEyebrow: readString(record.promos_eyebrow, fallbackSite.promosEyebrow),
+		promosTitle: readString(record.promos_title, fallbackSite.promosTitle),
+		promosBody: readString(record.promos_body, fallbackSite.promosBody),
+		menuEyebrow: readString(record.menu_eyebrow, fallbackSite.menuEyebrow),
+		menuTitle: readString(record.menu_title, fallbackSite.menuTitle),
+		menuBody: readString(record.menu_body, fallbackSite.menuBody),
+		galleryEyebrow: readString(record.gallery_eyebrow, fallbackSite.galleryEyebrow),
+		galleryTitle: readString(record.gallery_title, fallbackSite.galleryTitle),
+		galleryBody: readString(record.gallery_body, fallbackSite.galleryBody),
+		contactEyebrow: readString(record.contact_eyebrow, fallbackSite.contactEyebrow),
+		contactTitle: readString(record.contact_title, fallbackSite.contactTitle),
+		contactBody: readString(record.contact_body, fallbackSite.contactBody),
+		chefPickLabel: readString(record.chef_pick_label, fallbackSite.chefPickLabel),
+		chefPickItemSlug: readString(record.chef_pick_item_slug, fallbackSite.chefPickItemSlug),
+		statsCards: readStatsCards(record.stats_cards, fallbackSite.statsCards),
+		navLinks: readNavLinks(record.nav_links, fallbackSite.navLinks),
+		aboutCards: readAboutCards(record.about_cards, fallbackSite.aboutCards),
+		hoursHeading: readString(record.hours_heading, fallbackSite.hoursHeading),
+		connectHeading: readString(record.connect_heading, fallbackSite.connectHeading),
+		accentColor: readString(record.accent_color, fallbackSite.accentColor),
+		darkColor: readString(record.dark_color, fallbackSite.darkColor),
+		favicon: toDirectusAssetUrl(readOptionalString(record.favicon)) || fallbackSite.favicon,
+		logo: toDirectusAssetUrl(readOptionalString(record.logo)) || fallbackSite.logo,
 		seoTitle: readString(record.seo_title, fallbackSite.seoTitle),
 		seoDescription: readString(record.seo_description, fallbackSite.seoDescription),
 		footerNote: readString(record.footer_note, fallbackSite.footerNote),
@@ -200,7 +231,12 @@ function mapHomepageSection(row: JsonRecord): HomepageSection {
 		ctaUrl: readOptionalString(row.cta_url),
 		secondaryLabel: readOptionalString(row.secondary_label),
 		secondaryUrl: readOptionalString(row.secondary_url),
-		imageUrl: toDirectusAssetUrl(readOptionalString(row.image_url)),
+		image:
+			toDirectusAssetUrl(readOptionalString(row.image)) ||
+			toDirectusAssetUrl(readOptionalString(row.image_url)),
+		imageUrl:
+			toDirectusAssetUrl(readOptionalString(row.image)) ||
+			toDirectusAssetUrl(readOptionalString(row.image_url)),
 		sort: readNumber(row.sort, 0)
 	};
 }
@@ -211,8 +247,14 @@ function mapMenuCategory(row: JsonRecord): MenuCategory {
 		name: readString(row.name, 'Menu Category'),
 		slug: readString(row.slug, 'menu-category'),
 		description: readString(row.description, ''),
+		image:
+			toDirectusAssetUrl(readOptionalString(row.image)) ||
+			toDirectusAssetUrl(readOptionalString(row.image_url)) ||
+			fallbackCategories[0].imageUrl,
 		imageUrl:
-			toDirectusAssetUrl(readOptionalString(row.image_url)) || fallbackCategories[0].imageUrl,
+			toDirectusAssetUrl(readOptionalString(row.image)) ||
+			toDirectusAssetUrl(readOptionalString(row.image_url)) ||
+			fallbackCategories[0].imageUrl,
 		sort: readNumber(row.sort, 0),
 		active: readBoolean(row.active, true)
 	};
@@ -226,7 +268,14 @@ function mapMenuItem(row: JsonRecord): MenuItem {
 		description: readString(row.description, ''),
 		price: readNumber(row.price, 0),
 		promoPrice: readNullableNumber(row.promo_price),
-		imageUrl: toDirectusAssetUrl(readOptionalString(row.image_url)) || fallbackItems[0].imageUrl,
+		image:
+			toDirectusAssetUrl(readOptionalString(row.image)) ||
+			toDirectusAssetUrl(readOptionalString(row.image_url)) ||
+			fallbackItems[0].imageUrl,
+		imageUrl:
+			toDirectusAssetUrl(readOptionalString(row.image)) ||
+			toDirectusAssetUrl(readOptionalString(row.image_url)) ||
+			fallbackItems[0].imageUrl,
 		categorySlug: readString(row.category_slug, 'small-plates'),
 		labels: readList(row.labels, []),
 		heatLevel: readNumber(row.heat_level, 0),
@@ -243,8 +292,14 @@ function mapPromotion(row: JsonRecord): Promotion {
 		slug: readString(row.slug, 'promotion'),
 		shortDescription: readString(row.short_description, ''),
 		fullDescription: readString(row.full_description, ''),
+		image:
+			toDirectusAssetUrl(readOptionalString(row.image)) ||
+			toDirectusAssetUrl(readOptionalString(row.image_url)) ||
+			fallbackPromotions[0].imageUrl,
 		imageUrl:
-			toDirectusAssetUrl(readOptionalString(row.image_url)) || fallbackPromotions[0].imageUrl,
+			toDirectusAssetUrl(readOptionalString(row.image)) ||
+			toDirectusAssetUrl(readOptionalString(row.image_url)) ||
+			fallbackPromotions[0].imageUrl,
 		startDate: readOptionalString(row.start_date),
 		endDate: readOptionalString(row.end_date),
 		ctaLabel: readOptionalString(row.cta_label),
@@ -269,7 +324,14 @@ function mapBusinessHour(row: JsonRecord): BusinessHour {
 function mapGalleryItem(row: JsonRecord): GalleryItem {
 	return {
 		id: readOptionalString(row.id),
-		imageUrl: toDirectusAssetUrl(readOptionalString(row.image_url)) || fallbackGallery[0].imageUrl,
+		image:
+			toDirectusAssetUrl(readOptionalString(row.image)) ||
+			toDirectusAssetUrl(readOptionalString(row.image_url)) ||
+			fallbackGallery[0].imageUrl,
+		imageUrl:
+			toDirectusAssetUrl(readOptionalString(row.image)) ||
+			toDirectusAssetUrl(readOptionalString(row.image_url)) ||
+			fallbackGallery[0].imageUrl,
 		altText: readString(row.alt_text, 'Gallery image'),
 		caption: readOptionalString(row.caption),
 		sort: readNumber(row.sort, 0)
@@ -371,4 +433,92 @@ function readSocials(value: unknown, fallback: SiteSettings['socials']) {
 		.filter((entry): entry is SiteSettings['socials'][number] => entry !== null);
 
 	return entries.length > 0 ? entries : fallback;
+}
+
+function readStatsCards(value: unknown, fallback: SiteSettings['statsCards']) {
+	if (Array.isArray(value)) {
+		const entries = value
+			.map((entry) => {
+				if (typeof entry !== 'object' || entry === null) return null;
+				const record = entry as JsonRecord;
+				const label = readOptionalString(record.label);
+				const title = readOptionalString(record.title);
+				if (!label || !title) return null;
+				return { label, title };
+			})
+			.filter((entry): entry is SiteSettings['statsCards'][number] => entry !== null);
+		return entries.length > 0 ? entries : fallback;
+	}
+
+	if (typeof value === 'string' && value.trim().length > 0) {
+		try {
+			const parsed = JSON.parse(value);
+			if (Array.isArray(parsed)) {
+				return readStatsCards(parsed, fallback);
+			}
+		} catch {
+			return fallback;
+		}
+	}
+
+	return fallback;
+}
+
+function readNavLinks(value: unknown, fallback: SiteSettings['navLinks']) {
+	if (Array.isArray(value)) {
+		const entries = value
+			.map((entry) => {
+				if (typeof entry !== 'object' || entry === null) return null;
+				const record = entry as JsonRecord;
+				const label = readOptionalString(record.label);
+				const url = readOptionalString(record.url);
+				if (!label || !url) return null;
+				return { label, url };
+			})
+			.filter((entry): entry is SiteSettings['navLinks'][number] => entry !== null);
+		return entries.length > 0 ? entries : fallback;
+	}
+
+	if (typeof value === 'string' && value.trim().length > 0) {
+		try {
+			const parsed = JSON.parse(value);
+			if (Array.isArray(parsed)) {
+				return readNavLinks(parsed, fallback);
+			}
+		} catch {
+			return fallback;
+		}
+	}
+
+	return fallback;
+}
+
+function readAboutCards(value: unknown, fallback: SiteSettings['aboutCards']) {
+	if (Array.isArray(value)) {
+		const entries = value
+			.map((entry) => {
+				if (typeof entry !== 'object' || entry === null) return null;
+				const record = entry as JsonRecord;
+				const label = readOptionalString(record.label);
+				const title = readOptionalString(record.title);
+				const body = readOptionalString(record.body);
+				if (!label || !title || !body) return null;
+				return { label, title, body };
+			})
+			.filter((entry) => entry !== null) as SiteSettings['aboutCards'];
+		return entries.length > 0 ? entries : fallback;
+	}
+
+	if (typeof value === 'string' && value.trim().length > 0) {
+		try {
+			const parsed = JSON.parse(value);
+			if (Array.isArray(parsed)) {
+				return readAboutCards(parsed, fallback);
+			}
+		} catch {
+			return fallback;
+		}
+	}
+
+	return fallback;
 }

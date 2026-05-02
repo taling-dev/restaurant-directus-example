@@ -3,32 +3,27 @@
 	import type { SiteSettings } from '$lib/types/content';
 
 	let { site, visualEditing }: { site: SiteSettings; visualEditing: boolean } = $props();
-
-	const links = [
-		{ href: '/', label: 'Home' },
-		{ href: '/menu', label: 'Menu' },
-		{ href: '/promos', label: 'Promos' },
-		{ href: '/about', label: 'About' },
-		{ href: '/gallery', label: 'Gallery' },
-		{ href: '/contact', label: 'Contact' }
-	];
 </script>
 
 <header class="sticky top-0 z-40 border-b border-white/10 bg-stone-950/75 backdrop-blur-xl">
 	<div class="mx-auto flex max-w-6xl items-center justify-between gap-6 px-6 py-4 sm:px-8 lg:px-12">
 		<a class="flex min-w-0 items-center gap-4" href="/">
-			<div
-				class="flex size-11 items-center justify-center rounded-full border border-amber-300/30 bg-amber-300/10 text-sm font-semibold tracking-[0.3em] text-amber-300"
-			>
-				E&F
-			</div>
+			{#if site.logo}
+				<img class="size-11 rounded-full object-cover" src={site.logo} alt={site.name} />
+			{:else}
+				<div
+					class="flex size-11 items-center justify-center rounded-full border border-amber-300/30 bg-amber-300/10 text-sm font-semibold tracking-[0.3em] text-amber-300"
+				>
+					E&F
+				</div>
+			{/if}
 			<div
 				class="min-w-0"
 				data-directus={getDirectusAttr({
 					enabled: visualEditing,
 					collection: 'site_settings',
 					item: site.id,
-					fields: ['name', 'tagline'],
+					fields: ['name', 'tagline', 'logo'],
 					mode: 'popover'
 				})}
 			>
@@ -38,8 +33,8 @@
 		</a>
 
 		<nav class="hidden items-center gap-6 text-sm text-stone-300 lg:flex">
-			{#each links as link (link.href)}
-				<a class="hover:text-white" href={link.href}>{link.label}</a>
+			{#each site.navLinks as link (link.url)}
+				<a class="hover:text-white" href={link.url}>{link.label}</a>
 			{/each}
 		</nav>
 
