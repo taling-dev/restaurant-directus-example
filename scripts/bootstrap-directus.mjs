@@ -4,12 +4,19 @@ const DIRECTUS_URL = (process.env.PUBLIC_DIRECTUS_URL ?? 'http://localhost:8055'
 	/\/$/,
 	''
 );
+const DIRECTUS_ADMIN_TOKEN = process.env.DIRECTUS_ADMIN_TOKEN ?? process.env.DIRECTUS_TOKEN;
 const DIRECTUS_EMAIL = process.env.DIRECTUS_ADMIN_EMAIL;
 const DIRECTUS_PASSWORD = process.env.DIRECTUS_ADMIN_PASSWORD;
 const shouldSeed = process.argv.includes('--seed');
+const shouldRepairBroken =
+	process.argv.includes('--repair-broken') ||
+	process.env.DIRECTUS_BOOTSTRAP_REPAIR_BROKEN === 'true';
+let currentIdentity = null;
 
-if (!DIRECTUS_EMAIL || !DIRECTUS_PASSWORD) {
-	console.error('Missing DIRECTUS_ADMIN_EMAIL or DIRECTUS_ADMIN_PASSWORD.');
+if (!DIRECTUS_ADMIN_TOKEN && (!DIRECTUS_EMAIL || !DIRECTUS_PASSWORD)) {
+	console.error(
+		'Missing bootstrap credentials. Set DIRECTUS_ADMIN_TOKEN, or set DIRECTUS_ADMIN_EMAIL and DIRECTUS_ADMIN_PASSWORD.'
+	);
 	process.exit(1);
 }
 
@@ -18,30 +25,30 @@ const collections = [
 		collection: 'site_settings',
 		meta: { icon: 'storefront', note: 'Global restaurant settings', singleton: true },
 		fields: [
-			field('name'),
-			field('tagline', 'text'),
-			field('currency_code', 'string'),
-			field('phone'),
-			field('email'),
+			stringField('name'),
+			textField('tagline'),
+			stringField('currency_code'),
+			stringField('phone'),
+			stringField('email'),
 			jsonField('address_lines'),
-			field('location_note', 'text'),
-			field('reservation_url'),
-			field('maps_url'),
-			field('whatsapp_url'),
-			field('hero_badge'),
-			field('hero_title'),
-			field('hero_body', 'text'),
-			field('hero_primary_label'),
-			field('hero_primary_url'),
-			field('hero_secondary_label'),
-			field('hero_secondary_url'),
-			field('story_heading'),
-			field('story_body', 'text'),
-			field('about_title'),
-			field('about_body', 'text'),
-			field('seo_title'),
-			field('seo_description', 'text'),
-			field('footer_note', 'text'),
+			textField('location_note'),
+			stringField('reservation_url'),
+			stringField('maps_url'),
+			stringField('whatsapp_url'),
+			stringField('hero_badge'),
+			stringField('hero_title'),
+			textField('hero_body'),
+			stringField('hero_primary_label'),
+			stringField('hero_primary_url'),
+			stringField('hero_secondary_label'),
+			stringField('hero_secondary_url'),
+			stringField('story_heading'),
+			textField('story_body'),
+			stringField('about_title'),
+			textField('about_body'),
+			stringField('seo_title'),
+			textField('seo_description'),
+			textField('footer_note'),
 			jsonField('socials')
 		]
 	},
@@ -49,15 +56,15 @@ const collections = [
 		collection: 'homepage_sections',
 		meta: { icon: 'view_agenda', note: 'Editable homepage blocks' },
 		fields: [
-			field('section_type'),
-			field('eyebrow'),
-			field('title'),
-			field('body', 'text'),
-			field('cta_label'),
-			field('cta_url'),
-			field('secondary_label'),
-			field('secondary_url'),
-			field('image_url'),
+			stringField('section_type'),
+			stringField('eyebrow'),
+			stringField('title'),
+			textField('body'),
+			stringField('cta_label'),
+			stringField('cta_url'),
+			stringField('secondary_label'),
+			stringField('secondary_url'),
+			stringField('image_url'),
 			numberField('sort')
 		]
 	},
@@ -65,10 +72,10 @@ const collections = [
 		collection: 'menu_categories',
 		meta: { icon: 'restaurant_menu' },
 		fields: [
-			field('name'),
-			field('slug'),
-			field('description', 'text'),
-			field('image_url'),
+			stringField('name'),
+			stringField('slug'),
+			textField('description'),
+			stringField('image_url'),
 			numberField('sort'),
 			booleanField('active')
 		]
@@ -77,13 +84,13 @@ const collections = [
 		collection: 'menu_items',
 		meta: { icon: 'lunch_dining' },
 		fields: [
-			field('name'),
-			field('slug'),
-			field('description', 'text'),
+			stringField('name'),
+			stringField('slug'),
+			textField('description'),
 			decimalField('price'),
 			decimalField('promo_price', true),
-			field('image_url'),
-			field('category_slug'),
+			stringField('image_url'),
+			stringField('category_slug'),
 			jsonField('labels'),
 			numberField('heat_level'),
 			booleanField('featured'),
@@ -95,15 +102,15 @@ const collections = [
 		collection: 'promotions',
 		meta: { icon: 'local_offer' },
 		fields: [
-			field('title'),
-			field('slug'),
-			field('short_description', 'text'),
-			field('full_description', 'text'),
-			field('image_url'),
+			stringField('title'),
+			stringField('slug'),
+			textField('short_description'),
+			textField('full_description'),
+			stringField('image_url'),
 			dateField('start_date', true),
 			dateField('end_date', true),
-			field('cta_label'),
-			field('cta_url'),
+			stringField('cta_label'),
+			stringField('cta_url'),
 			booleanField('featured'),
 			booleanField('active')
 		]
@@ -112,20 +119,35 @@ const collections = [
 		collection: 'business_hours',
 		meta: { icon: 'schedule' },
 		fields: [
-			field('day'),
-			field('open'),
-			field('close'),
+			stringField('day'),
+			stringField('open'),
+			stringField('close'),
 			booleanField('closed'),
-			field('note', 'text'),
+			textField('note'),
 			numberField('sort')
 		]
 	},
 	{
 		collection: 'gallery_items',
 		meta: { icon: 'photo_library' },
-		fields: [field('image_url'), field('alt_text'), field('caption', 'text'), numberField('sort')]
+		fields: [
+			stringField('image_url'),
+			stringField('alt_text'),
+			textField('caption'),
+			numberField('sort')
+		]
 	}
 ];
+
+const seedStrategies = {
+	site_settings: { type: 'singleton' },
+	homepage_sections: { type: 'by-key', key: 'section_type' },
+	menu_categories: { type: 'by-key', key: 'slug' },
+	menu_items: { type: 'by-key', key: 'slug' },
+	promotions: { type: 'by-key', key: 'slug' },
+	business_hours: { type: 'by-key', key: 'day' },
+	gallery_items: { type: 'by-key', key: 'sort' }
+};
 
 const seedRecords = {
 	site_settings: [
@@ -287,14 +309,49 @@ const seedRecords = {
 	]
 };
 
-const token = await login();
+const token = await getAccessToken();
+await loadCurrentIdentity(token);
+await assertSchemaAccess(token);
+await clearInternalCache(token);
 
 for (const collection of collections) {
-	await ensureCollection(token, collection);
+	const created = await ensureCollection(token, collection);
+
+	if (created) {
+		await clearInternalCache(token);
+		continue;
+	}
+
+	let existingFields;
+
+	try {
+		existingFields = await waitForCollectionFields(token, collection, created);
+	} catch (error) {
+		if (shouldRepairBroken && isBrokenCollectionError(error)) {
+			await repairBrokenCollection(token, collection);
+			continue;
+		}
+
+		throw error;
+	}
+
+	const existingFieldNames = new Set(
+		Array.isArray(existingFields?.data)
+			? existingFields.data.map((field) => field.field).filter(Boolean)
+			: []
+	);
+
 	for (const currentField of collection.fields) {
-		await ensureField(token, collection.collection, currentField);
+		if (existingFieldNames.has(currentField.field)) {
+			continue;
+		}
+
+		await createField(token, collection.collection, currentField);
+		existingFieldNames.add(currentField.field);
 	}
 }
+
+await clearInternalCache(token);
 
 if (shouldSeed) {
 	for (const [collection, items] of Object.entries(seedRecords)) {
@@ -304,18 +361,50 @@ if (shouldSeed) {
 
 console.log('Directus bootstrap complete.');
 
-function field(name, interfaceType = 'input') {
+function stringField(name) {
 	return {
 		field: name,
 		type: 'string',
 		meta: {
-			interface: interfaceType,
+			interface: 'input',
 			width: 'full'
 		},
 		schema: {
 			name,
 			data_type: 'varchar',
 			max_length: 255
+		}
+	};
+}
+
+function textField(name) {
+	return {
+		field: name,
+		type: 'text',
+		meta: {
+			interface: 'input-multiline',
+			width: 'full'
+		},
+		schema: {
+			name,
+			data_type: 'text'
+		}
+	};
+}
+
+function idField() {
+	return {
+		field: 'id',
+		type: 'integer',
+		meta: {
+			hidden: true,
+			readonly: true,
+			interface: 'input',
+			special: ['auto-increment']
+		},
+		schema: {
+			is_primary_key: true,
+			has_auto_increment: true
 		}
 	};
 }
@@ -401,6 +490,15 @@ function dateField(name, nullable = false) {
 	};
 }
 
+async function getAccessToken() {
+	if (DIRECTUS_ADMIN_TOKEN) {
+		console.log('Using DIRECTUS_ADMIN_TOKEN for Directus bootstrap authentication.');
+		return DIRECTUS_ADMIN_TOKEN;
+	}
+
+	return login();
+}
+
 async function login() {
 	const response = await fetch(`${DIRECTUS_URL}/auth/login`, {
 		method: 'POST',
@@ -416,35 +514,65 @@ async function login() {
 	return payload.data.access_token;
 }
 
-async function ensureCollection(token, collection) {
-	const existing = await fetchJson(`/collections/${collection.collection}`, token, {
-		allowNotFound: true
-	});
-	if (existing) {
-		console.log(`Collection exists: ${collection.collection}`);
-		return;
-	}
+async function loadCurrentIdentity(token) {
+	try {
+		const payload = await fetchJson('/users/me?fields=id,email,role.id,role.name', token);
+		currentIdentity = payload?.data ?? null;
 
-	await fetchJson('/collections', token, {
-		method: 'POST',
-		body: {
-			collection: collection.collection,
-			meta: collection.meta,
-			schema: { name: collection.collection }
+		if (!currentIdentity) {
+			return;
+		}
+
+		const roleName = currentIdentity.role?.name ?? 'unknown';
+		console.log(
+			`Authenticated as ${currentIdentity.email ?? currentIdentity.id} (role: ${roleName})`
+		);
+	} catch {
+		console.warn('Authenticated, but could not inspect Directus user identity.');
+	}
+}
+
+async function assertSchemaAccess(token) {
+	const response = await fetch(`${DIRECTUS_URL}/collections?limit=1`, {
+		headers: {
+			Authorization: `Bearer ${token}`,
+			Accept: 'application/json'
 		}
 	});
 
-	console.log(`Created collection: ${collection.collection}`);
-}
-
-async function ensureField(token, collection, fieldConfig) {
-	const existing = await fetchJson(`/fields/${collection}/${fieldConfig.field}`, token, {
-		allowNotFound: true
-	});
-	if (existing) {
+	if (response.ok) {
 		return;
 	}
 
+	const details = await response.text();
+	throw new Error(
+		[
+			`Schema access preflight failed: GET /collections returned ${response.status} ${details}`,
+			currentIdentity
+				? `Authenticated identity: ${currentIdentity.email ?? currentIdentity.id} (role: ${currentIdentity.role?.name ?? 'unavailable'})`
+				: 'Authenticated identity could not be inspected.',
+			'In Directus v11, admin access is policy-based and role details may be hidden on /users/me. Compare the returned user ID with the user in the Directus admin UI and verify that user has the expected Administrator access policy.',
+			'If the token belongs to the correct admin user but /collections still returns 403, you are likely pointing at the wrong Directus instance or using a token from a different project or environment.'
+		].join('\n')
+	);
+}
+
+async function ensureCollection(token, collection) {
+	const existing = await fetchJson(
+		`/collections?filter[collection][_eq]=${encodeURIComponent(collection.collection)}&limit=1`,
+		token
+	);
+	const existingCollection = Array.isArray(existing?.data) ? existing.data[0] : null;
+	if (existingCollection) {
+		console.log(`Collection exists: ${collection.collection}`);
+		return false;
+	}
+
+	await createCollection(token, collection);
+	return true;
+}
+
+async function createField(token, collection, fieldConfig) {
 	await fetchJson(`/fields/${collection}`, token, {
 		method: 'POST',
 		body: fieldConfig
@@ -452,18 +580,117 @@ async function ensureField(token, collection, fieldConfig) {
 	console.log(`Created field: ${collection}.${fieldConfig.field}`);
 }
 
+async function waitForCollectionFields(
+	token,
+	collectionConfig,
+	createdThisRun,
+	retries = 10,
+	delayMs = 500
+) {
+	const collection = collectionConfig.collection;
+	let lastError = null;
+
+	for (let attempt = 1; attempt <= retries; attempt += 1) {
+		try {
+			return await fetchJson(`/fields/${collection}`, token);
+		} catch (error) {
+			lastError = error;
+
+			if (!isMissingCollectionError(error)) {
+				throw error;
+			}
+
+			if (attempt < retries) {
+				await sleep(delayMs);
+			}
+		}
+	}
+
+	throw new Error(
+		[
+			createdThisRun
+				? `Collection "${collection}" was created but its fields endpoint never became available.`
+				: `Collection "${collection}" already exists, but its fields endpoint is still unavailable.`,
+			createdThisRun
+				? 'This usually means Directus has not refreshed the schema cache yet.'
+				: 'This usually means the collection was left in a broken partial state by an earlier failed bootstrap or schema change.',
+			!createdThisRun
+				? shouldRepairBroken
+					? `Repair mode is enabled, but the collection still could not be repaired automatically.`
+					: `Rerun with --repair-broken to delete and recreate this managed collection automatically, or reset the Directus database if this environment is disposable.`
+				: null,
+			lastError instanceof Error ? lastError.message : String(lastError)
+		]
+			.filter(Boolean)
+			.join('\n')
+	);
+}
+
+async function clearInternalCache(token) {
+	await fetchJson('/utils/cache/clear?system=true', token, {
+		method: 'POST'
+	});
+	console.log('Cleared Directus internal cache.');
+}
+
 async function seedCollection(token, collection, items) {
-	const existing = await fetchJson(`/items/${collection}?limit=1`, token);
-	if (Array.isArray(existing?.data) && existing.data.length > 0) {
-		console.log(`Seed skipped for ${collection}; records already exist.`);
+	const strategy = seedStrategies[collection];
+
+	if (!strategy) {
+		throw new Error(`No seed strategy configured for collection "${collection}".`);
+	}
+
+	if (strategy.type === 'singleton') {
+		const existing = await fetchJson(`/items/${collection}?limit=1&fields=id`, token);
+		const existingItem = Array.isArray(existing?.data) ? existing.data[0] : null;
+		const payload = items[0];
+
+		if (!payload) {
+			return;
+		}
+
+		if (existingItem?.id) {
+			await fetchJson(`/items/${collection}/${existingItem.id}`, token, {
+				method: 'PATCH',
+				body: payload
+			});
+			console.log(`Updated singleton seed for ${collection}`);
+			return;
+		}
+
+		await fetchJson(`/items/${collection}`, token, {
+			method: 'POST',
+			body: payload
+		});
+		console.log(`Created singleton seed for ${collection}`);
 		return;
 	}
 
-	await fetchJson(`/items/${collection}`, token, {
-		method: 'POST',
-		body: items
-	});
-	console.log(`Seeded ${collection}`);
+	for (const item of items) {
+		const key = strategy.key;
+		const value = item[key];
+		const filterValue = encodeURIComponent(String(value));
+		const existing = await fetchJson(
+			`/items/${collection}?limit=1&fields=id&filter[${encodeURIComponent(key)}][_eq]=${filterValue}`,
+			token
+		);
+		const existingItem = Array.isArray(existing?.data) ? existing.data[0] : null;
+
+		if (existingItem?.id) {
+			await fetchJson(`/items/${collection}/${existingItem.id}`, token, {
+				method: 'PATCH',
+				body: item
+			});
+			console.log(`Updated seed record for ${collection}.${key}=${value}`);
+			continue;
+		}
+
+		await fetchJson(`/items/${collection}`, token, {
+			method: 'POST',
+			body: item
+		});
+		console.log(`Created seed record for ${collection}.${key}=${value}`);
+	}
 }
 
 async function fetchJson(path, token, options = {}) {
@@ -471,7 +698,9 @@ async function fetchJson(path, token, options = {}) {
 		method: options.method ?? 'GET',
 		headers: {
 			Authorization: `Bearer ${token}`,
-			'Content-Type': 'application/json'
+			'Content-Type': 'application/json',
+			'Cache-Control': 'no-store',
+			Pragma: 'no-cache'
 		},
 		body: options.body ? JSON.stringify(options.body) : undefined
 	});
@@ -482,8 +711,144 @@ async function fetchJson(path, token, options = {}) {
 
 	if (!response.ok) {
 		const details = await response.text();
+
+		if (
+			response.status === 403 &&
+			isSchemaWritePath(path) &&
+			options.method &&
+			options.method !== 'GET'
+		) {
+			if (options.method === 'DELETE' && path.startsWith('/collections/')) {
+				throw new Error(
+					[
+						`Directus API error for ${path}: ${response.status} ${details}`,
+						'This is not necessarily a bad admin token.',
+						'Directus can return 403 here when the collection-specific schema view is stale or inconsistent, even while list-based schema endpoints still show the collection.',
+						'Clear cache, restart Directus on a single replica, and recheck the collection list before retrying repair.'
+					].join('\n')
+				);
+			}
+
+			throw new Error(
+				[
+					`Directus API error for ${path}: ${response.status} ${details}`,
+					'Authentication succeeded, but this identity does not have permission to modify the Directus schema.',
+					'Use a Directus admin account or provide a full-access token via DIRECTUS_ADMIN_TOKEN.',
+					'If this is a Coolify deployment, verify the Directus admin user you are logging in as still has the Administrator role.'
+				].join('\n')
+			);
+		}
+
 		throw new Error(`Directus API error for ${path}: ${response.status} ${details}`);
 	}
 
-	return response.status === 204 ? null : response.json();
+	if (response.status === 204) {
+		return null;
+	}
+
+	const contentType = response.headers.get('content-type') ?? '';
+	const body = await response.text();
+
+	if (body.trim().length === 0) {
+		return null;
+	}
+
+	if (contentType.includes('application/json')) {
+		return JSON.parse(body);
+	}
+
+	return body;
+}
+
+function isSchemaWritePath(path) {
+	return (
+		path.startsWith('/collections') || path.startsWith('/fields') || path.startsWith('/relations')
+	);
+}
+
+function isMissingCollectionError(error) {
+	if (!(error instanceof Error)) {
+		return false;
+	}
+
+	return (
+		error.message.includes('Directus API error for /fields/') &&
+		error.message.includes('does not exist')
+	);
+}
+
+function isBrokenCollectionError(error) {
+	return error instanceof Error && error.message.includes('fields endpoint is still unavailable');
+}
+
+async function repairBrokenCollection(token, collectionConfig) {
+	console.warn(`Repairing broken collection: ${collectionConfig.collection}`);
+	await clearInternalCache(token);
+
+	const existingBeforeDelete = await getCollectionByName(token, collectionConfig.collection);
+
+	if (!existingBeforeDelete) {
+		console.warn(
+			`Collection ${collectionConfig.collection} disappeared after cache clear. Recreating it cleanly.`
+		);
+		await createCollection(token, collectionConfig);
+		await clearInternalCache(token);
+		return;
+	}
+
+	try {
+		await fetchJson(`/collections/${collectionConfig.collection}`, token, {
+			method: 'DELETE'
+		});
+	} catch (error) {
+		const stillExists = await getCollectionByName(token, collectionConfig.collection);
+
+		if (stillExists) {
+			throw new Error(
+				[
+					`Collection "${collectionConfig.collection}" still appears in list-based schema results, but Directus refused DELETE /collections/${collectionConfig.collection}.`,
+					'This points to stale or split schema state inside Directus rather than invalid admin credentials.',
+					'Run Directus with a single replica, restart it, keep CACHE_SCHEMA=false during bootstrap if possible, then rerun with --repair-broken.',
+					error instanceof Error ? error.message : String(error)
+				].join('\n'),
+				error instanceof Error ? { cause: error } : undefined
+			);
+		}
+
+		throw error;
+	}
+
+	await clearInternalCache(token);
+	await createCollection(token, collectionConfig);
+	await clearInternalCache(token);
+}
+
+async function getCollectionByName(token, collectionName) {
+	const existing = await fetchJson(
+		`/collections?filter[collection][_eq]=${encodeURIComponent(collectionName)}&limit=1`,
+		token
+	);
+
+	return Array.isArray(existing?.data) ? (existing.data[0] ?? null) : null;
+}
+
+async function createCollection(token, collection) {
+	await fetchJson('/collections', token, {
+		method: 'POST',
+		body: {
+			collection: collection.collection,
+			meta: collection.meta,
+			schema: {
+				name: collection.collection,
+				primary_key: 'id'
+			},
+			fields: [idField(), ...collection.fields]
+		}
+	});
+
+	console.log(`Created collection: ${collection.collection}`);
+}
+
+function sleep(ms) {
+	return new Promise((resolve) => setTimeout(resolve, ms));
 }

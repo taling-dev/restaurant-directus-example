@@ -1,11 +1,32 @@
 <script lang="ts">
+	import { getDirectusAttr } from '$lib/directus/visual-editing';
 	import type { Promotion } from '$lib/types/content';
 	import { formatPromotionWindow } from '$lib/utils/format';
 
-	let { promotion }: { promotion: Promotion } = $props();
+	let { promotion, visualEditing }: { promotion: Promotion; visualEditing: boolean } = $props();
 </script>
 
-<article class="panel-dark overflow-hidden">
+<article
+	class="panel-dark overflow-hidden"
+	data-directus={getDirectusAttr({
+		enabled: visualEditing,
+		collection: 'promotions',
+		item: promotion.id,
+		fields: [
+			'title',
+			'short_description',
+			'full_description',
+			'image_url',
+			'start_date',
+			'end_date',
+			'cta_label',
+			'cta_url',
+			'featured',
+			'active'
+		],
+		mode: 'drawer'
+	})}
+>
 	<img class="aspect-[4/3] w-full object-cover" src={promotion.imageUrl} alt={promotion.title} />
 	<div class="space-y-4 p-5">
 		<div>

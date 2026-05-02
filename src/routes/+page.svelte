@@ -2,6 +2,7 @@
 	import GalleryStrip from '$lib/components/content/GalleryStrip.svelte';
 	import PromoCard from '$lib/components/content/PromoCard.svelte';
 	import SectionHeading from '$lib/components/content/SectionHeading.svelte';
+	import { getDirectusAttr } from '$lib/directus/visual-editing';
 	import { formatCurrency } from '$lib/utils/format';
 
 	let { data } = $props();
@@ -10,6 +11,68 @@
 	const storySection = $derived(data.sections.find((section) => section.sectionType === 'story'));
 	const contactSection = $derived(
 		data.sections.find((section) => section.sectionType === 'contact-cta')
+	);
+	const heroAttr = $derived(
+		heroSection
+			? getDirectusAttr({
+					enabled: data.visualEditing,
+					collection: 'homepage_sections',
+					item: heroSection.id,
+					fields: [
+						'eyebrow',
+						'title',
+						'body',
+						'cta_label',
+						'cta_url',
+						'secondary_label',
+						'secondary_url',
+						'image_url'
+					],
+					mode: 'drawer'
+				})
+			: getDirectusAttr({
+					enabled: data.visualEditing,
+					collection: 'site_settings',
+					item: data.site.id,
+					fields: [
+						'hero_badge',
+						'hero_title',
+						'hero_body',
+						'hero_primary_label',
+						'hero_primary_url',
+						'hero_secondary_label',
+						'hero_secondary_url'
+					],
+					mode: 'drawer'
+				})
+	);
+	const storyAttr = $derived(
+		storySection
+			? getDirectusAttr({
+					enabled: data.visualEditing,
+					collection: 'homepage_sections',
+					item: storySection.id,
+					fields: ['eyebrow', 'title', 'body'],
+					mode: 'drawer'
+				})
+			: getDirectusAttr({
+					enabled: data.visualEditing,
+					collection: 'site_settings',
+					item: data.site.id,
+					fields: ['story_heading', 'story_body'],
+					mode: 'drawer'
+				})
+	);
+	const contactAttr = $derived(
+		contactSection
+			? getDirectusAttr({
+					enabled: data.visualEditing,
+					collection: 'homepage_sections',
+					item: contactSection.id,
+					fields: ['eyebrow', 'title', 'body', 'cta_label', 'cta_url'],
+					mode: 'drawer'
+				})
+			: undefined
 	);
 </script>
 
@@ -21,7 +84,7 @@
 <section class="hero-frame border-b border-white/10 px-6 py-20 sm:px-8 lg:px-12 lg:py-28">
 	<div class="mx-auto grid max-w-6xl gap-12 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
 		<div class="space-y-8">
-			<div class="space-y-4">
+			<div class="space-y-4" data-directus={heroAttr}>
 				<p class="section-kicker">{heroSection?.eyebrow ?? data.site.heroBadge}</p>
 				<h1
 					class="text-5xl font-semibold tracking-tight text-balance text-white sm:text-6xl lg:text-7xl"
@@ -51,7 +114,16 @@
 					<p class="text-sm tracking-[0.25em] text-amber-300/80 uppercase">Signature</p>
 					<p class="mt-2 text-lg font-medium text-white">Wood-fired mains and seasonal cocktails</p>
 				</div>
-				<div class="panel-dark">
+				<div
+					class="panel-dark"
+					data-directus={getDirectusAttr({
+						enabled: data.visualEditing,
+						collection: 'site_settings',
+						item: data.site.id,
+						fields: ['location_note'],
+						mode: 'popover'
+					})}
+				>
 					<p class="text-sm tracking-[0.25em] text-amber-300/80 uppercase">Location</p>
 					<p class="mt-2 text-lg font-medium text-white">{data.site.locationNote}</p>
 				</div>
@@ -60,6 +132,7 @@
 
 		<div
 			class="relative overflow-hidden rounded-[2rem] border border-white/10 bg-stone-900 shadow-2xl shadow-amber-950/40"
+			data-directus={heroAttr}
 		>
 			<img
 				class="h-full min-h-[28rem] w-full object-cover"
@@ -82,7 +155,7 @@
 
 <section class="px-6 py-16 sm:px-8 lg:px-12 lg:py-20">
 	<div class="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
-		<div class="space-y-4">
+		<div class="space-y-4" data-directus={storyAttr}>
 			<SectionHeading
 				eyebrow={storySection?.eyebrow ?? 'Why guests return'}
 				title={storySection?.title ?? data.site.storyHeading}
@@ -92,7 +165,16 @@
 
 		<div class="grid gap-4 sm:grid-cols-2">
 			{#each data.featuredItems as item (item.slug)}
-				<article class="panel-dark flex h-full flex-col overflow-hidden">
+				<article
+					class="panel-dark flex h-full flex-col overflow-hidden"
+					data-directus={getDirectusAttr({
+						enabled: data.visualEditing,
+						collection: 'menu_items',
+						item: item.id,
+						fields: ['name', 'description', 'price', 'promo_price', 'image_url', 'labels'],
+						mode: 'drawer'
+					})}
+				>
 					<img class="aspect-[4/3] w-full object-cover" src={item.imageUrl} alt={item.name} />
 					<div class="flex flex-1 flex-col gap-4 p-5">
 						<div class="flex items-start justify-between gap-4">
@@ -126,7 +208,7 @@
 
 		<div class="grid gap-6 lg:grid-cols-3">
 			{#each data.promotions as promotion (promotion.slug)}
-				<PromoCard {promotion} />
+				<PromoCard {promotion} visualEditing={data.visualEditing} />
 			{/each}
 		</div>
 	</div>
@@ -142,7 +224,16 @@
 			/>
 			<div class="grid gap-3 sm:grid-cols-2">
 				{#each data.categories as category (category.slug)}
-					<div class="rounded-2xl border border-white/10 bg-white/5 px-4 py-4">
+					<div
+						class="rounded-2xl border border-white/10 bg-white/5 px-4 py-4"
+						data-directus={getDirectusAttr({
+							enabled: data.visualEditing,
+							collection: 'menu_categories',
+							item: category.id,
+							fields: ['name', 'description'],
+							mode: 'popover'
+						})}
+					>
 						<p class="text-lg font-semibold text-white">{category.name}</p>
 						<p class="mt-2 text-sm leading-6 text-stone-300">{category.description}</p>
 					</div>
@@ -153,7 +244,16 @@
 		<div class="panel-dark overflow-hidden p-0">
 			<div class="grid gap-0 divide-y divide-white/10">
 				{#each data.featuredItems as item (item.slug)}
-					<div class="flex items-center justify-between gap-4 px-5 py-4 sm:px-6">
+					<div
+						class="flex items-center justify-between gap-4 px-5 py-4 sm:px-6"
+						data-directus={getDirectusAttr({
+							enabled: data.visualEditing,
+							collection: 'menu_items',
+							item: item.id,
+							fields: ['name', 'description', 'price', 'promo_price'],
+							mode: 'popover'
+						})}
+					>
 						<div>
 							<p class="text-lg font-medium text-white">{item.name}</p>
 							<p class="mt-1 text-sm text-stone-300">{item.description}</p>
@@ -178,7 +278,7 @@
 			title="Atmosphere, plating, and the little details that sell the experience"
 			copy="Every gallery card can come from Directus so marketing updates feel as quick as a nightly special."
 		/>
-		<GalleryStrip items={data.gallery} />
+		<GalleryStrip items={data.gallery} visualEditing={data.visualEditing} />
 	</div>
 </section>
 
@@ -187,7 +287,7 @@
 		class="mx-auto max-w-6xl rounded-[2rem] border border-amber-300/20 bg-gradient-to-br from-amber-400/10 via-amber-300/5 to-transparent px-8 py-10"
 	>
 		<div class="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-center">
-			<div class="space-y-3">
+			<div class="space-y-3" data-directus={contactAttr}>
 				<p class="section-kicker">{contactSection?.eyebrow ?? 'Book the room'}</p>
 				<h2 class="text-3xl font-semibold tracking-tight text-white sm:text-4xl">
 					{contactSection?.title ??

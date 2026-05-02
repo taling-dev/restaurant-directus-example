@@ -1,7 +1,8 @@
 <script lang="ts">
+	import { getDirectusAttr } from '$lib/directus/visual-editing';
 	import type { SiteSettings } from '$lib/types/content';
 
-	let { site }: { site: SiteSettings } = $props();
+	let { site, visualEditing }: { site: SiteSettings; visualEditing: boolean } = $props();
 
 	const links = [
 		{ href: '/', label: 'Home' },
@@ -21,7 +22,16 @@
 			>
 				E&F
 			</div>
-			<div class="min-w-0">
+			<div
+				class="min-w-0"
+				data-directus={getDirectusAttr({
+					enabled: visualEditing,
+					collection: 'site_settings',
+					item: site.id,
+					fields: ['name', 'tagline'],
+					mode: 'popover'
+				})}
+			>
 				<p class="truncate text-lg font-semibold text-white">{site.name}</p>
 				<p class="hidden truncate text-sm text-stone-400 sm:block">{site.tagline}</p>
 			</div>
@@ -34,8 +44,28 @@
 		</nav>
 
 		<div class="hidden items-center gap-3 sm:flex">
-			<a class="btn-secondary" href={`tel:${site.phone.replace(/\s+/g, '')}`}>Call</a>
-			<a class="btn-primary" href={site.reservationUrl}>Reserve</a>
+			<a
+				class="btn-secondary"
+				href={`tel:${site.phone.replace(/\s+/g, '')}`}
+				data-directus={getDirectusAttr({
+					enabled: visualEditing,
+					collection: 'site_settings',
+					item: site.id,
+					fields: ['phone'],
+					mode: 'popover'
+				})}>Call</a
+			>
+			<a
+				class="btn-primary"
+				href={site.reservationUrl}
+				data-directus={getDirectusAttr({
+					enabled: visualEditing,
+					collection: 'site_settings',
+					item: site.id,
+					fields: ['reservation_url'],
+					mode: 'popover'
+				})}>Reserve</a
+			>
 		</div>
 	</div>
 </header>

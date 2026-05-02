@@ -150,6 +150,7 @@ async function withFallback<T>(loader: () => Promise<T>, fallback: T) {
 
 function mapSiteSettings(record: JsonRecord): SiteSettings {
 	return {
+		id: readOptionalString(record.id),
 		name: readString(record.name, fallbackSite.name),
 		tagline: readString(record.tagline, fallbackSite.tagline),
 		currencyCode: readString(record.currency_code, fallbackSite.currencyCode),
@@ -196,6 +197,7 @@ function mapHomepageSection(row: JsonRecord): HomepageSection {
 
 function mapMenuCategory(row: JsonRecord): MenuCategory {
 	return {
+		id: readOptionalString(row.id),
 		name: readString(row.name, 'Menu Category'),
 		slug: readString(row.slug, 'menu-category'),
 		description: readString(row.description, ''),
@@ -208,6 +210,7 @@ function mapMenuCategory(row: JsonRecord): MenuCategory {
 
 function mapMenuItem(row: JsonRecord): MenuItem {
 	return {
+		id: readOptionalString(row.id),
 		name: readString(row.name, 'Menu Item'),
 		slug: readString(row.slug, 'menu-item'),
 		description: readString(row.description, ''),
@@ -225,6 +228,7 @@ function mapMenuItem(row: JsonRecord): MenuItem {
 
 function mapPromotion(row: JsonRecord): Promotion {
 	return {
+		id: readOptionalString(row.id),
 		title: readString(row.title, 'Promotion'),
 		slug: readString(row.slug, 'promotion'),
 		shortDescription: readString(row.short_description, ''),
@@ -242,6 +246,7 @@ function mapPromotion(row: JsonRecord): Promotion {
 
 function mapBusinessHour(row: JsonRecord): BusinessHour {
 	return {
+		id: readOptionalString(row.id),
 		day: readString(row.day, 'Monday'),
 		open: readString(row.open, '17:00'),
 		close: readString(row.close, '22:00'),
@@ -253,6 +258,7 @@ function mapBusinessHour(row: JsonRecord): BusinessHour {
 
 function mapGalleryItem(row: JsonRecord): GalleryItem {
 	return {
+		id: readOptionalString(row.id),
 		imageUrl: toDirectusAssetUrl(readOptionalString(row.image_url)) || fallbackGallery[0].imageUrl,
 		altText: readString(row.alt_text, 'Gallery image'),
 		caption: readOptionalString(row.caption),

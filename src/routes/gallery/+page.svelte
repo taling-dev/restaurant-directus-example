@@ -22,6 +22,6 @@
 
 <section class="px-6 py-10 pb-24 sm:px-8 lg:px-12 lg:py-12">
 	<div class="mx-auto max-w-6xl">
-		<GalleryStrip items={data.gallery} />
+		<GalleryStrip items={data.gallery} visualEditing={data.visualEditing} />
 	</div>
 </section>

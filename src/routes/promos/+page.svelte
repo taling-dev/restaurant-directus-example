@@ -23,7 +23,7 @@
 <section class="px-6 py-10 pb-24 sm:px-8 lg:px-12 lg:py-12">
 	<div class="mx-auto grid max-w-6xl gap-6 md:grid-cols-2 xl:grid-cols-3">
 		{#each data.promotions as promotion (promotion.slug)}
-			<PromoCard {promotion} />
+			<PromoCard {promotion} visualEditing={data.visualEditing} />
 		{/each}
 	</div>
 </section>

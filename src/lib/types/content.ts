@@ -4,6 +4,7 @@ export type SocialLink = {
 };
 
 export type SiteSettings = {
+	id?: string;
 	name: string;
 	tagline: string;
 	currencyCode: string;
@@ -54,6 +55,7 @@ export type HomepageSection = {
 };
 
 export type MenuCategory = {
+	id?: string;
 	name: string;
 	slug: string;
 	description: string;
@@ -63,6 +65,7 @@ export type MenuCategory = {
 };
 
 export type MenuItem = {
+	id?: string;
 	name: string;
 	slug: string;
 	description: string;
@@ -78,6 +81,7 @@ export type MenuItem = {
 };
 
 export type Promotion = {
+	id?: string;
 	title: string;
 	slug: string;
 	shortDescription: string;
@@ -92,6 +96,7 @@ export type Promotion = {
 };
 
 export type BusinessHour = {
+	id?: string;
 	day: string;
 	open: string;
 	close: string;
@@ -101,6 +106,7 @@ export type BusinessHour = {
 };
 
 export type GalleryItem = {
+	id?: string;
 	imageUrl: string;
 	altText: string;
 	caption?: string;

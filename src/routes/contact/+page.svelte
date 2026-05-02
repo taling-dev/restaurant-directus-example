@@ -1,5 +1,6 @@
 <script lang="ts">
 	import SectionHeading from '$lib/components/content/SectionHeading.svelte';
+	import { getDirectusAttr } from '$lib/directus/visual-editing';
 	import { formatServiceWindow } from '$lib/utils/format';
 
 	let { data } = $props();
@@ -19,7 +20,16 @@
 				copy="Address, phone, reservation links, and service windows stay visible and easy to update from the CMS."
 			/>
 
-			<div class="panel-dark p-6 text-sm leading-7 text-stone-300">
+			<div
+				class="panel-dark p-6 text-sm leading-7 text-stone-300"
+				data-directus={getDirectusAttr({
+					enabled: data.visualEditing,
+					collection: 'site_settings',
+					item: data.site.id,
+					fields: ['address_lines', 'phone', 'email', 'location_note'],
+					mode: 'drawer'
+				})}
+			>
 				{#each data.site.addressLines as line (line)}
 					<p>{line}</p>
 				{/each}
@@ -46,6 +56,13 @@
 					{#each data.hours as entry (entry.day)}
 						<div
 							class="flex items-start justify-between gap-4 border-b border-white/10 pb-4 last:border-0 last:pb-0"
+							data-directus={getDirectusAttr({
+								enabled: data.visualEditing,
+								collection: 'business_hours',
+								item: entry.id,
+								fields: ['day', 'open', 'close', 'closed', 'note'],
+								mode: 'popover'
+							})}
 						>
 							<div>
 								<p class="font-medium text-white">{entry.day}</p>

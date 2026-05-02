@@ -1,4 +1,5 @@
 <script lang="ts">
+	import VisualEditing from '$lib/components/directus/VisualEditing.svelte';
 	import './layout.css';
 	import Footer from '$lib/components/layout/Footer.svelte';
 	import Header from '$lib/components/layout/Header.svelte';
@@ -10,9 +11,11 @@
 
 <svelte:head><link rel="icon" href={favicon} /></svelte:head>
 
+<VisualEditing enabled={data.visualEditing} directusUrl={data.directusUrl} />
+
 <div class="min-h-screen bg-stone-950 text-stone-100">
-	<Header site={data.site} />
+	<Header site={data.site} visualEditing={data.visualEditing} />
 	<main>{@render children()}</main>
-	<Footer site={data.site} hours={data.hours} />
-	<FloatingActions site={data.site} />
+	<Footer site={data.site} hours={data.hours} visualEditing={data.visualEditing} />
+	<FloatingActions site={data.site} visualEditing={data.visualEditing} />
 </div>

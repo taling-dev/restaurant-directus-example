@@ -27,6 +27,7 @@
 				{category}
 				items={data.items.filter((item) => item.categorySlug === category.slug)}
 				site={data.site}
+				visualEditing={data.visualEditing}
 			/>
 		{/each}
 	</div>

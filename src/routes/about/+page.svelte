@@ -1,5 +1,6 @@
 <script lang="ts">
 	import SectionHeading from '$lib/components/content/SectionHeading.svelte';
+	import { getDirectusAttr } from '$lib/directus/visual-editing';
 
 	let { data } = $props();
 </script>
@@ -11,7 +12,16 @@
 
 <section class="border-b border-white/10 px-6 py-16 sm:px-8 lg:px-12 lg:py-20">
 	<div class="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
-		<div class="space-y-6">
+		<div
+			class="space-y-6"
+			data-directus={getDirectusAttr({
+				enabled: data.visualEditing,
+				collection: 'site_settings',
+				item: data.site.id,
+				fields: ['about_title', 'about_body'],
+				mode: 'drawer'
+			})}
+		>
 			<SectionHeading eyebrow="About" title={data.site.aboutTitle} copy={data.site.aboutBody} />
 			<p class="max-w-2xl text-base leading-7 text-stone-300">
 				This implementation keeps the visual system in SvelteKit while the editable restaurant

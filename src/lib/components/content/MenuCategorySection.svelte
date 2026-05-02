@@ -1,15 +1,34 @@
 <script lang="ts">
+	import { getDirectusAttr } from '$lib/directus/visual-editing';
 	import type { MenuCategory, MenuItem, SiteSettings } from '$lib/types/content';
 	import { formatCurrency } from '$lib/utils/format';
 
-	let { category, items, site }: { category: MenuCategory; items: MenuItem[]; site: SiteSettings } =
-		$props();
+	let {
+		category,
+		items,
+		site,
+		visualEditing
+	}: {
+		category: MenuCategory;
+		items: MenuItem[];
+		site: SiteSettings;
+		visualEditing: boolean;
+	} = $props();
 </script>
 
 <section
 	class="grid gap-6 rounded-[2rem] border border-white/10 bg-white/5 p-4 sm:p-6 lg:grid-cols-[0.4fr_0.6fr]"
 >
-	<div class="overflow-hidden rounded-[1.5rem] border border-white/10 bg-stone-900">
+	<div
+		class="overflow-hidden rounded-[1.5rem] border border-white/10 bg-stone-900"
+		data-directus={getDirectusAttr({
+			enabled: visualEditing,
+			collection: 'menu_categories',
+			item: category.id,
+			fields: ['name', 'description', 'image_url'],
+			mode: 'drawer'
+		})}
+	>
 		<img class="aspect-square w-full object-cover" src={category.imageUrl} alt={category.name} />
 	</div>
 	<div class="space-y-6">
@@ -20,7 +39,26 @@
 
 		<div class="space-y-4">
 			{#each items as item (item.slug)}
-				<article class="rounded-[1.25rem] border border-white/10 bg-black/10 p-4">
+				<article
+					class="rounded-[1.25rem] border border-white/10 bg-black/10 p-4"
+					data-directus={getDirectusAttr({
+						enabled: visualEditing,
+						collection: 'menu_items',
+						item: item.id,
+						fields: [
+							'name',
+							'description',
+							'price',
+							'promo_price',
+							'image_url',
+							'labels',
+							'heat_level',
+							'featured',
+							'available'
+						],
+						mode: 'drawer'
+					})}
+				>
 					<div class="flex items-start justify-between gap-4">
 						<div class="space-y-2">
 							<div class="flex flex-wrap items-center gap-2">

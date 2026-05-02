@@ -122,8 +122,13 @@ npm run directus:bootstrap -- --seed
 That script requires:
 
 - `PUBLIC_DIRECTUS_URL`
-- `DIRECTUS_ADMIN_EMAIL`
-- `DIRECTUS_ADMIN_PASSWORD`
+- one of:
+  - `DIRECTUS_ADMIN_TOKEN`
+  - `DIRECTUS_ADMIN_EMAIL` and `DIRECTUS_ADMIN_PASSWORD`
+
+If bootstrap returns `403 FORBIDDEN` on `/collections` or `/fields`, authentication worked but the identity does not have schema-write permission. In that case, use a real Directus administrator account or a full-access admin token for `DIRECTUS_ADMIN_TOKEN`.
+
+If collection creation succeeds but field creation immediately fails with `collection does not exist` or `403` on `/fields/<collection>`, the cause is usually Directus schema cache state. The bootstrap script now clears internal cache automatically, but if your Directus deployment is scaled to multiple instances you should keep it at one replica during bootstrap or use shared cache infrastructure instead of per-instance memory cache.
 
 ### Recommended Domains
 
@@ -145,6 +150,7 @@ Recommended environment variables:
 - `PUBLIC_SITE_URL`
 - `PUBLIC_DIRECTUS_URL`
 - `DIRECTUS_TOKEN`
+- `DIRECTUS_ADMIN_TOKEN`
 - `HOST`
 - `PORT`
 - `ORIGIN`
