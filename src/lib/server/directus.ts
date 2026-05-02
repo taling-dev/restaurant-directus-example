@@ -95,7 +95,7 @@ function isDirectusAssetUrl(value: string) {
 function withDirectusTransforms(value: string, width: number) {
 	const url = new URL(value);
 	url.searchParams.set('width', String(width));
-	url.searchParams.set('quality', '82');
+	url.searchParams.set('quality', '78');
 	url.searchParams.set('format', 'auto');
 
 	const token = getDirectusAuthToken();

@@ -4,7 +4,7 @@
  * Uses width/height transforms for Directus and Unsplash so returned
  * assets match the rendered aspect ratio.
  */
-const DEFAULT_WIDTHS = [400, 800, 1200, 1600];
+const DEFAULT_WIDTHS = [320, 384, 480, 640, 768, 800, 960, 1200, 1600];
 
 export function toSrcset(
 	url: string | undefined | null,
@@ -50,7 +50,7 @@ function isResponsiveImageUrl(url: URL) {
 function applyResponsiveTransform(url: URL, width: number, height?: number) {
 	if (url.hostname === 'images.unsplash.com') {
 		url.searchParams.set('w', String(width));
-		url.searchParams.set('q', '82');
+		url.searchParams.set('q', '78');
 		url.searchParams.set('auto', 'format');
 
 		if (height) {
@@ -62,7 +62,7 @@ function applyResponsiveTransform(url: URL, width: number, height?: number) {
 	}
 
 	url.searchParams.set('width', String(width));
-	url.searchParams.set('quality', '82');
+	url.searchParams.set('quality', '78');
 	url.searchParams.set('format', 'auto');
 
 	if (height) {

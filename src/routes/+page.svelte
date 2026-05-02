@@ -229,8 +229,8 @@
 						srcset={toSrcset(item.image || item.imageUrl, { ratio: 4 / 3 })}
 						sizes={toSizes({ sm: '50vw', lg: '28vw' })}
 						alt={item.name}
-						loading="eager"
-						fetchpriority="high"
+						loading="lazy"
+						fetchpriority="auto"
 						decoding="async"
 					/>
 					<div class="flex flex-1 flex-col gap-4 p-5">
