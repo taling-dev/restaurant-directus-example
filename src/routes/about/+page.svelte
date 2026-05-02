@@ -65,7 +65,7 @@
 				})}
 			>
 				<p class="section-kicker">{card.label}</p>
-				<p class="mt-4 text-base leading-7 text-stone-300">{card.body ?? card.title}</p>
+				<p class="mt-4 text-base leading-7 text-stone-300">{card.body}</p>
 			</div>
 		{/each}
 	</div>

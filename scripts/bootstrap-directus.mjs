@@ -30,7 +30,7 @@ const collections = [
 			stringField('currency_code'),
 			stringField('phone'),
 			stringField('email'),
-			jsonField('address_lines'),
+			stringArrayField('address_lines'),
 			textField('location_note'),
 			stringField('reservation_url'),
 			stringField('maps_url'),
@@ -134,7 +134,7 @@ const collections = [
 			fileField('image'),
 			stringField('image_url'),
 			stringField('category_slug'),
-			jsonField('labels'),
+			stringArrayField('labels'),
 			numberField('heat_level'),
 			booleanField('featured'),
 			booleanField('available'),
@@ -261,15 +261,15 @@ const seedRecords = {
 			about_cards: [
 				{
 					label: 'CMS-ready',
-					title: 'Swap hero copy, homepage blocks, and contact details from structured content.'
+					body: 'Swap hero copy, homepage blocks, and contact details from structured content.'
 				},
 				{
 					label: 'Restaurant-first',
-					title: 'Layouts prioritize menu legibility, promo urgency, and reservation conversion.'
+					body: 'Layouts prioritize menu legibility, promo urgency, and reservation conversion.'
 				},
 				{
 					label: 'Operational fit',
-					title: 'Demo content fallback keeps the frontend usable while Directus gets populated.'
+					body: 'Demo content fallback keeps the frontend usable while Directus gets populated.'
 				}
 			],
 			hours_heading: 'Hours',
@@ -544,6 +544,22 @@ function jsonField(name) {
 		meta: {
 			interface: 'input-code',
 			options: { language: 'json' },
+			width: 'full'
+		},
+		schema: {
+			name,
+			data_type: 'json'
+		}
+	};
+}
+
+function stringArrayField(name) {
+	return {
+		field: name,
+		type: 'json',
+		meta: {
+			interface: 'tags',
+			special: ['cast-json'],
 			width: 'full'
 		},
 		schema: {

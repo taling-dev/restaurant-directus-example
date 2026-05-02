@@ -51,7 +51,7 @@ export type SiteSettings = {
 	chefPickItemSlug: string;
 	statsCards: { label: string; title: string }[];
 	navLinks: { label: string; url: string }[];
-	aboutCards: { label: string; title: string; body?: string }[];
+	aboutCards: { label: string; body: string }[];
 	hoursHeading: string;
 	connectHeading: string;
 	accentColor: string;

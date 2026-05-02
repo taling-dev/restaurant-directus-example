@@ -518,10 +518,9 @@ function readAboutCards(value: unknown, fallback: SiteSettings['aboutCards']) {
 				if (typeof entry !== 'object' || entry === null) return null;
 				const record = entry as JsonRecord;
 				const label = readOptionalString(record.label);
-				const title = readOptionalString(record.title);
-				const body = readOptionalString(record.body);
-				if (!label || !title || !body) return null;
-				return { label, title, body };
+				const body = readOptionalString(record.body) ?? readOptionalString(record.title);
+				if (!label || !body) return null;
+				return { label, body };
 			})
 			.filter((entry) => entry !== null) as SiteSettings['aboutCards'];
 		return entries.length > 0 ? entries : fallback;

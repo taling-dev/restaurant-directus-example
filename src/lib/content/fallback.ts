@@ -78,15 +78,15 @@ export const fallbackSite: SiteSettings = {
 	aboutCards: [
 		{
 			label: 'CMS-ready',
-			title: 'Swap hero copy, homepage blocks, and contact details from structured content.'
+			body: 'Swap hero copy, homepage blocks, and contact details from structured content.'
 		},
 		{
 			label: 'Restaurant-first',
-			title: 'Layouts prioritize menu legibility, promo urgency, and reservation conversion.'
+			body: 'Layouts prioritize menu legibility, promo urgency, and reservation conversion.'
 		},
 		{
 			label: 'Operational fit',
-			title: 'Demo content fallback keeps the frontend usable while Directus gets populated.'
+			body: 'Demo content fallback keeps the frontend usable while Directus gets populated.'
 		}
 	],
 	hoursHeading: 'Hours',
