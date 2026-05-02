@@ -190,7 +190,7 @@ function mapSiteSettings(record: JsonRecord): SiteSettings {
 		aboutTitle: readString(record.about_title, fallbackSite.aboutTitle),
 		aboutBody: readString(record.about_body, fallbackSite.aboutBody),
 		aboutImage:
-			toOptimizedAssetUrl(readOptionalString(record.about_image)) ||
+			toOptimizedAssetUrl(readAssetToken(record.about_image)) ||
 			toOptimizedAssetUrl(readOptionalString(record.about_image_url)) ||
 			fallbackSite.aboutImage,
 		promosEyebrow: readString(record.promos_eyebrow, fallbackSite.promosEyebrow),
@@ -226,8 +226,8 @@ function mapSiteSettings(record: JsonRecord): SiteSettings {
 		connectHeading: readString(record.connect_heading, fallbackSite.connectHeading),
 		accentColor: readString(record.accent_color, fallbackSite.accentColor),
 		darkColor: readString(record.dark_color, fallbackSite.darkColor),
-		favicon: toOptimizedAssetUrl(readOptionalString(record.favicon)) || fallbackSite.favicon,
-		logo: toOptimizedAssetUrl(readOptionalString(record.logo)) || fallbackSite.logo,
+		favicon: toOptimizedAssetUrl(readAssetToken(record.favicon)) || fallbackSite.favicon,
+		logo: toOptimizedAssetUrl(readAssetToken(record.logo)) || fallbackSite.logo,
 		seoTitle: readString(record.seo_title, fallbackSite.seoTitle),
 		seoDescription: readString(record.seo_description, fallbackSite.seoDescription),
 		footerNote: readString(record.footer_note, fallbackSite.footerNote),
@@ -255,10 +255,10 @@ function mapHomepageSection(row: JsonRecord): HomepageSection {
 		secondaryLabel: readOptionalString(row.secondary_label),
 		secondaryUrl: readOptionalString(row.secondary_url),
 		image:
-			toOptimizedAssetUrl(readOptionalString(row.image)) ||
+			toOptimizedAssetUrl(readAssetToken(row.image)) ||
 			toOptimizedAssetUrl(readOptionalString(row.image_url)),
 		imageUrl:
-			toOptimizedAssetUrl(readOptionalString(row.image)) ||
+			toOptimizedAssetUrl(readAssetToken(row.image)) ||
 			toOptimizedAssetUrl(readOptionalString(row.image_url)),
 		sort: readNumber(row.sort, 0)
 	};
@@ -271,11 +271,11 @@ function mapMenuCategory(row: JsonRecord): MenuCategory {
 		slug: readString(row.slug, 'menu-category'),
 		description: readString(row.description, ''),
 		image:
-			toOptimizedAssetUrl(readOptionalString(row.image)) ||
+			toOptimizedAssetUrl(readAssetToken(row.image)) ||
 			toOptimizedAssetUrl(readOptionalString(row.image_url)) ||
 			fallbackCategories[0].imageUrl,
 		imageUrl:
-			toOptimizedAssetUrl(readOptionalString(row.image)) ||
+			toOptimizedAssetUrl(readAssetToken(row.image)) ||
 			toOptimizedAssetUrl(readOptionalString(row.image_url)) ||
 			fallbackCategories[0].imageUrl,
 		sort: readNumber(row.sort, 0),
@@ -295,11 +295,11 @@ function mapMenuItem(row: JsonRecord, categories: MenuCategory[]): MenuItem {
 		price: readNumber(row.price, 0),
 		promoPrice: readNullableNumber(row.promo_price),
 		image:
-			toOptimizedAssetUrl(readOptionalString(row.image)) ||
+			toOptimizedAssetUrl(readAssetToken(row.image)) ||
 			toOptimizedAssetUrl(readOptionalString(row.image_url)) ||
 			fallbackItems[0].imageUrl,
 		imageUrl:
-			toOptimizedAssetUrl(readOptionalString(row.image)) ||
+			toOptimizedAssetUrl(readAssetToken(row.image)) ||
 			toOptimizedAssetUrl(readOptionalString(row.image_url)) ||
 			fallbackItems[0].imageUrl,
 		categorySlug,
@@ -360,11 +360,11 @@ function mapPromotion(row: JsonRecord): Promotion {
 		shortDescription: readString(row.short_description, ''),
 		fullDescription: readString(row.full_description, ''),
 		image:
-			toOptimizedAssetUrl(readOptionalString(row.image)) ||
+			toOptimizedAssetUrl(readAssetToken(row.image)) ||
 			toOptimizedAssetUrl(readOptionalString(row.image_url)) ||
 			fallbackPromotions[0].imageUrl,
 		imageUrl:
-			toOptimizedAssetUrl(readOptionalString(row.image)) ||
+			toOptimizedAssetUrl(readAssetToken(row.image)) ||
 			toOptimizedAssetUrl(readOptionalString(row.image_url)) ||
 			fallbackPromotions[0].imageUrl,
 		startDate: readOptionalString(row.start_date),
@@ -392,11 +392,11 @@ function mapGalleryItem(row: JsonRecord): GalleryItem {
 	return {
 		id: readOptionalString(row.id),
 		image:
-			toOptimizedAssetUrl(readOptionalString(row.image)) ||
+			toOptimizedAssetUrl(readAssetToken(row.image)) ||
 			toOptimizedAssetUrl(readOptionalString(row.image_url)) ||
 			fallbackGallery[0].imageUrl,
 		imageUrl:
-			toOptimizedAssetUrl(readOptionalString(row.image)) ||
+			toOptimizedAssetUrl(readAssetToken(row.image)) ||
 			toOptimizedAssetUrl(readOptionalString(row.image_url)) ||
 			fallbackGallery[0].imageUrl,
 		altText: readString(row.alt_text, 'Gallery image'),
@@ -411,6 +411,23 @@ function readString(value: unknown, fallback: string) {
 
 function readOptionalString(value: unknown) {
 	return typeof value === 'string' && value.trim().length > 0 ? value : undefined;
+}
+
+function readAssetToken(value: unknown) {
+	if (typeof value === 'string' && value.trim().length > 0) {
+		return value;
+	}
+
+	if (typeof value === 'object' && value !== null) {
+		const record = value as JsonRecord;
+		return (
+			readOptionalString(record.id) ??
+			readOptionalString(record.filename_disk) ??
+			readOptionalString(record.filename_download)
+		);
+	}
+
+	return undefined;
 }
 
 function readNumber(value: unknown, fallback: number) {

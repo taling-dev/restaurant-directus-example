@@ -21,8 +21,8 @@ if (!DIRECTUS_ADMIN_TOKEN && (!DIRECTUS_EMAIL || !DIRECTUS_PASSWORD)) {
 }
 
 const collections = [
-	{
-		collection: 'site_settings',
+		{
+			collection: 'site_settings',
 		meta: { icon: 'storefront', note: 'Global restaurant settings', singleton: true },
 		fields: [
 			stringField('name'),
