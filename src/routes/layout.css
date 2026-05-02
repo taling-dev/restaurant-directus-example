@@ -1,0 +1,60 @@
+@import 'tailwindcss';
+@plugin '@tailwindcss/typography';
+
+@theme {
+	--color-ember-50: #fff8ee;
+	--color-ember-300: #f5c27a;
+	--color-ember-400: #efab5f;
+	--color-ember-500: #de8f44;
+	--color-night-900: #120d09;
+	--font-display: 'Inter', 'SF Pro Display', 'Segoe UI', sans-serif;
+}
+
+@layer base {
+	html {
+		scroll-behavior: smooth;
+	}
+
+	body {
+		font-family: var(--font-display);
+		background:
+			radial-gradient(circle at top, rgba(245, 194, 122, 0.08), transparent 28%),
+			linear-gradient(180deg, #120d09 0%, #18120d 40%, #0f0b08 100%);
+	}
+
+	a {
+		@apply transition duration-200;
+	}
+
+	img {
+		display: block;
+	}
+}
+
+@layer components {
+	.btn-primary {
+		@apply inline-flex items-center justify-center rounded-full bg-amber-300 px-5 py-3 text-sm font-semibold text-stone-950 shadow-lg shadow-amber-950/20 hover:bg-amber-200;
+	}
+
+	.btn-secondary {
+		@apply inline-flex items-center justify-center rounded-full border border-white/15 bg-white/5 px-5 py-3 text-sm font-semibold text-white hover:border-amber-300/40 hover:bg-white/10;
+	}
+
+	.panel-dark {
+		@apply rounded-[1.5rem] border border-white/10 bg-white/5 backdrop-blur;
+	}
+
+	.section-kicker {
+		@apply text-xs font-semibold tracking-[0.35em] text-amber-300 uppercase;
+	}
+
+	.chip {
+		@apply rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-stone-200;
+	}
+
+	.hero-frame {
+		background:
+			linear-gradient(135deg, rgba(245, 194, 122, 0.08), transparent 35%),
+			radial-gradient(circle at 20% 20%, rgba(239, 171, 95, 0.18), transparent 30%);
+	}
+}
