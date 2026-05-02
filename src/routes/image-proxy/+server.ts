@@ -5,7 +5,7 @@ import { error } from '@sveltejs/kit';
 
 const MAX_WIDTH = 1600;
 
-export async function GET({ url, fetch }) {
+export async function GET({ url, fetch, request }) {
 	const target = url.searchParams.get('url');
 
 	if (!target) {
@@ -32,6 +32,7 @@ export async function GET({ url, fetch }) {
 	}
 
 	const source = Buffer.from(await response.arrayBuffer());
+	const preferredFormat = getPreferredFormat(request.headers.get('accept'));
 
 	if (contentType.includes('svg+xml') || contentType.includes('gif')) {
 		return new Response(source, {
@@ -50,15 +51,15 @@ export async function GET({ url, fetch }) {
 	let output;
 	let mimeType = contentType;
 
-	if (contentType.includes('png')) {
-		output = await transformer.png({ compressionLevel: 9, adaptiveFiltering: true }).toBuffer();
-		mimeType = 'image/png';
-	} else if (contentType.includes('webp')) {
-		output = await transformer.webp({ quality: 82 }).toBuffer();
-		mimeType = 'image/webp';
-	} else if (contentType.includes('avif')) {
+	if (preferredFormat === 'avif') {
 		output = await transformer.avif({ quality: 60 }).toBuffer();
 		mimeType = 'image/avif';
+	} else if (preferredFormat === 'webp') {
+		output = await transformer.webp({ quality: 82 }).toBuffer();
+		mimeType = 'image/webp';
+	} else if (contentType.includes('png')) {
+		output = await transformer.png({ compressionLevel: 9, adaptiveFiltering: true }).toBuffer();
+		mimeType = 'image/png';
 	} else {
 		output = await transformer.jpeg({ quality: 82, mozjpeg: true }).toBuffer();
 		mimeType = 'image/jpeg';
@@ -67,7 +68,24 @@ export async function GET({ url, fetch }) {
 	return new Response(new Uint8Array(output), {
 		headers: {
 			'content-type': mimeType,
+			vary: 'Accept',
 			'cache-control': 'public, max-age=31536000, immutable'
 		}
 	});
+}
+
+function getPreferredFormat(accept: string | null) {
+	if (!accept) {
+		return 'jpeg';
+	}
+
+	if (accept.includes('image/avif')) {
+		return 'avif';
+	}
+
+	if (accept.includes('image/webp')) {
+		return 'webp';
+	}
+
+	return 'jpeg';
 }
