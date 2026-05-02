@@ -39,7 +39,7 @@
 	<img
 		class="aspect-[4/3] w-full object-cover"
 		src={promotion.image || promotion.imageUrl}
-		srcset={toSrcset(promotion.image || promotion.imageUrl)}
+		srcset={toSrcset(promotion.image || promotion.imageUrl, { ratio: 4 / 3 })}
 		sizes={toSizes({ sm: '50vw', lg: '30vw' })}
 		alt={promotion.title}
 		loading="lazy"

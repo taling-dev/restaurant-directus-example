@@ -35,7 +35,7 @@
 		<img
 			class="aspect-square w-full object-cover"
 			src={category.image || category.imageUrl}
-			srcset={toSrcset(category.image || category.imageUrl)}
+			srcset={toSrcset(category.image || category.imageUrl, { ratio: 1 })}
 			sizes={toSizes({ lg: '35vw' })}
 			alt={category.name}
 			loading={priority ? 'eager' : 'lazy'}
@@ -76,7 +76,7 @@
 						<img
 							class="aspect-[4/3] w-full object-cover"
 							src={item.image || item.imageUrl}
-							srcset={toSrcset(item.image || item.imageUrl)}
+							srcset={toSrcset(item.image || item.imageUrl, { ratio: 4 / 3 })}
 							sizes={toSizes({ md: '50vw', lg: '30vw' })}
 							alt={item.name}
 							loading="lazy"

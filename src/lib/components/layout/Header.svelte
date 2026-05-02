@@ -13,7 +13,7 @@
 				<img
 					class="size-11 rounded-full object-cover"
 					src={site.logo}
-					srcset={toSrcset(site.logo)}
+					srcset={toSrcset(site.logo, { ratio: 1 })}
 					sizes={toSizes({ mobile: '44px' })}
 					alt={site.name}
 					loading="eager"

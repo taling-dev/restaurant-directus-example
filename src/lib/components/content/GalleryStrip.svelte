@@ -21,7 +21,7 @@
 			<img
 				class="aspect-[4/3] w-full object-cover"
 				src={item.image || item.imageUrl}
-				srcset={toSrcset(item.image || item.imageUrl)}
+				srcset={toSrcset(item.image || item.imageUrl, { ratio: 4 / 3 })}
 				sizes={index === 0
 					? toSizes({ md: '50vw', xl: '50vw' })
 					: toSizes({ md: '50vw', xl: '25vw' })}

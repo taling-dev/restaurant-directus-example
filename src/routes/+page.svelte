@@ -155,7 +155,8 @@
 					heroSection?.image ||
 						heroSection?.imageUrl ||
 						data.site.heroImage ||
-						data.featuredItems[0]?.imageUrl
+						data.featuredItems[0]?.imageUrl,
+					{ ratio: 1.25 }
 				)}
 				sizes={toSizes({ lg: '40vw' })}
 				alt={heroSection?.title ?? data.site.heroTitle}
@@ -219,7 +220,7 @@
 					<img
 						class="aspect-[4/3] w-full object-cover"
 						src={item.image || item.imageUrl}
-						srcset={toSrcset(item.image || item.imageUrl)}
+						srcset={toSrcset(item.image || item.imageUrl, { ratio: 4 / 3 })}
 						sizes={toSizes({ sm: '50vw', lg: '28vw' })}
 						alt={item.name}
 						loading="eager"

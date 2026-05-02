@@ -39,7 +39,7 @@ export function toOptimizedAssetUrl(value?: string | null) {
 	}
 
 	if (isDirectusAssetUrl(assetUrl)) {
-		return toProxyImageUrl(assetUrl);
+		return withDirectusTransforms(assetUrl, 1600);
 	}
 
 	// External URLs (e.g. Unsplash fallbacks) are already CDN-optimised.
@@ -93,6 +93,15 @@ function isDirectusAssetUrl(value: string) {
 	return value.startsWith(base) && value.includes('/assets/');
 }
 
-function toProxyImageUrl(value: string) {
-	return `/image-proxy?url=${encodeURIComponent(value)}&width=1600`;
+function withDirectusTransforms(value: string, width: number) {
+	const url = new URL(value);
+	url.searchParams.set('width', String(width));
+	url.searchParams.set('quality', '82');
+	url.searchParams.set('format', 'auto');
+
+	if (privateEnv.DIRECTUS_TOKEN) {
+		url.searchParams.set('access_token', privateEnv.DIRECTUS_TOKEN);
+	}
+
+	return url.toString();
 }

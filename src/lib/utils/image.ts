@@ -1,21 +1,23 @@
 /**
  * Generate a srcset string from a Directus asset URL.
  *
- * Works by substituting the `width` query parameter that
- * toOptimizedAssetUrl already injects. Returns undefined for
- * external URLs so the browser just uses the plain `src`.
+ * Uses width/height transforms so Directus can return appropriately
+ * cropped assets for the rendered aspect ratio.
  */
 const DEFAULT_WIDTHS = [400, 800, 1200, 1600];
-const LOCAL_ORIGIN = 'http://directus.local';
 
-export function toSrcset(url: string | undefined | null, widths = DEFAULT_WIDTHS) {
+export function toSrcset(
+	url: string | undefined | null,
+	options: { widths?: number[]; ratio?: number } = {}
+) {
+	const { widths = DEFAULT_WIDTHS, ratio } = options;
+
 	if (!url) {
 		return undefined;
 	}
 
 	try {
-		const isAbsolute = /^[a-z]+:\/\//i.test(url);
-		const imageUrl = new URL(url, LOCAL_ORIGIN);
+		const imageUrl = new URL(url);
 
 		if (!isResponsiveImageUrl(imageUrl)) {
 			return undefined;
@@ -23,10 +25,14 @@ export function toSrcset(url: string | undefined | null, widths = DEFAULT_WIDTHS
 
 		return widths
 			.map((w) => {
+				const h = ratio ? Math.round(w / ratio) : undefined;
 				const u = new URL(imageUrl.toString());
 				u.searchParams.set('width', String(w));
-				const sizedUrl = isAbsolute ? u.toString() : `${u.pathname}${u.search}${u.hash}`;
-				return `${sizedUrl} ${w}w`;
+				if (h) {
+					u.searchParams.set('height', String(h));
+					u.searchParams.set('fit', 'cover');
+				}
+				return `${u.toString()} ${w}w`;
 			})
 			.join(', ');
 	} catch {
@@ -35,7 +41,7 @@ export function toSrcset(url: string | undefined | null, widths = DEFAULT_WIDTHS
 }
 
 function isResponsiveImageUrl(url: URL) {
-	return url.pathname.includes('/assets/') || url.pathname === '/image-proxy';
+	return url.pathname.includes('/assets/');
 }
 
 export function toSizes({

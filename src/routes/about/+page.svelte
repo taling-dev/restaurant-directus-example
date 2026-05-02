@@ -46,7 +46,7 @@
 			<img
 				class="aspect-[4/3] w-full object-cover"
 				src={data.site.aboutImage}
-				srcset={toSrcset(data.site.aboutImage)}
+				srcset={toSrcset(data.site.aboutImage, { ratio: 4 / 3 })}
 				sizes={toSizes({ lg: '50vw' })}
 				alt="Dining room interior"
 				loading="eager"
