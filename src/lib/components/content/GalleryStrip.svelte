@@ -1,9 +1,11 @@
 <script lang="ts">
 	import { getDirectusAttr } from '$lib/directus/visual-editing';
 	import type { GalleryItem } from '$lib/types/content';
-	import { toSizes, toSrcset } from '$lib/utils/image';
+	import { toAspectDimensions, toSizes, toSrcset } from '$lib/utils/image';
 
 	let { items, visualEditing }: { items: GalleryItem[]; visualEditing: boolean } = $props();
+
+	const galleryImageDimensions = toAspectDimensions(4 / 3);
 </script>
 
 <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
@@ -21,6 +23,8 @@
 			<img
 				class="aspect-[4/3] w-full object-cover"
 				src={item.image || item.imageUrl}
+				width={galleryImageDimensions.width}
+				height={galleryImageDimensions.height}
 				srcset={toSrcset(item.image || item.imageUrl, { ratio: 4 / 3 })}
 				sizes={index === 0
 					? toSizes({ md: '50vw', xl: '50vw' })

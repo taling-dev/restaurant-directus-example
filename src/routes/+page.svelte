@@ -4,7 +4,7 @@
 	import SectionHeading from '$lib/components/content/SectionHeading.svelte';
 	import { getDirectusAttr, withVisualEditingHref } from '$lib/directus/visual-editing';
 	import { formatCurrency } from '$lib/utils/format';
-	import { toSizes, toSrcset } from '$lib/utils/image';
+	import { toAspectDimensions, toSizes, toSrcset } from '$lib/utils/image';
 
 	let { data } = $props();
 
@@ -79,6 +79,8 @@
 					mode: 'drawer'
 				})
 	);
+	const heroImageDimensions = toAspectDimensions(5 / 4);
+	const cardImageDimensions = toAspectDimensions(4 / 3);
 </script>
 
 <svelte:head>
@@ -151,6 +153,8 @@
 					heroSection?.imageUrl ||
 					data.site.heroImage ||
 					data.featuredItems[0]?.imageUrl}
+				width={heroImageDimensions.width}
+				height={heroImageDimensions.height}
 				srcset={toSrcset(
 					heroSection?.image ||
 						heroSection?.imageUrl ||
@@ -220,6 +224,8 @@
 					<img
 						class="aspect-[4/3] w-full object-cover"
 						src={item.image || item.imageUrl}
+						width={cardImageDimensions.width}
+						height={cardImageDimensions.height}
 						srcset={toSrcset(item.image || item.imageUrl, { ratio: 4 / 3 })}
 						sizes={toSizes({ sm: '50vw', lg: '28vw' })}
 						alt={item.name}

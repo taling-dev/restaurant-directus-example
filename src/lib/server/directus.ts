@@ -42,8 +42,7 @@ export function toOptimizedAssetUrl(value?: string | null) {
 		return withDirectusTransforms(assetUrl, 1600);
 	}
 
-	// External URLs (e.g. Unsplash fallbacks) are already CDN-optimised.
-	// Routing them through the proxy adds a server encode round-trip with no benefit.
+	// External URLs (e.g. Unsplash fallbacks) are returned untouched.
 	return assetUrl;
 }
 
@@ -67,7 +66,7 @@ async function request<T>(path: string, params: Record<string, string>) {
 	const response = await fetch(url, {
 		headers: {
 			Accept: 'application/json',
-			...(privateEnv.DIRECTUS_TOKEN ? { Authorization: `Bearer ${privateEnv.DIRECTUS_TOKEN}` } : {})
+			...(getDirectusAuthToken() ? { Authorization: `Bearer ${getDirectusAuthToken()}` } : {})
 		}
 	});
 
@@ -99,9 +98,15 @@ function withDirectusTransforms(value: string, width: number) {
 	url.searchParams.set('quality', '82');
 	url.searchParams.set('format', 'auto');
 
-	if (privateEnv.DIRECTUS_TOKEN) {
-		url.searchParams.set('access_token', privateEnv.DIRECTUS_TOKEN);
+	const token = getDirectusAuthToken();
+
+	if (token) {
+		url.searchParams.set('access_token', token);
 	}
 
 	return url.toString();
+}
+
+function getDirectusAuthToken() {
+	return privateEnv.DIRECTUS_TOKEN ?? privateEnv.DIRECTUS_ADMIN_TOKEN;
 }

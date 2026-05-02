@@ -1,9 +1,11 @@
 <script lang="ts">
 	import SectionHeading from '$lib/components/content/SectionHeading.svelte';
 	import { getDirectusAttr } from '$lib/directus/visual-editing';
-	import { toSizes, toSrcset } from '$lib/utils/image';
+	import { toAspectDimensions, toSizes, toSrcset } from '$lib/utils/image';
 
 	let { data } = $props();
+
+	const aboutImageDimensions = toAspectDimensions(4 / 3);
 </script>
 
 <svelte:head>
@@ -46,6 +48,8 @@
 			<img
 				class="aspect-[4/3] w-full object-cover"
 				src={data.site.aboutImage}
+				width={aboutImageDimensions.width}
+				height={aboutImageDimensions.height}
 				srcset={toSrcset(data.site.aboutImage, { ratio: 4 / 3 })}
 				sizes={toSizes({ lg: '50vw' })}
 				alt="Dining room interior"

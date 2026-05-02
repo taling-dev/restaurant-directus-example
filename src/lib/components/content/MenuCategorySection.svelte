@@ -2,7 +2,7 @@
 	import { getDirectusAttr } from '$lib/directus/visual-editing';
 	import type { MenuCategory, MenuItem, SiteSettings } from '$lib/types/content';
 	import { formatCurrency } from '$lib/utils/format';
-	import { toSizes, toSrcset } from '$lib/utils/image';
+	import { toAspectDimensions, toSizes, toSrcset } from '$lib/utils/image';
 
 	let {
 		category,
@@ -17,6 +17,9 @@
 		site: SiteSettings;
 		visualEditing: boolean;
 	} = $props();
+
+	const categoryImageDimensions = toAspectDimensions(1);
+	const menuItemImageDimensions = toAspectDimensions(4 / 3);
 </script>
 
 <section
@@ -35,6 +38,8 @@
 		<img
 			class="aspect-square w-full object-cover"
 			src={category.image || category.imageUrl}
+			width={categoryImageDimensions.width}
+			height={categoryImageDimensions.height}
 			srcset={toSrcset(category.image || category.imageUrl, { ratio: 1 })}
 			sizes={toSizes({ lg: '35vw' })}
 			alt={category.name}
@@ -76,6 +81,8 @@
 						<img
 							class="aspect-[4/3] w-full object-cover"
 							src={item.image || item.imageUrl}
+							width={menuItemImageDimensions.width}
+							height={menuItemImageDimensions.height}
 							srcset={toSrcset(item.image || item.imageUrl, { ratio: 4 / 3 })}
 							sizes={toSizes({ md: '50vw', lg: '30vw' })}
 							alt={item.name}

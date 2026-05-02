@@ -1,8 +1,8 @@
 /**
  * Generate a srcset string from a Directus asset URL.
  *
- * Uses width/height transforms so Directus can return appropriately
- * cropped assets for the rendered aspect ratio.
+ * Uses width/height transforms for Directus and Unsplash so returned
+ * assets match the rendered aspect ratio.
  */
 const DEFAULT_WIDTHS = [400, 800, 1200, 1600];
 
@@ -27,11 +27,7 @@ export function toSrcset(
 			.map((w) => {
 				const h = ratio ? Math.round(w / ratio) : undefined;
 				const u = new URL(imageUrl.toString());
-				u.searchParams.set('width', String(w));
-				if (h) {
-					u.searchParams.set('height', String(h));
-					u.searchParams.set('fit', 'cover');
-				}
+				applyResponsiveTransform(u, w, h);
 				return `${u.toString()} ${w}w`;
 			})
 			.join(', ');
@@ -40,8 +36,39 @@ export function toSrcset(
 	}
 }
 
+export function toAspectDimensions(ratio: number, width = 1200) {
+	return {
+		width,
+		height: Math.round(width / ratio)
+	};
+}
+
 function isResponsiveImageUrl(url: URL) {
-	return url.pathname.includes('/assets/');
+	return url.pathname.includes('/assets/') || url.hostname === 'images.unsplash.com';
+}
+
+function applyResponsiveTransform(url: URL, width: number, height?: number) {
+	if (url.hostname === 'images.unsplash.com') {
+		url.searchParams.set('w', String(width));
+		url.searchParams.set('q', '82');
+		url.searchParams.set('auto', 'format');
+
+		if (height) {
+			url.searchParams.set('h', String(height));
+			url.searchParams.set('fit', 'crop');
+		}
+
+		return;
+	}
+
+	url.searchParams.set('width', String(width));
+	url.searchParams.set('quality', '82');
+	url.searchParams.set('format', 'auto');
+
+	if (height) {
+		url.searchParams.set('height', String(height));
+		url.searchParams.set('fit', 'cover');
+	}
 }
 
 export function toSizes({

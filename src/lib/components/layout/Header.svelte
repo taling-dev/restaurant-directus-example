@@ -1,9 +1,11 @@
 <script lang="ts">
 	import { getDirectusAttr, withVisualEditingHref } from '$lib/directus/visual-editing';
 	import type { SiteSettings } from '$lib/types/content';
-	import { toSizes, toSrcset } from '$lib/utils/image';
+	import { toAspectDimensions, toSizes, toSrcset } from '$lib/utils/image';
 
 	let { site, visualEditing }: { site: SiteSettings; visualEditing: boolean } = $props();
+
+	const logoDimensions = toAspectDimensions(1, 44);
 </script>
 
 <header class="sticky top-0 z-40 border-b border-white/10 bg-stone-950/75 backdrop-blur-xl">
@@ -13,6 +15,8 @@
 				<img
 					class="size-11 rounded-full object-cover"
 					src={site.logo}
+					width={logoDimensions.width}
+					height={logoDimensions.height}
 					srcset={toSrcset(site.logo, { ratio: 1 })}
 					sizes={toSizes({ mobile: '44px' })}
 					alt={site.name}
