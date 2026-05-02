@@ -13,9 +13,9 @@
 <section class="border-b border-white/10 px-6 py-16 sm:px-8 lg:px-12 lg:py-20">
 	<div class="mx-auto max-w-6xl space-y-6">
 		<SectionHeading
-			eyebrow="Promos"
-			title="Time-bound campaigns that can go live or expire without a redeploy"
-			copy="This page is designed for brunch launches, private dining pushes, cocktail windows, and seasonal menu moments."
+			eyebrow={data.site.promosEyebrow}
+			title={data.site.promosTitle}
+			copy={data.site.promosBody}
 			visualEditing={data.visualEditing}
 			collection="site_settings"
 			item={data.site.id}
@@ -27,7 +27,11 @@
 <section class="px-6 py-10 pb-24 sm:px-8 lg:px-12 lg:py-12">
 	<div class="mx-auto grid max-w-6xl gap-6 md:grid-cols-2 xl:grid-cols-3">
 		{#each data.promotions as promotion (promotion.slug)}
-			<PromoCard {promotion} visualEditing={data.visualEditing} />
+			<PromoCard
+				{promotion}
+				visualEditing={data.visualEditing}
+				defaultLabel={data.site.learnMoreLabel}
+			/>
 		{/each}
 	</div>
 </section>

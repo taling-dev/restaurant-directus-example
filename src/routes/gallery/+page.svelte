@@ -13,9 +13,9 @@
 <section class="border-b border-white/10 px-6 py-16 sm:px-8 lg:px-12 lg:py-20">
 	<div class="mx-auto max-w-6xl space-y-6">
 		<SectionHeading
-			eyebrow="Gallery"
-			title="A visual layer for dishes, cocktails, and room mood"
-			copy="Use this page for plating updates, interior shots, chef moments, and social-first imagery that can be changed weekly."
+			eyebrow={data.site.galleryEyebrow}
+			title={data.site.galleryTitle}
+			copy={data.site.galleryBody}
 			visualEditing={data.visualEditing}
 			collection="site_settings"
 			item={data.site.id}

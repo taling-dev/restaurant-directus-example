@@ -183,7 +183,9 @@ function mapSiteSettings(record: JsonRecord): SiteSettings {
 		heroSecondaryLabel: readString(record.hero_secondary_label, fallbackSite.heroSecondaryLabel),
 		heroSecondaryUrl: readString(record.hero_secondary_url, fallbackSite.heroSecondaryUrl),
 		storyHeading: readString(record.story_heading, fallbackSite.storyHeading),
+		storyEyebrow: readString(record.story_eyebrow, fallbackSite.storyEyebrow),
 		storyBody: readString(record.story_body, fallbackSite.storyBody),
+		aboutEyebrow: readString(record.about_eyebrow, fallbackSite.aboutEyebrow),
 		aboutTitle: readString(record.about_title, fallbackSite.aboutTitle),
 		aboutBody: readString(record.about_body, fallbackSite.aboutBody),
 		aboutImage:
@@ -202,6 +204,14 @@ function mapSiteSettings(record: JsonRecord): SiteSettings {
 		contactEyebrow: readString(record.contact_eyebrow, fallbackSite.contactEyebrow),
 		contactTitle: readString(record.contact_title, fallbackSite.contactTitle),
 		contactBody: readString(record.contact_body, fallbackSite.contactBody),
+		contactCtaEyebrow: readString(record.contact_cta_eyebrow, fallbackSite.contactCtaEyebrow),
+		contactCtaTitle: readString(record.contact_cta_title, fallbackSite.contactCtaTitle),
+		contactCtaBody: readString(record.contact_cta_body, fallbackSite.contactCtaBody),
+		contactCtaButtonLabel: readString(
+			record.contact_cta_button_label,
+			fallbackSite.contactCtaButtonLabel
+		),
+		learnMoreLabel: readString(record.learn_more_label, fallbackSite.learnMoreLabel),
 		chefPickLabel: readString(record.chef_pick_label, fallbackSite.chefPickLabel),
 		chefPickItemSlug: readString(record.chef_pick_item_slug, fallbackSite.chefPickItemSlug),
 		statsCards: readStatsCards(record.stats_cards, fallbackSite.statsCards),
@@ -216,6 +226,14 @@ function mapSiteSettings(record: JsonRecord): SiteSettings {
 		seoTitle: readString(record.seo_title, fallbackSite.seoTitle),
 		seoDescription: readString(record.seo_description, fallbackSite.seoDescription),
 		footerNote: readString(record.footer_note, fallbackSite.footerNote),
+		callLabel: readString(record.call_label, fallbackSite.callLabel),
+		reserveLabel: readString(record.reserve_label, fallbackSite.reserveLabel),
+		mapLabel: readString(record.map_label, fallbackSite.mapLabel),
+		directionsLabel: readString(record.directions_label, fallbackSite.directionsLabel),
+		planVisitLabel: readString(record.plan_visit_label, fallbackSite.planVisitLabel),
+		messageLabel: readString(record.message_label, fallbackSite.messageLabel),
+		featuredLabel: readString(record.featured_label, fallbackSite.featuredLabel),
+		aboutExtra: readOptionalString(record.about_extra),
 		socials: readSocials(record.socials, fallbackSite.socials)
 	};
 }

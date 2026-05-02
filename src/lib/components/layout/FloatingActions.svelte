@@ -16,9 +16,9 @@
 				enabled: visualEditing,
 				collection: 'site_settings',
 				item: site.id,
-				fields: ['phone'],
+				fields: ['phone', 'call_label'],
 				mode: 'popover'
-			})}>Call</a
+			})}>{site.callLabel}</a
 		>
 		<a
 			class="rounded-full bg-white/5 px-3 py-3 text-center text-xs font-semibold text-white"
@@ -27,9 +27,9 @@
 				enabled: visualEditing,
 				collection: 'site_settings',
 				item: site.id,
-				fields: ['maps_url'],
+				fields: ['maps_url', 'map_label'],
 				mode: 'popover'
-			})}>Map</a
+			})}>{site.mapLabel}</a
 		>
 		<a
 			class="rounded-full bg-amber-300 px-3 py-3 text-center text-xs font-semibold text-stone-950"
@@ -38,9 +38,9 @@
 				enabled: visualEditing,
 				collection: 'site_settings',
 				item: site.id,
-				fields: ['reservation_url'],
+				fields: ['reservation_url', 'reserve_label'],
 				mode: 'popover'
-			})}>Reserve</a
+			})}>{site.reserveLabel}</a
 		>
 	</div>
 </div>

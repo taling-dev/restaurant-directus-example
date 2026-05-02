@@ -24,7 +24,9 @@ export type SiteSettings = {
 	heroSecondaryLabel: string;
 	heroSecondaryUrl: string;
 	storyHeading: string;
+	storyEyebrow: string;
 	storyBody: string;
+	aboutEyebrow: string;
 	aboutTitle: string;
 	aboutBody: string;
 	aboutImage?: string;
@@ -40,6 +42,11 @@ export type SiteSettings = {
 	contactEyebrow: string;
 	contactTitle: string;
 	contactBody: string;
+	contactCtaEyebrow: string;
+	contactCtaTitle: string;
+	contactCtaBody: string;
+	contactCtaButtonLabel: string;
+	learnMoreLabel: string;
 	chefPickLabel: string;
 	chefPickItemSlug: string;
 	statsCards: { label: string; title: string }[];
@@ -54,6 +61,14 @@ export type SiteSettings = {
 	seoTitle: string;
 	seoDescription: string;
 	footerNote: string;
+	callLabel: string;
+	reserveLabel: string;
+	mapLabel: string;
+	directionsLabel: string;
+	planVisitLabel: string;
+	messageLabel: string;
+	featuredLabel: string;
+	aboutExtra?: string;
 	socials: SocialLink[];
 };
 

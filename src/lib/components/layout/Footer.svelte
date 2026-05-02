@@ -32,7 +32,18 @@
 		</div>
 
 		<div>
-			<p class="section-kicker">{site.hoursHeading}</p>
+			<p
+				class="section-kicker"
+				data-directus={getDirectusAttr({
+					enabled: visualEditing,
+					collection: 'site_settings',
+					item: site.id,
+					fields: ['hours_heading'],
+					mode: 'popover'
+				})}
+			>
+				{site.hoursHeading}
+			</p>
 			<div class="mt-4 space-y-3 text-sm text-stone-300">
 				{#each hours as entry (entry.day)}
 					<div
@@ -62,7 +73,7 @@
 				enabled: visualEditing,
 				collection: 'site_settings',
 				item: site.id,
-				fields: ['phone', 'email', 'maps_url', 'socials', 'connect_heading'],
+				fields: ['phone', 'email', 'maps_url', 'socials', 'connect_heading', 'directions_label'],
 				mode: 'drawer'
 			})}
 		>
@@ -73,7 +84,7 @@
 					>
 				</p>
 				<p><a class="hover:text-white" href={`mailto:${site.email}`}>{site.email}</a></p>
-				<p><a class="hover:text-white" href={site.mapsUrl}>Get directions</a></p>
+				<p><a class="hover:text-white" href={site.mapsUrl}>{site.directionsLabel}</a></p>
 				<div class="flex flex-wrap gap-3 pt-2">
 					{#each site.socials as social (social.url)}
 						<a class="chip hover:border-amber-300/40 hover:text-white" href={social.url}

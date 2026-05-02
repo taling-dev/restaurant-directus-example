@@ -30,8 +30,10 @@ export const fallbackSite: SiteSettings = {
 	heroSecondaryLabel: 'View the menu',
 	heroSecondaryUrl: '/menu',
 	storyHeading: 'Built for operators who change offers as often as the weather changes.',
+	storyEyebrow: 'Why guests return',
 	storyBody:
 		'Use Directus to update signature dishes, lunch specials, brunch promos, private dining callouts, and all the details guests care about before they visit.',
+	aboutEyebrow: 'About',
 	aboutTitle: 'A hospitality brand with a little heat and a lot of rhythm.',
 	aboutBody:
 		'Ember & Fig is imagined as a modern neighborhood restaurant: open kitchen energy, charcoal-led dishes, and a website that helps guests decide quickly whether they are coming for lunch, cocktails, or a full dinner reservation.',
@@ -53,6 +55,12 @@ export const fallbackSite: SiteSettings = {
 	contactTitle: 'Make the visit feel easy before the guest even leaves home',
 	contactBody:
 		'Address, phone, reservation links, and service windows stay visible and easy to update from the CMS.',
+	contactCtaEyebrow: 'Book the room',
+	contactCtaTitle: 'Ready for date night, lunch service, or a private group booking?',
+	contactCtaBody:
+		'Send guests directly to the reservation flow, phone line, or directions with one tap.',
+	contactCtaButtonLabel: 'Reserve a table',
+	learnMoreLabel: 'Learn more',
 	chefPickLabel: "Chef's pick",
 	chefPickItemSlug: 'charred-carrots',
 	statsCards: [
@@ -89,6 +97,15 @@ export const fallbackSite: SiteSettings = {
 	seoDescription:
 		'A Directus-powered SvelteKit restaurant website with menus, promotions, hours, gallery content, and reservation CTAs.',
 	footerNote: 'Happy hour every weekday from 5-7pm. Private dining inquiries welcome.',
+	callLabel: 'Call',
+	reserveLabel: 'Reserve',
+	mapLabel: 'Map',
+	directionsLabel: 'Open directions',
+	planVisitLabel: 'Plan your visit',
+	messageLabel: 'Message on WhatsApp',
+	featuredLabel: 'Featured',
+	aboutExtra:
+		'This implementation keeps the visual system in SvelteKit while the editable restaurant details move into Directus over time, starting with menus, promos, hours, and homepage messaging.',
 	socials: [
 		{ label: 'Instagram', url: 'https://instagram.com/' },
 		{ label: 'TikTok', url: 'https://tiktok.com/' },

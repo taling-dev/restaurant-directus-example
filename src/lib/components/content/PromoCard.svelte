@@ -3,7 +3,15 @@
 	import type { Promotion } from '$lib/types/content';
 	import { formatPromotionWindow } from '$lib/utils/format';
 
-	let { promotion, visualEditing }: { promotion: Promotion; visualEditing: boolean } = $props();
+	let {
+		promotion,
+		visualEditing,
+		defaultLabel
+	}: {
+		promotion: Promotion;
+		visualEditing: boolean;
+		defaultLabel: string;
+	} = $props();
 </script>
 
 <article
@@ -41,7 +49,7 @@
 		<p class="text-sm leading-6 text-stone-400">{promotion.fullDescription}</p>
 		{#if promotion.ctaUrl}
 			<a class="btn-secondary w-full" href={promotion.ctaUrl}
-				>{promotion.ctaLabel ?? 'Learn more'}</a
+				>{promotion.ctaLabel ?? defaultLabel}</a
 			>
 		{/if}
 	</div>

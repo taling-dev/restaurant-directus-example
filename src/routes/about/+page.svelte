@@ -18,16 +18,18 @@
 				enabled: data.visualEditing,
 				collection: 'site_settings',
 				item: data.site.id,
-				fields: ['about_title', 'about_body'],
+				fields: ['about_eyebrow', 'about_title', 'about_body', 'about_extra'],
 				mode: 'drawer'
 			})}
 		>
-			<SectionHeading eyebrow="About" title={data.site.aboutTitle} copy={data.site.aboutBody} />
-			<p class="max-w-2xl text-base leading-7 text-stone-300">
-				This implementation keeps the visual system in SvelteKit while the editable restaurant
-				details move into Directus over time, starting with menus, promos, hours, and homepage
-				messaging.
-			</p>
+			<SectionHeading
+				eyebrow={data.site.aboutEyebrow}
+				title={data.site.aboutTitle}
+				copy={data.site.aboutBody}
+			/>
+			{#if data.site.aboutExtra}
+				<p class="max-w-2xl text-base leading-7 text-stone-300">{data.site.aboutExtra}</p>
+			{/if}
 		</div>
 
 		<div

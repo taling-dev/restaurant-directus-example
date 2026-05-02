@@ -32,7 +32,16 @@
 			</div>
 		</a>
 
-		<nav class="hidden items-center gap-6 text-sm text-stone-300 lg:flex">
+		<nav
+			class="hidden items-center gap-6 text-sm text-stone-300 lg:flex"
+			data-directus={getDirectusAttr({
+				enabled: visualEditing,
+				collection: 'site_settings',
+				item: site.id,
+				fields: ['nav_links'],
+				mode: 'popover'
+			})}
+		>
 			{#each site.navLinks as link (link.url)}
 				<a class="hover:text-white" href={link.url}>{link.label}</a>
 			{/each}
@@ -46,9 +55,9 @@
 					enabled: visualEditing,
 					collection: 'site_settings',
 					item: site.id,
-					fields: ['phone'],
+					fields: ['phone', 'call_label'],
 					mode: 'popover'
-				})}>Call</a
+				})}>{site.callLabel}</a
 			>
 			<a
 				class="btn-primary"
@@ -57,9 +66,9 @@
 					enabled: visualEditing,
 					collection: 'site_settings',
 					item: site.id,
-					fields: ['reservation_url'],
+					fields: ['reservation_url', 'reserve_label'],
 					mode: 'popover'
-				})}>Reserve</a
+				})}>{site.reserveLabel}</a
 			>
 		</div>
 	</div>

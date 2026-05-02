@@ -44,7 +44,9 @@ const collections = [
 			stringField('hero_secondary_label'),
 			stringField('hero_secondary_url'),
 			stringField('story_heading'),
+			stringField('story_eyebrow'),
 			textField('story_body'),
+			stringField('about_eyebrow'),
 			stringField('about_title'),
 			textField('about_body'),
 			fileField('about_image'),
@@ -60,6 +62,11 @@ const collections = [
 			stringField('contact_eyebrow'),
 			stringField('contact_title'),
 			textField('contact_body'),
+			stringField('contact_cta_eyebrow'),
+			stringField('contact_cta_title'),
+			textField('contact_cta_body'),
+			stringField('contact_cta_button_label'),
+			stringField('learn_more_label'),
 			stringField('chef_pick_label'),
 			stringField('chef_pick_item_slug'),
 			jsonField('stats_cards'),
@@ -74,6 +81,14 @@ const collections = [
 			stringField('seo_title'),
 			textField('seo_description'),
 			textField('footer_note'),
+			stringField('call_label'),
+			stringField('reserve_label'),
+			stringField('map_label'),
+			stringField('directions_label'),
+			stringField('plan_visit_label'),
+			stringField('message_label'),
+			stringField('featured_label'),
+			textField('about_extra'),
 			jsonField('socials')
 		]
 	},
@@ -200,14 +215,80 @@ const seedRecords = {
 			hero_secondary_label: 'View the menu',
 			hero_secondary_url: '/menu',
 			story_heading: 'Built for operators who change offers often.',
+			story_eyebrow: 'Why guests return',
 			story_body: 'Menus, promos, and service information stay editable in one place.',
+			about_eyebrow: 'About',
 			about_title: 'A hospitality brand with a little heat and a lot of rhythm.',
 			about_body:
 				'This seed content gives the site enough material to show the intended editorial structure.',
+			promos_eyebrow: 'Current promos',
+			promos_title: 'Seasonal offers that keep the room buzzing',
+			promos_body:
+				'Highlight tasting menus, cocktail hours, weekend brunches, and limited-time pairings directly from Directus.',
+			menu_eyebrow: 'Menu',
+			menu_title:
+				'Organized for quick scanning on phones and better merchandising on larger screens',
+			menu_body:
+				'Each category and item can be edited from Directus without changing the page structure or layout code.',
+			gallery_eyebrow: 'Gallery',
+			gallery_title: 'A visual layer for dishes, cocktails, and room mood',
+			gallery_body:
+				'Use this page for plating updates, interior shots, chef moments, and social-first imagery that can be changed weekly.',
+			contact_eyebrow: 'Contact',
+			contact_title: 'Make the visit feel easy before the guest even leaves home',
+			contact_body:
+				'Address, phone, reservation links, and service windows stay visible and easy to update from the CMS.',
+			contact_cta_eyebrow: 'Book the room',
+			contact_cta_title: 'Ready for date night, lunch service, or a private group booking?',
+			contact_cta_body:
+				'Send guests directly to the reservation flow, phone line, or directions with one tap.',
+			contact_cta_button_label: 'Reserve a table',
+			learn_more_label: 'Learn more',
+			chef_pick_label: "Chef's pick",
+			chef_pick_item_slug: 'charred-carrots',
+			stats_cards: [
+				{ label: 'Today', title: 'Fresh lunch and dinner service' },
+				{ label: 'Signature', title: 'Wood-fired mains and seasonal cocktails' }
+			],
+			nav_links: [
+				{ label: 'Home', url: '/' },
+				{ label: 'Menu', url: '/menu' },
+				{ label: 'Promos', url: '/promos' },
+				{ label: 'About', url: '/about' },
+				{ label: 'Gallery', url: '/gallery' },
+				{ label: 'Contact', url: '/contact' }
+			],
+			about_cards: [
+				{
+					label: 'CMS-ready',
+					title: 'Swap hero copy, homepage blocks, and contact details from structured content.'
+				},
+				{
+					label: 'Restaurant-first',
+					title: 'Layouts prioritize menu legibility, promo urgency, and reservation conversion.'
+				},
+				{
+					label: 'Operational fit',
+					title: 'Demo content fallback keeps the frontend usable while Directus gets populated.'
+				}
+			],
+			hours_heading: 'Hours',
+			connect_heading: 'Connect',
+			accent_color: '#fbbf24',
+			dark_color: '#0c0a09',
 			seo_title: 'Ember & Fig | Seasonal Restaurant Website Demo',
 			seo_description:
 				'A Directus-powered restaurant website demo with menus, promos, hours, and gallery content.',
 			footer_note: 'Happy hour every weekday from 5-7pm. Private dining inquiries welcome.',
+			call_label: 'Call',
+			reserve_label: 'Reserve',
+			map_label: 'Map',
+			directions_label: 'Open directions',
+			plan_visit_label: 'Plan your visit',
+			message_label: 'Message on WhatsApp',
+			featured_label: 'Featured',
+			about_extra:
+				'This seed content gives the site enough material to show the intended editorial structure.',
 			socials: [
 				{ label: 'Instagram', url: 'https://instagram.com/' },
 				{ label: 'TikTok', url: 'https://tiktok.com/' },

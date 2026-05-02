@@ -15,9 +15,9 @@
 	<div class="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:items-start">
 		<div class="space-y-6">
 			<SectionHeading
-				eyebrow="Contact"
-				title="Make the visit feel easy before the guest even leaves home"
-				copy="Address, phone, reservation links, and service windows stay visible and easy to update from the CMS."
+				eyebrow={data.site.contactEyebrow}
+				title={data.site.contactTitle}
+				copy={data.site.contactBody}
 				visualEditing={data.visualEditing}
 				collection="site_settings"
 				item={data.site.id}
@@ -30,7 +30,15 @@
 					enabled: data.visualEditing,
 					collection: 'site_settings',
 					item: data.site.id,
-					fields: ['address_lines', 'phone', 'email', 'location_note'],
+					fields: [
+						'address_lines',
+						'phone',
+						'email',
+						'location_note',
+						'reserve_label',
+						'directions_label',
+						'message_label'
+					],
 					mode: 'drawer'
 				})}
 			>
@@ -47,15 +55,24 @@
 			</div>
 
 			<div class="flex flex-wrap gap-4">
-				<a class="btn-primary" href={data.site.reservationUrl}>Reserve a table</a>
-				<a class="btn-secondary" href={data.site.mapsUrl}>Open directions</a>
-				<a class="btn-secondary" href={data.site.whatsappUrl}>Message on WhatsApp</a>
+				<a class="btn-primary" href={data.site.reservationUrl}>{data.site.reserveLabel}</a>
+				<a class="btn-secondary" href={data.site.mapsUrl}>{data.site.directionsLabel}</a>
+				<a class="btn-secondary" href={data.site.whatsappUrl}>{data.site.messageLabel}</a>
 			</div>
 		</div>
 
 		<div class="space-y-4">
-			<div class="panel-dark p-6">
-				<p class="section-kicker">Hours</p>
+			<div
+				class="panel-dark p-6"
+				data-directus={getDirectusAttr({
+					enabled: data.visualEditing,
+					collection: 'site_settings',
+					item: data.site.id,
+					fields: ['hours_heading'],
+					mode: 'popover'
+				})}
+			>
+				<p class="section-kicker">{data.site.hoursHeading}</p>
 				<div class="mt-5 space-y-4">
 					{#each data.hours as entry (entry.day)}
 						<div
@@ -80,11 +97,23 @@
 				</div>
 			</div>
 
-			<div class="panel-dark overflow-hidden">
+			<div
+				class="panel-dark overflow-hidden"
+				data-directus={getDirectusAttr({
+					enabled: data.visualEditing,
+					collection: 'site_settings',
+					item: data.site.id,
+					fields: ['maps_url'],
+					mode: 'popover'
+				})}
+			>
 				<iframe
 					title="Restaurant location"
 					class="h-[20rem] w-full border-0"
-					src="https://www.google.com/maps?q=214+Orchard+Street+New+York+NY&output=embed"
+					src={data.site.mapsUrl.replace(
+						'https://maps.google.com/?q=',
+						'https://www.google.com/maps?q='
+					) + '&output=embed'}
 					loading="lazy"
 					referrerpolicy="no-referrer-when-downgrade"
 				></iframe>
