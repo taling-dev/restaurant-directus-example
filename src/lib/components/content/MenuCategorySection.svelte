@@ -72,6 +72,7 @@
 							'labels',
 							'heat_level',
 							'featured',
+							'chef_pick',
 							'available'
 						],
 						mode: 'drawer'

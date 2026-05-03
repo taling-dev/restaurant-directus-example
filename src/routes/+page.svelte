@@ -167,15 +167,15 @@
 		>
 			<img
 				class="h-full min-h-[28rem] w-full object-cover"
-				src={heroSection?.image || heroSection?.imageUrl || data.featuredItems[0]?.imageUrl}
+				src={data.chefPickItem?.image || data.chefPickItem?.imageUrl || data.featuredItems[0]?.imageUrl}
 				width={heroImageDimensions.width}
 				height={heroImageDimensions.height}
 				srcset={toSrcset(
-					heroSection?.image || heroSection?.imageUrl || data.featuredItems[0]?.imageUrl,
+					data.chefPickItem?.image || data.chefPickItem?.imageUrl || data.featuredItems[0]?.imageUrl,
 					{ ratio: 1.25 }
 				)}
 				sizes={toSizes({ lg: '40vw' })}
-				alt={heroSection?.title}
+				alt={data.chefPickItem?.name || 'Featured dish'}
 				loading="eager"
 				fetchpriority="high"
 				decoding="async"
@@ -190,16 +190,16 @@
 						enabled: data.visualEditing,
 						collection: 'site_settings',
 						item: data.site.id,
-						fields: ['chef_pick_label', 'chef_pick_item_slug'],
+						fields: ['chef_pick_label'],
 						mode: 'popover'
 					})}
 				>
 					{data.site.chefPickLabel}
 				</p>
-				{#if data.featuredItems.find((i) => i.slug === data.site.chefPickItemSlug)}
-					{@const pick = data.featuredItems.find((i) => i.slug === data.site.chefPickItemSlug)}
-					<p class="mt-3 text-2xl font-semibold text-white">{pick?.name}</p>
-					<p class="mt-2 max-w-sm text-sm leading-6 text-stone-200">{pick?.description}</p>
+				{#if data.chefPickItem}
+					{@const pick = data.chefPickItem}
+					<p class="mt-3 text-2xl font-semibold text-white">{pick.name}</p>
+					<p class="mt-2 max-w-sm text-sm leading-6 text-stone-200">{pick.description}</p>
 				{:else}
 					<p class="mt-3 text-2xl font-semibold text-white">{data.featuredItems[0]?.name}</p>
 					<p class="mt-2 max-w-sm text-sm leading-6 text-stone-200">
@@ -232,7 +232,7 @@
 						enabled: data.visualEditing,
 						collection: 'menu_items',
 						item: item.id,
-						fields: ['name', 'description', 'price', 'promo_price', 'image', 'image_url', 'labels'],
+						fields: ['name', 'description', 'price', 'promo_price', 'image', 'image_url', 'labels', 'chef_pick'],
 						mode: 'drawer'
 					})}
 				>

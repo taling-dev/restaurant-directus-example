@@ -45,7 +45,6 @@ export type SiteSettings = {
 	contactBody: string;
 	learnMoreLabel: string;
 	chefPickLabel: string;
-	chefPickItemSlug: string;
 	statsCards: { label: string; title: string }[];
 	navLinks: { label: string; url: string }[];
 	aboutCards: { label: string; body: string }[];
@@ -120,6 +119,7 @@ export type MenuItem = {
 	labels: string[];
 	heatLevel: number;
 	featured: boolean;
+	chefPick: boolean;
 	available: boolean;
 	sort: number;
 };

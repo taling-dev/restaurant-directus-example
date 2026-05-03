@@ -142,11 +142,13 @@ export async function getHomePageData() {
 		getGalleryItems()
 	]);
 	const items = await getMenuItems(categories);
+	const featuredItems = items.filter((item) => item.featured);
 
 	return {
 		sections,
 		categories,
-		featuredItems: items.filter((item) => item.featured),
+		featuredItems,
+		chefPickItem: items.find((item) => item.chefPick) ?? featuredItems[0] ?? null,
 		promotions,
 		gallery
 	};
@@ -202,7 +204,6 @@ function mapSiteSettings(record: JsonRecord): SiteSettings {
 		contactBody: readString(record.contact_body, fallbackSite.contactBody),
 		learnMoreLabel: readString(record.learn_more_label, fallbackSite.learnMoreLabel),
 		chefPickLabel: readString(record.chef_pick_label, fallbackSite.chefPickLabel),
-		chefPickItemSlug: readString(record.chef_pick_item_slug, fallbackSite.chefPickItemSlug),
 		statsCards: readStatsCards(record.stats_cards, fallbackSite.statsCards),
 		navLinks: readNavLinks(record.nav_links, fallbackSite.navLinks),
 		aboutCards: readAboutCards(record.about_cards, fallbackSite.aboutCards),
@@ -293,6 +294,7 @@ function mapMenuItem(row: JsonRecord, categories: MenuCategory[]): MenuItem {
 		labels: readList(row.labels, []),
 		heatLevel: readNumber(row.heat_level, 0),
 		featured: readBoolean(row.featured, false),
+		chefPick: readBoolean(row.chef_pick, false),
 		available: readBoolean(row.available, true),
 		sort: readNumber(row.sort, 0)
 	};

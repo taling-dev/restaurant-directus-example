@@ -68,7 +68,6 @@ export const fallbackSite: SiteSettings = {
 		'Address, phone, reservation links, and service windows stay visible and easy to update from the CMS.',
 	learnMoreLabel: 'Learn more',
 	chefPickLabel: "Chef's pick",
-	chefPickItemSlug: 'charred-carrots',
 	statsCards: [
 		{ label: 'Today', title: 'Fresh lunch and dinner service' },
 		{ label: 'Signature', title: 'Wood-fired mains and seasonal cocktails' }
@@ -130,8 +129,6 @@ export const fallbackSections: HomepageSection[] = [
 		ctaUrl: '/promos',
 		secondaryLabel: 'Plan your visit',
 		secondaryUrl: '/contact',
-		imageUrl:
-			'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=80',
 		sort: 1
 	},
 	{
@@ -197,6 +194,7 @@ export const fallbackItems: MenuItem[] = [
 		labels: ['Vegetarian', 'Best seller'],
 		heatLevel: 1,
 		featured: true,
+		chefPick: true,
 		available: true,
 		sort: 1
 	},
@@ -212,6 +210,7 @@ export const fallbackItems: MenuItem[] = [
 		labels: ['Gluten free'],
 		heatLevel: 2,
 		featured: false,
+		chefPick: false,
 		available: true,
 		sort: 2
 	},
@@ -227,6 +226,7 @@ export const fallbackItems: MenuItem[] = [
 		labels: ['Featured', 'Dinner'],
 		heatLevel: 1,
 		featured: true,
+		chefPick: false,
 		available: true,
 		sort: 3
 	},
@@ -242,6 +242,7 @@ export const fallbackItems: MenuItem[] = [
 		labels: ['Gluten free'],
 		heatLevel: 1,
 		featured: true,
+		chefPick: false,
 		available: true,
 		sort: 4
 	},
@@ -257,6 +258,7 @@ export const fallbackItems: MenuItem[] = [
 		labels: ['Happy hour'],
 		heatLevel: 0,
 		featured: false,
+		chefPick: false,
 		available: true,
 		sort: 5
 	},
@@ -272,6 +274,7 @@ export const fallbackItems: MenuItem[] = [
 		labels: ['House favorite'],
 		heatLevel: 0,
 		featured: true,
+		chefPick: false,
 		available: true,
 		sort: 6
 	}
