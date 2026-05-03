@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { getDirectusAttr } from '$lib/directus/visual-editing';
 	import type { GalleryItem } from '$lib/types/content';
-	import { toAspectDimensions, toSizes, toSrcset } from '$lib/utils/image';
+	import { CARD_WIDTHS, toSizes, toSrcset } from '$lib/utils/image';
 
 	let { items, visualEditing }: { items: GalleryItem[]; visualEditing: boolean } = $props();
 
-	const galleryImageDimensions = toAspectDimensions(4 / 3);
+	const galleryImageDimensions = { width: 1200, height: 900 };
 </script>
 
 <div class="grid [grid-template-columns:repeat(auto-fit,minmax(16rem,1fr))] gap-4">
@@ -21,11 +21,11 @@
 			})}
 		>
 			<img
-				class="aspect-[4/3] w-full object-cover"
+				class="w-full object-cover"
 				src={item.image || item.imageUrl}
 				width={galleryImageDimensions.width}
 				height={galleryImageDimensions.height}
-				srcset={toSrcset(item.image || item.imageUrl, { ratio: 4 / 3 })}
+				srcset={toSrcset(item.image || item.imageUrl, { widths: CARD_WIDTHS })}
 				sizes={index === 0
 					? toSizes({ md: '50vw', xl: '50vw' })
 					: toSizes({ md: '50vw', xl: '25vw' })}

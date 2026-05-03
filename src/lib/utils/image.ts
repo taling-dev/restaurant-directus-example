@@ -1,16 +1,30 @@
 /**
  * Generate a srcset string from a Directus asset URL.
  *
- * Uses width/height transforms for Directus and Unsplash so returned
- * assets match the rendered aspect ratio.
+ * Uses width transforms for Directus and Unsplash so returned
+ * assets match the rendered size without over-downloading.
  */
-const DEFAULT_WIDTHS = [320, 384, 480, 640, 768, 800, 960, 1200, 1600];
+
+/** Widths for small card thumbnails (menu items, promos, gallery). Max display ~400px. */
+export const CARD_WIDTHS = [320, 480, 640, 800];
+
+/** Widths for medium cards (about page, category images). Max display ~700px. */
+export const MEDIUM_WIDTHS = [320, 480, 640, 800, 960];
+
+/** Widths for large hero images. Max display ~800px. */
+export const HERO_WIDTHS = [320, 480, 640, 800, 960, 1200];
+
+/** Default fallback widths. */
+const DEFAULT_WIDTHS = CARD_WIDTHS;
+
+/** Default quality (0-100). 65 is a sweet spot for photos on the web. */
+const DEFAULT_QUALITY = 65;
 
 export function toSrcset(
 	url: string | undefined | null,
-	options: { widths?: number[]; ratio?: number } = {}
+	options: { widths?: number[]; quality?: number } = {}
 ) {
-	const { widths = DEFAULT_WIDTHS, ratio } = options;
+	const { widths = DEFAULT_WIDTHS, quality = DEFAULT_QUALITY } = options;
 
 	if (!url) {
 		return undefined;
@@ -25,9 +39,8 @@ export function toSrcset(
 
 		return widths
 			.map((w) => {
-				const h = ratio ? Math.round(w / ratio) : undefined;
 				const u = new URL(imageUrl.toString());
-				applyResponsiveTransform(u, w, h);
+				applyResponsiveTransform(u, w, quality);
 				return `${u.toString()} ${w}w`;
 			})
 			.join(', ');
@@ -47,28 +60,17 @@ function isResponsiveImageUrl(url: URL) {
 	return url.pathname.includes('/assets/') || url.hostname === 'images.unsplash.com';
 }
 
-function applyResponsiveTransform(url: URL, width: number, height?: number) {
+function applyResponsiveTransform(url: URL, width: number, quality: number) {
 	if (url.hostname === 'images.unsplash.com') {
 		url.searchParams.set('w', String(width));
-		url.searchParams.set('q', '78');
+		url.searchParams.set('q', String(quality));
 		url.searchParams.set('auto', 'format');
-
-		if (height) {
-			url.searchParams.set('h', String(height));
-			url.searchParams.set('fit', 'crop');
-		}
-
 		return;
 	}
 
 	url.searchParams.set('width', String(width));
-	url.searchParams.set('quality', '78');
+	url.searchParams.set('quality', String(quality));
 	url.searchParams.set('format', 'auto');
-
-	if (height) {
-		url.searchParams.set('height', String(height));
-		url.searchParams.set('fit', 'cover');
-	}
 }
 
 export function toSizes({

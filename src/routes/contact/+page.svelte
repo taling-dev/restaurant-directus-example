@@ -98,7 +98,7 @@
 							<div>
 								<p class="font-medium text-white">{entry.day}</p>
 								{#if entry.note}
-									<p class="mt-1 text-xs text-stone-500">{entry.note}</p>
+									<p class="mt-1 text-xs text-stone-400">{entry.note}</p>
 								{/if}
 							</div>
 							<p class="text-sm text-stone-300">{formatServiceWindow(entry)}</p>

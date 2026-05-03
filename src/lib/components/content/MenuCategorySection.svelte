@@ -2,7 +2,7 @@
 	import { getDirectusAttr } from '$lib/directus/visual-editing';
 	import type { MenuCategory, MenuItem, SiteSettings } from '$lib/types/content';
 	import { formatCurrency } from '$lib/utils/format';
-	import { toAspectDimensions, toSizes, toSrcset } from '$lib/utils/image';
+	import { CARD_WIDTHS, MEDIUM_WIDTHS, toSizes, toSrcset } from '$lib/utils/image';
 
 	let {
 		category,
@@ -18,8 +18,8 @@
 		visualEditing: boolean;
 	} = $props();
 
-	const categoryImageDimensions = toAspectDimensions(1);
-	const menuItemImageDimensions = toAspectDimensions(4 / 3);
+	const categoryImageDimensions = { width: 1200, height: 1200 };
+	const menuItemImageDimensions = { width: 1200, height: 900 };
 </script>
 
 <section
@@ -36,11 +36,11 @@
 		})}
 	>
 		<img
-			class="aspect-square w-full object-cover"
+			class="w-full object-cover"
 			src={category.image || category.imageUrl}
 			width={categoryImageDimensions.width}
 			height={categoryImageDimensions.height}
-			srcset={toSrcset(category.image || category.imageUrl, { ratio: 1 })}
+			srcset={toSrcset(category.image || category.imageUrl, { widths: MEDIUM_WIDTHS })}
 			sizes={toSizes({ lg: '35vw' })}
 			alt={category.name}
 			loading={priority ? 'eager' : 'lazy'}
@@ -80,11 +80,11 @@
 				>
 					{#if item.image || item.imageUrl}
 						<img
-							class="aspect-[4/3] w-full object-cover"
+							class="w-full object-cover"
 							src={item.image || item.imageUrl}
 							width={menuItemImageDimensions.width}
 							height={menuItemImageDimensions.height}
-							srcset={toSrcset(item.image || item.imageUrl, { ratio: 4 / 3 })}
+							srcset={toSrcset(item.image || item.imageUrl, { widths: CARD_WIDTHS })}
 							sizes={toSizes({ md: '50vw', lg: '30vw' })}
 							alt={item.name}
 							loading="lazy"
@@ -105,7 +105,7 @@
 							</div>
 							<div class="shrink-0 text-right">
 								{#if item.promoPrice}
-									<p class="text-sm text-stone-500 line-through">
+									<p class="text-sm text-stone-400 line-through">
 										{formatCurrency(item.price, site.currencyCode)}
 									</p>
 								{/if}

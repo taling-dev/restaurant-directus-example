@@ -2,7 +2,7 @@
 	import { getDirectusAttr, withVisualEditingHref } from '$lib/directus/visual-editing';
 	import type { Promotion } from '$lib/types/content';
 	import { formatPromotionWindow } from '$lib/utils/format';
-	import { toAspectDimensions, toSizes, toSrcset } from '$lib/utils/image';
+	import { CARD_WIDTHS, toSizes, toSrcset } from '$lib/utils/image';
 
 	let {
 		promotion,
@@ -14,7 +14,7 @@
 		defaultLabel: string;
 	} = $props();
 
-	const promoImageDimensions = toAspectDimensions(4 / 3);
+	const promoImageDimensions = { width: 1200, height: 900 };
 </script>
 
 <article
@@ -39,11 +39,11 @@
 	})}
 >
 	<img
-		class="aspect-[4/3] w-full object-cover"
+		class="w-full object-cover"
 		src={promotion.image || promotion.imageUrl}
 		width={promoImageDimensions.width}
 		height={promoImageDimensions.height}
-		srcset={toSrcset(promotion.image || promotion.imageUrl, { ratio: 4 / 3 })}
+		srcset={toSrcset(promotion.image || promotion.imageUrl, { widths: CARD_WIDTHS })}
 		sizes={toSizes({ sm: '50vw', lg: '30vw' })}
 		alt={promotion.title}
 		loading="lazy"

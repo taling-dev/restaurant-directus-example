@@ -4,7 +4,7 @@
 	import SectionHeading from '$lib/components/content/SectionHeading.svelte';
 	import { getDirectusAttr, withVisualEditingHref } from '$lib/directus/visual-editing';
 	import { formatCurrency } from '$lib/utils/format';
-	import { toAspectDimensions, toSizes, toSrcset } from '$lib/utils/image';
+	import { CARD_WIDTHS, HERO_WIDTHS, toSizes, toSrcset } from '$lib/utils/image';
 
 	let { data } = $props();
 
@@ -100,8 +100,8 @@
 			: undefined
 	);
 
-	const heroImageDimensions = toAspectDimensions(5 / 4);
-	const cardImageDimensions = toAspectDimensions(4 / 3);
+	const heroImageDimensions = { width: 1200, height: 960 };
+	const cardImageDimensions = { width: 1200, height: 900 };
 </script>
 
 <svelte:head>
@@ -172,7 +172,7 @@
 				height={heroImageDimensions.height}
 				srcset={toSrcset(
 					data.chefPickItem?.image || data.chefPickItem?.imageUrl || data.featuredItems[0]?.imageUrl,
-					{ ratio: 1.25 }
+					{ widths: HERO_WIDTHS }
 				)}
 				sizes={toSizes({ lg: '40vw' })}
 				alt={data.chefPickItem?.name || 'Featured dish'}
@@ -237,11 +237,11 @@
 					})}
 				>
 					<img
-						class="aspect-[4/3] w-full object-cover"
+						class="w-full object-cover"
 						src={item.image || item.imageUrl}
 						width={cardImageDimensions.width}
 						height={cardImageDimensions.height}
-						srcset={toSrcset(item.image || item.imageUrl, { ratio: 4 / 3 })}
+							srcset={toSrcset(item.image || item.imageUrl, { widths: CARD_WIDTHS })}
 						sizes={toSizes({ sm: '50vw', lg: '28vw' })}
 						alt={item.name}
 						loading="lazy"

@@ -27,7 +27,7 @@
 					src={site.logo}
 					width={logoDimensions.width}
 					height={logoDimensions.height}
-					srcset={toSrcset(site.logo, { ratio: 1, widths: [44, 88, 132] })}
+					srcset={toSrcset(site.logo, { widths: [44, 88, 132] })}
 					sizes={toSizes({ mobile: '44px' })}
 					alt={site.name}
 					loading="eager"
