@@ -45,25 +45,17 @@ export async function getSiteSettings() {
 	return mapSiteSettings(record);
 }
 
-export async function getHomepageSections(categories: MenuCategory[] = fallbackCategories) {
+export async function getHomepageSections() {
 	const rows = await withFallback(
 		() =>
 			readItems<JsonRecord>('homepage_sections', {
 				sort: 'sort',
-				limit: '20',
-				fields: [
-					'*',
-					'selected_promotions.promotions_id.*',
-					'selected_menu_items.menu_items_id.*',
-					'selected_gallery_items.gallery_items_id.*'
-				].join(',')
+				limit: '20'
 			}).then((response) => response.data),
 		fallbackSections
 	);
 
-	return rows
-		.map((row) => mapHomepageSection(row, categories))
-		.sort((left, right) => left.sort - right.sort);
+	return rows.map(mapHomepageSection).sort((left, right) => left.sort - right.sort);
 }
 
 export async function getMenuCategories() {
@@ -141,13 +133,13 @@ export async function getGalleryItems() {
 }
 
 export async function getHomePageData() {
-	const [categories, promotions, gallery] = await Promise.all([
+	const [sections, categories, promotions, gallery] = await Promise.all([
+		getHomepageSections(),
 		getMenuCategories(),
 		getPromotions(),
 		getGalleryItems()
 	]);
 	const items = await getMenuItems(categories);
-	const sections = await getHomepageSections(categories);
 
 	return {
 		sections,
@@ -251,19 +243,7 @@ function mapSiteSettings(record: JsonRecord): SiteSettings {
 	};
 }
 
-function mapHomepageSection(row: JsonRecord, categories: MenuCategory[] = []): HomepageSection {
-	// Unpack M2M junction rows → actual item records
-	const selectedPromotions = readJunctionItems(row.selected_promotions, 'promotions_id').map(
-		mapPromotion
-	);
-	const selectedMenuItems = readJunctionItems(row.selected_menu_items, 'menu_items_id').map((r) =>
-		mapMenuItem(r, categories)
-	);
-	const selectedGalleryItems = readJunctionItems(
-		row.selected_gallery_items,
-		'gallery_items_id'
-	).map(mapGalleryItem);
-
+function mapHomepageSection(row: JsonRecord): HomepageSection {
 	return {
 		id: readString(row.id, crypto.randomUUID()),
 		sectionType: readString(row.section_type, 'story') as HomepageSection['sectionType'],
@@ -280,24 +260,8 @@ function mapHomepageSection(row: JsonRecord, categories: MenuCategory[] = []): H
 		imageUrl:
 			toOptimizedAssetUrl(readAssetToken(row.image)) ||
 			toOptimizedAssetUrl(readOptionalString(row.image_url)),
-		sort: readNumber(row.sort, 0),
-		selectedPromotions: selectedPromotions.length > 0 ? selectedPromotions : undefined,
-		selectedMenuItems: selectedMenuItems.length > 0 ? selectedMenuItems : undefined,
-		selectedGalleryItems: selectedGalleryItems.length > 0 ? selectedGalleryItems : undefined
+		sort: readNumber(row.sort, 0)
 	};
-}
-
-function readJunctionItems(value: unknown, itemKey: string): JsonRecord[] {
-	if (!Array.isArray(value)) return [];
-	return value
-		.map((entry) => {
-			if (typeof entry !== 'object' || entry === null) return null;
-			const record = entry as JsonRecord;
-			const item = record[itemKey];
-			if (typeof item !== 'object' || item === null) return null;
-			return item as JsonRecord;
-		})
-		.filter((item): item is JsonRecord => item !== null);
 }
 
 function mapMenuCategory(row: JsonRecord): MenuCategory {
