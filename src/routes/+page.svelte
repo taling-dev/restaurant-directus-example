@@ -80,13 +80,16 @@
 				})
 	);
 	const promoSection = $derived(
-		data.sections.find((section) => section.sectionType === 'promo-strip')
+		data.sections.find((section) => section.sectionType === 'promo-strip') ??
+		data.sections.find((section) => section.selectedPromotions && section.selectedPromotions.length > 0)
 	);
 	const featuredMenuSection = $derived(
-		data.sections.find((section) => section.sectionType === 'featured-menu')
+		data.sections.find((section) => section.sectionType === 'featured-menu') ??
+		data.sections.find((section) => section.selectedMenuItems && section.selectedMenuItems.length > 0)
 	);
 	const gallerySection = $derived(
-		data.sections.find((section) => section.sectionType === 'gallery-preview')
+		data.sections.find((section) => section.sectionType === 'gallery-preview') ??
+		data.sections.find((section) => section.selectedGalleryItems && section.selectedGalleryItems.length > 0)
 	);
 
 	// Use section-curated items when set, otherwise fall back to all items from API
