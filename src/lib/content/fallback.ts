@@ -19,20 +19,6 @@ export const fallbackSite: SiteSettings = {
 	reservationUrl: 'https://www.opentable.com/',
 	mapsUrl: 'https://maps.google.com/?q=214+Orchard+Street+New+York+NY',
 	whatsappUrl: 'https://wa.me/12125550188',
-	heroBadge: 'Seasonal plates. Late pours. Warm room.',
-	heroTitle: 'A restaurant site made for nightly menu edits and promo drops.',
-	heroBody:
-		'Ember & Fig blends wood-fired mains, bright market vegetables, and a bar program designed for long dinners and quick walk-ins alike.',
-	heroImage:
-		'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=80',
-	heroPrimaryLabel: 'Book a table',
-	heroPrimaryUrl: 'https://www.opentable.com/',
-	heroSecondaryLabel: 'View the menu',
-	heroSecondaryUrl: '/menu',
-	storyHeading: 'Built for operators who change offers as often as the weather changes.',
-	storyEyebrow: 'Why guests return',
-	storyBody:
-		'Use Directus to update signature dishes, lunch specials, brunch promos, private dining callouts, and all the details guests care about before they visit.',
 	aboutEyebrow: 'About',
 	aboutTitle: 'A hospitality brand with a little heat and a lot of rhythm.',
 	aboutBody:
@@ -80,11 +66,6 @@ export const fallbackSite: SiteSettings = {
 	contactTitle: 'Make the visit feel easy before the guest even leaves home',
 	contactBody:
 		'Address, phone, reservation links, and service windows stay visible and easy to update from the CMS.',
-	contactCtaEyebrow: 'Book the room',
-	contactCtaTitle: 'Ready for date night, lunch service, or a private group booking?',
-	contactCtaBody:
-		'Send guests directly to the reservation flow, phone line, or directions with one tap.',
-	contactCtaButtonLabel: 'Reserve a table',
 	learnMoreLabel: 'Learn more',
 	chefPickLabel: "Chef's pick",
 	chefPickItemSlug: 'charred-carrots',

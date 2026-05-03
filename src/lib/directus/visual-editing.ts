@@ -29,9 +29,9 @@ export function getDirectusAttr({
 	});
 }
 
-export function withVisualEditingHref(href: string, enabled: boolean) {
+export function withVisualEditingHref(href: string | undefined, enabled: boolean) {
 	if (!enabled || !href) {
-		return href;
+		return href ?? '';
 	}
 
 	if (

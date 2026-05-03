@@ -177,20 +177,6 @@ function mapSiteSettings(record: JsonRecord): SiteSettings {
 		reservationUrl: readString(record.reservation_url, fallbackSite.reservationUrl),
 		mapsUrl: readString(record.maps_url, fallbackSite.mapsUrl),
 		whatsappUrl: readString(record.whatsapp_url, fallbackSite.whatsappUrl),
-		heroBadge: readString(record.hero_badge, fallbackSite.heroBadge),
-		heroTitle: readString(record.hero_title, fallbackSite.heroTitle),
-		heroBody: readString(record.hero_body, fallbackSite.heroBody),
-		heroImage:
-			toOptimizedAssetUrl(readAssetToken(record.hero_image)) ||
-			toOptimizedAssetUrl(readOptionalString(record.hero_image_url)) ||
-			fallbackSite.heroImage,
-		heroPrimaryLabel: readString(record.hero_primary_label, fallbackSite.heroPrimaryLabel),
-		heroPrimaryUrl: readString(record.hero_primary_url, fallbackSite.heroPrimaryUrl),
-		heroSecondaryLabel: readString(record.hero_secondary_label, fallbackSite.heroSecondaryLabel),
-		heroSecondaryUrl: readString(record.hero_secondary_url, fallbackSite.heroSecondaryUrl),
-		storyHeading: readString(record.story_heading, fallbackSite.storyHeading),
-		storyEyebrow: readString(record.story_eyebrow, fallbackSite.storyEyebrow),
-		storyBody: readString(record.story_body, fallbackSite.storyBody),
 		aboutEyebrow: readString(record.about_eyebrow, fallbackSite.aboutEyebrow),
 		aboutTitle: readString(record.about_title, fallbackSite.aboutTitle),
 		aboutBody: readString(record.about_body, fallbackSite.aboutBody),
@@ -214,13 +200,6 @@ function mapSiteSettings(record: JsonRecord): SiteSettings {
 		contactEyebrow: readString(record.contact_eyebrow, fallbackSite.contactEyebrow),
 		contactTitle: readString(record.contact_title, fallbackSite.contactTitle),
 		contactBody: readString(record.contact_body, fallbackSite.contactBody),
-		contactCtaEyebrow: readString(record.contact_cta_eyebrow, fallbackSite.contactCtaEyebrow),
-		contactCtaTitle: readString(record.contact_cta_title, fallbackSite.contactCtaTitle),
-		contactCtaBody: readString(record.contact_cta_body, fallbackSite.contactCtaBody),
-		contactCtaButtonLabel: readString(
-			record.contact_cta_button_label,
-			fallbackSite.contactCtaButtonLabel
-		),
 		learnMoreLabel: readString(record.learn_more_label, fallbackSite.learnMoreLabel),
 		chefPickLabel: readString(record.chef_pick_label, fallbackSite.chefPickLabel),
 		chefPickItemSlug: readString(record.chef_pick_item_slug, fallbackSite.chefPickItemSlug),

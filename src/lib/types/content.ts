@@ -23,17 +23,6 @@ export type SiteSettings = {
 	reservationUrl: string;
 	mapsUrl: string;
 	whatsappUrl: string;
-	heroBadge: string;
-	heroTitle: string;
-	heroBody: string;
-	heroImage?: string;
-	heroPrimaryLabel: string;
-	heroPrimaryUrl: string;
-	heroSecondaryLabel: string;
-	heroSecondaryUrl: string;
-	storyHeading: string;
-	storyEyebrow: string;
-	storyBody: string;
 	aboutEyebrow: string;
 	aboutTitle: string;
 	aboutBody: string;
@@ -54,10 +43,6 @@ export type SiteSettings = {
 	contactEyebrow: string;
 	contactTitle: string;
 	contactBody: string;
-	contactCtaEyebrow: string;
-	contactCtaTitle: string;
-	contactCtaBody: string;
-	contactCtaButtonLabel: string;
 	learnMoreLabel: string;
 	chefPickLabel: string;
 	chefPickItemSlug: string;

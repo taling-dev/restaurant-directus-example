@@ -22,22 +22,7 @@
 					fields: ['eyebrow', 'title', 'body', 'cta_label', 'cta_url', 'image'],
 					mode: 'drawer'
 				})
-			: getDirectusAttr({
-					enabled: data.visualEditing,
-					collection: 'site_settings',
-					item: data.site.id,
-					fields: [
-						'hero_badge',
-						'hero_title',
-						'hero_body',
-						'hero_primary_label',
-						'hero_primary_url',
-						'hero_secondary_label',
-						'hero_secondary_url',
-						'hero_image'
-					],
-					mode: 'drawer'
-				})
+			: undefined
 	);
 	const storyAttr = $derived(
 		storySection
@@ -48,13 +33,7 @@
 					fields: ['eyebrow', 'title', 'body', 'image'],
 					mode: 'drawer'
 				})
-			: getDirectusAttr({
-					enabled: data.visualEditing,
-					collection: 'site_settings',
-					item: data.site.id,
-					fields: ['story_eyebrow', 'story_heading', 'story_body'],
-					mode: 'drawer'
-				})
+			: undefined
 	);
 	const contactAttr = $derived(
 		contactSection
@@ -65,19 +44,7 @@
 					fields: ['eyebrow', 'title', 'body', 'cta_label', 'cta_url', 'image'],
 					mode: 'drawer'
 				})
-			: getDirectusAttr({
-					enabled: data.visualEditing,
-					collection: 'site_settings',
-					item: data.site.id,
-					fields: [
-						'contact_cta_eyebrow',
-						'contact_cta_title',
-						'contact_cta_body',
-						'contact_cta_button_label',
-						'plan_visit_label'
-					],
-					mode: 'drawer'
-				})
+			: undefined
 	);
 	const promoSection = $derived(
 		data.sections.find((section) => section.sectionType === 'promo-strip') ??
@@ -108,13 +75,7 @@
 					fields: ['eyebrow', 'title', 'body', 'selected_promotions'],
 					mode: 'drawer'
 				})
-			: getDirectusAttr({
-					enabled: data.visualEditing,
-					collection: 'site_settings',
-					item: data.site.id,
-					fields: ['promos_eyebrow', 'promos_title', 'promos_body'],
-					mode: 'drawer'
-				})
+			: undefined
 	);
 	const featuredMenuAttr = $derived(
 		featuredMenuSection
@@ -125,13 +86,7 @@
 					fields: ['eyebrow', 'title', 'body', 'selected_menu_items'],
 					mode: 'drawer'
 				})
-			: getDirectusAttr({
-					enabled: data.visualEditing,
-					collection: 'site_settings',
-					item: data.site.id,
-					fields: ['story_eyebrow', 'story_heading', 'story_body'],
-					mode: 'drawer'
-				})
+			: undefined
 	);
 	const galleryAttr = $derived(
 		gallerySection
@@ -142,13 +97,7 @@
 					fields: ['eyebrow', 'title', 'body', 'selected_gallery_items'],
 					mode: 'drawer'
 				})
-			: getDirectusAttr({
-					enabled: data.visualEditing,
-					collection: 'site_settings',
-					item: data.site.id,
-					fields: ['gallery_eyebrow', 'gallery_title', 'gallery_body'],
-					mode: 'drawer'
-				})
+			: undefined
 	);
 
 	const heroImageDimensions = toAspectDimensions(5 / 4);
@@ -164,35 +113,29 @@
 	<div class="mx-auto grid max-w-6xl gap-12 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
 		<div class="space-y-8">
 			<div class="space-y-4" data-directus={heroAttr}>
-				<p class="section-kicker">{heroSection?.eyebrow ?? data.site.heroBadge}</p>
+				<p class="section-kicker">{heroSection?.eyebrow}</p>
 				<h1
 					class="text-5xl font-semibold tracking-tight text-balance text-white sm:text-6xl lg:text-7xl"
 				>
-					{heroSection?.title ?? data.site.heroTitle}
+					{heroSection?.title}
 				</h1>
 				<p class="max-w-2xl text-lg leading-8 text-stone-300 sm:text-xl">
-					{heroSection?.body ?? data.site.heroBody}
+					{heroSection?.body}
 				</p>
 			</div>
 
 			<div class="flex flex-wrap gap-4">
 				<a
 					class="btn-primary"
-					href={withVisualEditingHref(
-						heroSection?.ctaUrl ?? data.site.heroPrimaryUrl,
-						data.visualEditing
-					)}
+					href={withVisualEditingHref(heroSection?.ctaUrl, data.visualEditing)}
 				>
-					{heroSection?.ctaLabel ?? data.site.heroPrimaryLabel}
+					{heroSection?.ctaLabel}
 				</a>
 				<a
 					class="btn-secondary"
-					href={withVisualEditingHref(
-						heroSection?.secondaryUrl ?? data.site.heroSecondaryUrl,
-						data.visualEditing
-					)}
+					href={withVisualEditingHref(heroSection?.secondaryUrl, data.visualEditing)}
 				>
-					{heroSection?.secondaryLabel ?? data.site.heroSecondaryLabel}
+					{heroSection?.secondaryLabel}
 				</a>
 			</div>
 
@@ -221,21 +164,15 @@
 		>
 			<img
 				class="h-full min-h-[28rem] w-full object-cover"
-				src={heroSection?.image ||
-					heroSection?.imageUrl ||
-					data.site.heroImage ||
-					data.featuredItems[0]?.imageUrl}
+				src={heroSection?.image || heroSection?.imageUrl || data.featuredItems[0]?.imageUrl}
 				width={heroImageDimensions.width}
 				height={heroImageDimensions.height}
 				srcset={toSrcset(
-					heroSection?.image ||
-						heroSection?.imageUrl ||
-						data.site.heroImage ||
-						data.featuredItems[0]?.imageUrl,
+					heroSection?.image || heroSection?.imageUrl || data.featuredItems[0]?.imageUrl,
 					{ ratio: 1.25 }
 				)}
 				sizes={toSizes({ lg: '40vw' })}
-				alt={heroSection?.title ?? data.site.heroTitle}
+				alt={heroSection?.title}
 				loading="eager"
 				fetchpriority="high"
 				decoding="async"
@@ -275,9 +212,9 @@
 	<div class="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
 		<div class="space-y-4" data-directus={storyAttr}>
 			<SectionHeading
-				eyebrow={storySection?.eyebrow ?? data.site.storyEyebrow}
-				title={storySection?.title ?? data.site.storyHeading}
-				copy={storySection?.body ?? data.site.storyBody}
+				eyebrow={storySection?.eyebrow}
+				title={storySection?.title}
+				copy={storySection?.body}
 			/>
 		</div>
 
@@ -382,9 +319,9 @@
 >
 	<div class="mx-auto max-w-6xl space-y-10">
 		<SectionHeading
-			eyebrow={promoSection?.eyebrow ?? data.site.promosEyebrow}
-			title={promoSection?.title ?? data.site.promosTitle}
-			copy={promoSection?.body ?? data.site.promosBody}
+			eyebrow={promoSection?.eyebrow}
+			title={promoSection?.title}
+			copy={promoSection?.body}
 			visualEditing={data.visualEditing}
 			collection={promoSection ? 'homepage_sections' : 'site_settings'}
 			item={promoSection ? promoSection.id : data.site.id}
@@ -446,9 +383,9 @@
 >
 	<div class="mx-auto max-w-6xl space-y-8">
 		<SectionHeading
-			eyebrow={gallerySection?.eyebrow ?? data.site.galleryEyebrow}
-			title={gallerySection?.title ?? data.site.galleryTitle}
-			copy={gallerySection?.body ?? data.site.galleryBody}
+			eyebrow={gallerySection?.eyebrow}
+			title={gallerySection?.title}
+			copy={gallerySection?.body}
 			visualEditing={data.visualEditing}
 			collection={gallerySection ? 'homepage_sections' : 'site_settings'}
 			item={gallerySection ? gallerySection.id : data.site.id}
@@ -470,23 +407,20 @@
 	>
 		<div class="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-center">
 			<div class="space-y-3" data-directus={contactAttr}>
-				<p class="section-kicker">{contactSection?.eyebrow ?? data.site.contactCtaEyebrow}</p>
+				<p class="section-kicker">{contactSection?.eyebrow}</p>
 				<h2 class="text-3xl font-semibold tracking-tight text-white sm:text-4xl">
-					{contactSection?.title ?? data.site.contactCtaTitle}
+					{contactSection?.title}
 				</h2>
 				<p class="max-w-3xl text-base leading-7 text-stone-300">
-					{contactSection?.body ?? data.site.contactCtaBody}
+					{contactSection?.body}
 				</p>
 			</div>
 			<div class="flex flex-wrap gap-4">
 				<a
 					class="btn-primary"
-					href={withVisualEditingHref(
-						contactSection?.ctaUrl ?? data.site.reservationUrl,
-						data.visualEditing
-					)}
+					href={withVisualEditingHref(contactSection?.ctaUrl, data.visualEditing)}
 				>
-					{contactSection?.ctaLabel ?? data.site.contactCtaButtonLabel}
+					{contactSection?.ctaLabel}
 				</a>
 				<a
 					class="btn-secondary"

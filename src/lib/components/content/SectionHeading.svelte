@@ -10,9 +10,9 @@
 		item,
 		fields
 	}: {
-		eyebrow: string;
-		title: string;
-		copy: string;
+		eyebrow?: string;
+		title?: string;
+		copy?: string;
 		visualEditing?: boolean;
 		collection?: string;
 		item?: string;
