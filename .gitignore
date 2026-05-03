@@ -27,3 +27,12 @@ directus/extensions/*
 # Vite
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+
+# Kilo / Skills
+.kilo/node_modules
+.kilo/package.json
+.kilo/package-lock.json
+.kilo/pnpm-lock.yaml
+.kilo/bun.lock
+.kilo/yarn.lock
+.kilo/.gitignore
