@@ -38,17 +38,19 @@
 		mode: 'drawer'
 	})}
 >
-	<img
-		class="w-full object-cover"
-		src={promotion.image || promotion.imageUrl}
-		width={promoImageDimensions.width}
-		height={promoImageDimensions.height}
-		srcset={toSrcset(promotion.image || promotion.imageUrl, { widths: CARD_WIDTHS })}
-		sizes={toSizes({ sm: '50vw', lg: '30vw' })}
-		alt={promotion.title}
-		loading="lazy"
-		decoding="async"
-	/>
+	<div class="aspect-[4/3] overflow-hidden">
+		<img
+			class="h-full w-full object-cover"
+			src={promotion.image || promotion.imageUrl}
+			width={promoImageDimensions.width}
+			height={promoImageDimensions.height}
+			srcset={toSrcset(promotion.image || promotion.imageUrl, { widths: CARD_WIDTHS })}
+			sizes={toSizes({ sm: '50vw', lg: '30vw' })}
+			alt={promotion.title}
+			loading="lazy"
+			decoding="async"
+		/>
+	</div>
 	<div class="space-y-4 p-5">
 		<div>
 			<p class="section-kicker">{formatPromotionWindow(promotion)}</p>

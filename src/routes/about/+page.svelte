@@ -45,18 +45,20 @@
 				mode: 'popover'
 			})}
 		>
-			<img
-				class="w-full object-cover"
-				src={data.site.aboutImage}
-				width={aboutImageDimensions.width}
-				height={aboutImageDimensions.height}
-				srcset={toSrcset(data.site.aboutImage, { widths: MEDIUM_WIDTHS })}
-				sizes={toSizes({ lg: '50vw' })}
-				alt="Dining room interior"
-				loading="eager"
-				fetchpriority="high"
-				decoding="async"
-			/>
+			<div class="aspect-[4/3] overflow-hidden">
+				<img
+					class="h-full w-full object-cover"
+					src={data.site.aboutImage}
+					width={aboutImageDimensions.width}
+					height={aboutImageDimensions.height}
+					srcset={toSrcset(data.site.aboutImage, { widths: MEDIUM_WIDTHS })}
+					sizes={toSizes({ lg: '50vw' })}
+					alt="Dining room interior"
+					loading="eager"
+					fetchpriority="high"
+					decoding="async"
+				/>
+			</div>
 		</div>
 	</div>
 </section>

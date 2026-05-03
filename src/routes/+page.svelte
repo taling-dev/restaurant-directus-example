@@ -236,18 +236,20 @@
 						mode: 'drawer'
 					})}
 				>
-					<img
-						class="w-full object-cover"
-						src={item.image || item.imageUrl}
-						width={cardImageDimensions.width}
-						height={cardImageDimensions.height}
-							srcset={toSrcset(item.image || item.imageUrl, { widths: CARD_WIDTHS })}
-						sizes={toSizes({ sm: '50vw', lg: '28vw' })}
-						alt={item.name}
-						loading="lazy"
-						fetchpriority="auto"
-						decoding="async"
-					/>
+					<div class="aspect-[4/3] overflow-hidden">
+						<img
+							class="h-full w-full object-cover"
+							src={item.image || item.imageUrl}
+							width={cardImageDimensions.width}
+							height={cardImageDimensions.height}
+								srcset={toSrcset(item.image || item.imageUrl, { widths: CARD_WIDTHS })}
+							sizes={toSizes({ sm: '50vw', lg: '28vw' })}
+							alt={item.name}
+							loading="lazy"
+							fetchpriority="auto"
+							decoding="async"
+						/>
+					</div>
 					<div class="flex flex-1 flex-col gap-4 p-5">
 						<div class="flex items-start justify-between gap-4">
 							<div>

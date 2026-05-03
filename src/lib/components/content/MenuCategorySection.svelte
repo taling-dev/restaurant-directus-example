@@ -26,7 +26,7 @@
 	class="grid gap-6 rounded-[2rem] border border-white/10 bg-white/5 p-4 [contain-intrinsic-size:800px] [content-visibility:auto] sm:p-6 lg:grid-cols-[0.4fr_0.6fr]"
 >
 	<div
-		class="overflow-hidden rounded-[1.5rem] border border-white/10 bg-stone-900"
+		class="aspect-square overflow-hidden rounded-[1.5rem] border border-white/10 bg-stone-900"
 		data-directus={getDirectusAttr({
 			enabled: visualEditing,
 			collection: 'menu_categories',
@@ -36,7 +36,7 @@
 		})}
 	>
 		<img
-			class="w-full object-cover"
+			class="h-full w-full object-cover"
 			src={category.image || category.imageUrl}
 			width={categoryImageDimensions.width}
 			height={categoryImageDimensions.height}
@@ -79,18 +79,20 @@
 					})}
 				>
 					{#if item.image || item.imageUrl}
-						<img
-							class="w-full object-cover"
-							src={item.image || item.imageUrl}
-							width={menuItemImageDimensions.width}
-							height={menuItemImageDimensions.height}
-							srcset={toSrcset(item.image || item.imageUrl, { widths: CARD_WIDTHS })}
-							sizes={toSizes({ md: '50vw', lg: '30vw' })}
-							alt={item.name}
-							loading="lazy"
-							fetchpriority="auto"
-							decoding="async"
-						/>
+						<div class="aspect-[4/3] overflow-hidden">
+							<img
+								class="h-full w-full object-cover"
+								src={item.image || item.imageUrl}
+								width={menuItemImageDimensions.width}
+								height={menuItemImageDimensions.height}
+								srcset={toSrcset(item.image || item.imageUrl, { widths: CARD_WIDTHS })}
+								sizes={toSizes({ md: '50vw', lg: '30vw' })}
+								alt={item.name}
+								loading="lazy"
+								fetchpriority="auto"
+								decoding="async"
+							/>
+						</div>
 					{/if}
 					<div class="space-y-4 p-5">
 						<div class="flex items-start justify-between gap-4">

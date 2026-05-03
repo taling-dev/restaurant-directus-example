@@ -20,19 +20,21 @@
 				mode: 'drawer'
 			})}
 		>
-			<img
-				class="w-full object-cover"
-				src={item.image || item.imageUrl}
-				width={galleryImageDimensions.width}
-				height={galleryImageDimensions.height}
-				srcset={toSrcset(item.image || item.imageUrl, { widths: CARD_WIDTHS })}
-				sizes={index === 0
-					? toSizes({ md: '50vw', xl: '50vw' })
-					: toSizes({ md: '50vw', xl: '25vw' })}
-				alt={item.altText}
-				loading="lazy"
-				decoding="async"
-			/>
+			<div class="aspect-[4/3] overflow-hidden">
+				<img
+					class="h-full w-full object-cover"
+					src={item.image || item.imageUrl}
+					width={galleryImageDimensions.width}
+					height={galleryImageDimensions.height}
+					srcset={toSrcset(item.image || item.imageUrl, { widths: CARD_WIDTHS })}
+					sizes={index === 0
+						? toSizes({ md: '50vw', xl: '50vw' })
+						: toSizes({ md: '50vw', xl: '25vw' })}
+					alt={item.altText}
+					loading="lazy"
+					decoding="async"
+				/>
+			</div>
 			{#if item.caption}
 				<figcaption class="px-4 py-4 text-sm leading-6 text-stone-300">{item.caption}</figcaption>
 			{/if}
