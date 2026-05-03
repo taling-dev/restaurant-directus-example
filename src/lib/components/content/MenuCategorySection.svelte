@@ -57,7 +57,7 @@
 		<div class="grid gap-4 md:grid-cols-2">
 			{#each items as item (item.slug)}
 				<article
-					class="overflow-hidden rounded-[1.5rem] border border-white/10 bg-black/15"
+					class="overflow-hidden rounded-2xl border border-white/10 bg-stone-900/40"
 					data-directus={getDirectusAttr({
 						enabled: visualEditing,
 						collection: 'menu_items',

@@ -5,7 +5,17 @@
 
 	let { site, visualEditing }: { site: SiteSettings; visualEditing: boolean } = $props();
 
+	let mobileOpen = $state(false);
+
 	const logoDimensions = toAspectDimensions(1, 44);
+
+	function toggleMobile() {
+		mobileOpen = !mobileOpen;
+	}
+
+	function closeMobile() {
+		mobileOpen = false;
+	}
 </script>
 
 <header class="sticky top-0 z-40 border-b border-white/10 bg-stone-950/75 backdrop-blur-xl">
@@ -87,5 +97,50 @@
 				})}>{site.reserveLabel}</a
 			>
 		</div>
+
+		<button
+			class="flex size-10 flex-col items-center justify-center gap-1.5 rounded-lg border border-white/10 bg-white/5 lg:hidden"
+			onclick={toggleMobile}
+			aria-label="Toggle navigation"
+			aria-expanded={mobileOpen}
+		>
+			<span class="block h-0.5 w-5 bg-white transition-transform {mobileOpen ? 'translate-y-2 rotate-45' : ''}"></span>
+			<span class="block h-0.5 w-5 bg-white transition-opacity {mobileOpen ? 'opacity-0' : ''}"></span>
+			<span class="block h-0.5 w-5 bg-white transition-transform {mobileOpen ? '-translate-y-2 -rotate-45' : ''}"></span>
+		</button>
 	</div>
+
+	{#if mobileOpen}
+		<div
+			class="border-b border-white/10 bg-stone-950/95 px-6 py-4 backdrop-blur-xl lg:hidden"
+		>
+			<nav class="flex flex-col gap-3 text-sm text-stone-300">
+				{#each site.navLinks as link (link.url)}
+					<a
+						class="rounded-lg px-3 py-2 hover:bg-white/5 hover:text-white"
+						href={withVisualEditingHref(link.url, visualEditing)}
+						onclick={closeMobile}
+					>
+						{link.label}
+					</a>
+				{/each}
+				<div class="mt-2 flex flex-col gap-2 border-t border-white/10 pt-3">
+					<a
+						class="btn-secondary text-center"
+						href={`tel:${site.phone.replace(/\s+/g, '')}`}
+						 onclick={closeMobile}
+					>
+						{site.callLabel}
+					</a>
+					<a
+						class="btn-primary text-center"
+						href={withVisualEditingHref(site.reservationUrl, visualEditing)}
+						onclick={closeMobile}
+					>
+						{site.reserveLabel}
+					</a>
+				</div>
+			</nav>
+		</div>
+	{/if}
 </header>

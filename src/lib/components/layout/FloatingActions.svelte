@@ -32,7 +32,7 @@
 			})}>{site.mapLabel}</a
 		>
 		<a
-			class="rounded-full bg-amber-300 px-3 py-3 text-center text-xs font-semibold text-stone-950"
+			class="rounded-full bg-amber-300 px-3 py-3 text-center text-xs font-semibold text-black"
 			href={withVisualEditingHref(site.reservationUrl, visualEditing)}
 			data-directus={getDirectusAttr({
 				enabled: visualEditing,

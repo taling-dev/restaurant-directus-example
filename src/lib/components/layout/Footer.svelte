@@ -10,7 +10,7 @@
 	}: { site: SiteSettings; hours: BusinessHour[]; visualEditing: boolean } = $props();
 </script>
 
-<footer class="border-t border-white/10 bg-black/20 px-6 py-12 sm:px-8 lg:px-12">
+<footer class="border-t border-white/10 bg-stone-950/50 px-6 py-12 sm:px-8 lg:px-12">
 	<div class="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[1.2fr_0.8fr_0.8fr]">
 		<div
 			class="space-y-4"

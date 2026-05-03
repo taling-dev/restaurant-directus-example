@@ -139,10 +139,10 @@
 				</a>
 			</div>
 
-			<div class="grid gap-4 sm:grid-cols-[repeat(auto-fit,minmax(14rem,1fr))]">
+			<div class="flex flex-wrap gap-x-6 gap-y-3">
 				{#each data.site.statsCards as card (card.label)}
 					<div
-						class="panel-dark"
+						class="flex items-center gap-3"
 						data-directus={getDirectusAttr({
 							enabled: data.visualEditing,
 							collection: 'site_settings',
@@ -151,8 +151,11 @@
 							mode: 'popover'
 						})}
 					>
-						<p class="text-sm tracking-[0.25em] text-amber-300/80 uppercase">{card.label}</p>
-						<p class="mt-2 text-lg font-medium text-white">{card.title}</p>
+						<span class="size-2 rounded-full bg-amber-300"></span>
+						<p class="text-sm text-stone-300">
+							<span class="font-medium text-amber-300/90">{card.label}:</span>
+							{card.title}
+						</p>
 					</div>
 				{/each}
 			</div>
@@ -268,7 +271,7 @@
 </section>
 
 <section
-	class="border-y border-white/10 bg-black/20 px-6 py-16 [contain-intrinsic-size:900px] [content-visibility:auto] sm:px-8 lg:px-12 lg:py-20"
+	class="border-y border-white/10 bg-stone-950/40 px-6 py-16 [contain-intrinsic-size:900px] [content-visibility:auto] sm:px-8 lg:px-12 lg:py-20"
 >
 	<div class="mx-auto max-w-6xl space-y-8">
 		<SectionHeading
