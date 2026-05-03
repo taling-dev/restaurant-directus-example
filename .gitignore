@@ -36,3 +36,4 @@ vite.config.ts.timestamp-*
 .kilo/bun.lock
 .kilo/yarn.lock
 .kilo/.gitignore
+.kilocode
