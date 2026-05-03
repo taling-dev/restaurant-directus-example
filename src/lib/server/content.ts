@@ -45,17 +45,19 @@ export async function getSiteSettings() {
 	return mapSiteSettings(record);
 }
 
-export async function getHomepageSections() {
+export async function getHomepageSections(categories: MenuCategory[] = fallbackCategories) {
 	const rows = await withFallback(
 		() =>
 			readItems<JsonRecord>('homepage_sections', {
 				sort: 'sort',
-				limit: '20'
+				limit: '20',
+				fields:
+					'*,selected_promotions.promotions_id.*,selected_menu_items.menu_items_id.*,selected_gallery_items.gallery_items_id.*'
 			}).then((response) => response.data),
 		fallbackSections
 	);
 
-	return rows.map(mapHomepageSection).sort((left, right) => left.sort - right.sort);
+	return rows.map((row) => mapHomepageSection(row, categories)).sort((left, right) => left.sort - right.sort);
 }
 
 export async function getMenuCategories() {
@@ -133,9 +135,9 @@ export async function getGalleryItems() {
 }
 
 export async function getHomePageData() {
-	const [sections, categories, promotions, gallery] = await Promise.all([
-		getHomepageSections(),
-		getMenuCategories(),
+	const categories = await getMenuCategories();
+	const [sections, promotions, gallery] = await Promise.all([
+		getHomepageSections(categories),
 		getPromotions(),
 		getGalleryItems()
 	]);
@@ -154,7 +156,10 @@ async function withFallback<T>(loader: () => Promise<T>, fallback: T) {
 	try {
 		return await loader();
 	} catch (error) {
-		console.warn('Using fallback content because Directus is unavailable or incomplete.', error);
+		console.warn(
+			'[content] Using fallback content because Directus is unavailable or incomplete.',
+			error
+		);
 		return fallback;
 	}
 }
@@ -243,7 +248,7 @@ function mapSiteSettings(record: JsonRecord): SiteSettings {
 	};
 }
 
-function mapHomepageSection(row: JsonRecord): HomepageSection {
+function mapHomepageSection(row: JsonRecord, categories: MenuCategory[] = fallbackCategories): HomepageSection {
 	return {
 		id: readString(row.id, crypto.randomUUID()),
 		sectionType: readString(row.section_type, 'story') as HomepageSection['sectionType'],
@@ -260,7 +265,10 @@ function mapHomepageSection(row: JsonRecord): HomepageSection {
 		imageUrl:
 			toOptimizedAssetUrl(readAssetToken(row.image)) ||
 			toOptimizedAssetUrl(readOptionalString(row.image_url)),
-		sort: readNumber(row.sort, 0)
+		sort: readNumber(row.sort, 0),
+		selectedPromotions: readM2MItems(row.selected_promotions, mapPromotion),
+		selectedMenuItems: readM2MItems(row.selected_menu_items, (item) => mapMenuItem(item, categories)),
+		selectedGalleryItems: readM2MItems(row.selected_gallery_items, mapGalleryItem)
 	};
 }
 
@@ -333,6 +341,36 @@ function resolveMenuCategorySlug(value: string | undefined, categories: MenuCate
 	}
 
 	return fallbackCategories.find((category) => category.slug === value)?.slug ?? value;
+}
+
+function readM2MItems<T>(
+	value: unknown,
+	mapper: (row: JsonRecord) => T
+): T[] | undefined {
+	if (!Array.isArray(value) || value.length === 0) {
+		return undefined;
+	}
+
+	const items = value
+		.map((entry) => {
+			if (typeof entry !== 'object' || entry === null) {
+				return null;
+			}
+
+			const record = entry as JsonRecord;
+			// Directus M2M expanded relations are nested under `{ junction_field: { ... } }`
+			const nested =
+				record.promotions_id ?? record.menu_items_id ?? record.gallery_items_id ?? record;
+
+			if (typeof nested !== 'object' || nested === null) {
+				return null;
+			}
+
+			return mapper(nested as JsonRecord);
+		})
+		.filter((item): item is T => item !== null);
+
+	return items.length > 0 ? items : undefined;
 }
 
 function readRelationToken(value: unknown) {
